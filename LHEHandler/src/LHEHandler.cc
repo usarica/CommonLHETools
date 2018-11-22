@@ -155,7 +155,7 @@ void LHEHandler::extract(){
 
 void LHEHandler::readEvent(){
   // Particles
-  if (doKinematics){
+  if (doKinematics>=doBasicKinematics){
     const lhef::HEPEUP hepeup_ = (*lhe_evt)->hepeup();
     const int nup = hepeup_.NUP;
     const vectorInt istup = hepeup_.ISTUP;
