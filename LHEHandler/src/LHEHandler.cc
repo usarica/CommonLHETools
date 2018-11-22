@@ -15,7 +15,7 @@ typedef std::vector<std::pair<int, int>> vectorIntPair;
 
 using namespace std;
 using namespace PDGHelpers;
-using namespace HiggsComparators;
+
 
 //if this is false, for 2017 MC, reweight from the default PDF, NNPDF31_nnlo_hessian_pdfas, to NNPDF31_nlo_hessian_pdfas and its variations
 //                               and use the hessian  method to get the systematics.
@@ -25,7 +25,7 @@ using namespace HiggsComparators;
 //(LO samples like JHUGen and MCFM only have one pdf, NNPDF31_lo_as_0130.  Phantom only has NNPDF31_nnlo_hessian_pdfas.)
 const constexpr static bool useNNPDF30 = true;
 
-LHEHandler::LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, int VVMode_, int VVDecayMode_, bool doKinematics_, int year_) :
+LHEHandler::LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_) :
 VVMode(VVMode_),
 VVDecayMode(VVDecayMode_),
 doKinematics(doKinematics_),
@@ -36,7 +36,7 @@ genCand(0)
   setHandle(lhe_evt_); // Also calls clear()
   extract();
 }
-LHEHandler::LHEHandler(int VVMode_, int VVDecayMode_, bool doKinematics_, int year_) :
+LHEHandler::LHEHandler(int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_) :
 VVMode(VVMode_),
 VVDecayMode(VVDecayMode_),
 doKinematics(doKinematics_),
@@ -107,7 +107,9 @@ void LHEHandler::extract(){
 
       readEvent();
 
-      if (doKinematics){
+      genCand=nullptr;
+      genEvent=nullptr;
+      if (doKinematics>=doBasicKinematics){
 
         genEvent = new MELAEvent();
         vectorInt hasGenHiggs;
@@ -125,28 +127,27 @@ void LHEHandler::extract(){
               else if (isAPhoton(genPart->id)) genEvent->addPhoton(genPart);
               else if (isAGluon(genPart->id) || isAQuark(genPart->id)) genEvent->addJet(genPart);
             }
+            else if (genPart->genStatus==-1) genEvent->addMother(genPart);
             p++;
           }
         }
 
-        genEvent->constructVVCandidates(VVMode, VVDecayMode);
-        for (MELAParticle* genPart:particleList){ if (genPart->genStatus==-1) genEvent->addVVCandidateMother(genPart); }
-        genEvent->addVVCandidateAppendages();
-
-        genCand=nullptr;
-        if (!hasGenHiggs.empty()){
-          for (int iH:hasGenHiggs){
-            MELACandidate* tmpCand = matchAHiggsToParticle(*genEvent, particleList.at(iH));
-            if (tmpCand){
-              if (!genCand) genCand=tmpCand;
-              else genCand = candComparator(genCand, tmpCand, HiggsComparators::BestZ1ThenZ2ScSumPt, VVMode);
+        if (doKinematics==doHiggsKinematics){
+          genEvent->constructVVCandidates(VVMode, VVDecayMode);
+          genEvent->addVVCandidateAppendages();
+          if (!hasGenHiggs.empty()){
+            for (int iH : hasGenHiggs){
+              MELACandidate* tmpCand = HiggsComparators::matchAHiggsToParticle(*genEvent, particleList.at(iH));
+              if (tmpCand){
+                if (!genCand) genCand=tmpCand;
+                else genCand = HiggsComparators::candComparator(genCand, tmpCand, HiggsComparators::BestZ1ThenZ2ScSumPt, VVMode);
+              }
             }
           }
+          if (!genCand) genCand = HiggsComparators::candidateSelector(*genEvent, HiggsComparators::BestZ1ThenZ2ScSumPt, VVMode);
         }
-        if (!genCand) genCand = candidateSelector(*genEvent, HiggsComparators::BestZ1ThenZ2ScSumPt, VVMode);
 
       }
-      else{ genCand=0; genEvent=0; }
 
     }
   }

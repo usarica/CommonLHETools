@@ -21,9 +21,14 @@
 
 class LHEHandler{
 public:
+  enum KinematicsMode{
+    noKinematics=0,
+    doBasicKinematics=1,
+    doHiggsKinematics=2
+  };
 
-  LHEHandler(int VVMode_, int VVDecayMode_, bool doKinematics_, int year_);
-  LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, int VVMode_, int VVDecayMode_, bool doKinematics_, int year_);
+  LHEHandler(int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_);
+  LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_);
   virtual ~LHEHandler();
   
   void setHandle(edm::Handle<LHEEventProduct>* lhe_evt_);
@@ -47,7 +52,7 @@ protected:
   // VVMode and VVDecayMode: See comment lines within MELAEvent::constructVVCandidates
   const int VVMode;
   const int VVDecayMode;
-  const bool doKinematics;
+  const LHEHandler::KinematicsMode doKinematics;
   const int year;
 
   edm::Handle<LHEEventProduct>* lhe_evt;
