@@ -17,7 +17,7 @@ using namespace std;
 using namespace PDGHelpers;
 
 
-//if this is false, for 2017 MC, reweight from the default PDF, NNPDF31_nnlo_hessian_pdfas, to NNPDF31_nlo_hessian_pdfas and its variations
+//if this is false, for 2017/18 MC, reweight from the default PDF, NNPDF31_nnlo_hessian_pdfas, to NNPDF31_nlo_hessian_pdfas and its variations
 //                               and use the hessian  method to get the systematics.
 //if this is true,               reweight                                                   to NNPDF30_nlo_nf_5_pdfas    and its variations
 //                               and use the replicas method to get the systematics.
@@ -91,7 +91,7 @@ float LHEHandler::getLHEWeigh_AsMZUpDn(int whichUpDn, float defaultValue) const{
 }
 float const& LHEHandler::getPDFScale() const{ return PDFScale; }
 float LHEHandler::reweightNNLOtoNLO() const{
-  if (year == 2017) return defaultNLOweight; //note this is already divided by originalPowhegWeight
+  if (year == 2017 || year == 2018) return defaultNLOweight; //note this is already divided by originalPowhegWeight
   throw cms::Exception("LHEWeights") << "Shouldn't be calling this function for " << year;
 }
 
@@ -221,7 +221,7 @@ void LHEHandler::readEvent(){
       if (wgtid<2000) LHEWeight.push_back(wgtval);
       else if (wgtid<3000) LHEPDFVariationWgt.push_back(wgtval); // Add PDF replicas and alphas(mZ) variations from the same pdf
     }
-    else if (year == 2017){
+    else if (year == 2017 || year == 2018){
       //Madgraph 0 offset
       if (weightstype == unknown && wgtid == 1){ weightstype = madgraph_0offset; LHEWeight.push_back(wgtval); }
       else if (weightstype == madgraph_0offset && 2 <= wgtid && wgtid <= 9) LHEWeight.push_back(wgtval);
@@ -260,9 +260,9 @@ void LHEHandler::readEvent(){
     else throw cms::Exception("LHEWeights") << "Unknown year " << year;
   }
 
-  if (year == 2017 && !(*lhe_evt)->weights().empty() && !(foundpowhegOriginalWeight && founddefaultNLOweight && LHEWeight.size() == 9 && LHEPDFVariationWgt.size() == 102)){
+  if ((year == 2017 || year == 2018) && !(*lhe_evt)->weights().empty() && !(foundpowhegOriginalWeight && founddefaultNLOweight && LHEWeight.size() == 9 && LHEPDFVariationWgt.size() == 102)){
     throw cms::Exception("LHEWeights")
-      << "For 2017 MC, expect to find either\n"
+      << "For " << year << " MC, expect to find either\n"
       << " - no alternate LHE weights, or\n"
       << " - all of the following:\n"
       << "   - muR and muF variations (1001-1009, found " << LHEWeight.size() << " of them, " << (foundpowhegOriginalWeight ? "" : "not ") << "including 1001)\n"
@@ -270,7 +270,7 @@ void LHEHandler::readEvent(){
       << "   - NLO PDF weight variations (3001-3102, found " << LHEPDFVariationWgt.size() << " of them)";
   }
 
-  if (year == 2017 && weightstype == madgraph_1000offset){   //but not 0offset!  0offset does it the same way as powheg
+  if ((year == 2017 || year == 2018) && weightstype == madgraph_1000offset){   //but not 0offset!  0offset does it the same way as powheg
     LHEWeight ={ LHEWeight[0], LHEWeight[3], LHEWeight[6],   //note LHEWeight[8] is always defined here,
                  LHEWeight[1], LHEWeight[4], LHEWeight[7],   //because weightstype != unknown implies that there are weights present
                  LHEWeight[2], LHEWeight[5], LHEWeight[8] }; //so if LHEweight.size() != 9 you already got an exception
@@ -296,13 +296,13 @@ void LHEHandler::readEvent(){
 
   // Find the proper PDF and alphas(mZ) variations
   if (!LHEWeight.empty()){
-    if (year == 2016 || (year == 2017 && useNNPDF30)){
+    if (year == 2016 || ((year == 2017 || year == 2018) && useNNPDF30)){
       float centralWeight, divideby;
       if (year == 2016){
         centralWeight = LHEWeight.at(0);
         divideby = 1;
       }
-      else if (year == 2017){
+      else if (year == 2017 || year == 2018){
         centralWeight = defaultNLOweight;
         divideby = reweightNNLOtoNLO();
       }
@@ -314,12 +314,12 @@ void LHEHandler::readEvent(){
         float asdn = LHEPDFAlphaSMZWgt.at(0);
         float asup = LHEPDFAlphaSMZWgt.at(1);
         // Rescale alphas(mZ) variations from 0.118+-0.001 to 0.118+-0.0015
-        // 0.001 is valid both for the alternates used in 2016 and for NNPDF30_nlo_nf_5_pdfas in 2017
+        // 0.001 is valid both for the alternates used in 2016 and for NNPDF30_nlo_nf_5_pdfas in 2017/18
         LHEWeight_AsMZUpDn.push_back((centralWeight + (asup-centralWeight)*1.5) / divideby);
         LHEWeight_AsMZUpDn.push_back((centralWeight + (asdn-centralWeight)*1.5) / divideby);
       }
     }
-    else if (year == 2017 && !useNNPDF30){
+    else if ((year == 2017 || year == 2018) && !useNNPDF30){
       //https://arxiv.org/pdf/1706.00428v2.pdf page 88
       //we are working with NNPDF31_nlo_hessian_pdfas
       //see the routine starting on line 101 of PDFSet.cc in LHAPDF-6.2.1

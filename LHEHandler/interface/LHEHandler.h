@@ -44,6 +44,7 @@ public:
   float const& getPDFScale() const;
   float reweightNNLOtoNLO() const;
 
+  // Misc. functions needed for ordering the PDF weights
   static bool compareAbsIsLess(float val1, float val2);
   static float findNearestOneSigma(float ref, int lowhigh, std::vector<float> const& wgt_array);
 
