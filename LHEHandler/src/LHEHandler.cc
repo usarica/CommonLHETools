@@ -98,58 +98,54 @@ float LHEHandler::reweightNNLOtoNLO() const{
 
 
 void LHEHandler::extract(){
-  if (lhe_evt==0) cerr << "LHEHandler::extract: lhe_evt==0" << endl;
+  if (!lhe_evt) cerr << "LHEHandler::extract: lhe_evt==0" << endl;
+  else if (!lhe_evt->isValid()) cerr << "LHEHandler::extract: lhe_evt invalid!" << endl;
+  else{
 
-  if (lhe_evt!=0){
-    if (!lhe_evt->isValid()) cerr << "LHEHandler::extract: lhe_evt invalid!" << endl;
+    readEvent();
 
-    if (lhe_evt->isValid()){
+    genCand=nullptr;
+    genEvent=nullptr;
+    if (doKinematics>=doBasicKinematics){
 
-      readEvent();
+      genEvent = new MELAEvent();
+      vectorInt writtenGenCandIndex;
 
-      genCand=nullptr;
-      genEvent=nullptr;
-      if (doKinematics>=doBasicKinematics){
+      {
+        int p=0;
+        for (MELAParticle* genPart:particleList){
+          if (doKinematics==doHiggsKinematics && isAHiggs(genPart->id)){
+            writtenGenCandIndex.push_back(p);
+            if (VVMode==-1 && (genPart->genStatus==1 || genPart->genStatus==2)) genEvent->addIntermediate(genPart);
+          }
+          if (genPart->genStatus==1){
+            if (isALepton(genPart->id)) genEvent->addLepton(genPart);
+            else if (isANeutrino(genPart->id)) genEvent->addNeutrino(genPart);
+            else if (isAPhoton(genPart->id)) genEvent->addPhoton(genPart);
+            else if (isAGluon(genPart->id) || isAQuark(genPart->id)) genEvent->addJet(genPart);
+          }
+          else if (genPart->genStatus==-1) genEvent->addMother(genPart);
+          p++;
+        }
+      }
 
-        genEvent = new MELAEvent();
-        vectorInt hasGenHiggs;
-
-        {
-          int p=0;
-          for (MELAParticle* genPart:particleList){
-            if (isAHiggs(genPart->id)){
-              hasGenHiggs.push_back(p);
-              if (VVMode==-1 && (genPart->genStatus==1 || genPart->genStatus==2)) genEvent->addIntermediate(genPart);
+      if (doKinematics==doHiggsKinematics){
+        genEvent->constructVVCandidates(VVMode, VVDecayMode);
+        genEvent->addVVCandidateAppendages();
+        if (!writtenGenCandIndex.empty()){
+          for (const int& iC:writtenGenCandIndex){
+            MELACandidate* tmpCand = HiggsComparators::matchAHiggsToParticle(*genEvent, particleList.at(iC));
+            if (tmpCand){
+              if (!genCand) genCand = tmpCand;
+              else genCand = HiggsComparators::candComparator(genCand, tmpCand, HiggsComparators::BestZ1ThenZ2ScSumPt, VVMode);
             }
-            if (genPart->genStatus==1){
-              if (isALepton(genPart->id)) genEvent->addLepton(genPart);
-              else if (isANeutrino(genPart->id)) genEvent->addNeutrino(genPart);
-              else if (isAPhoton(genPart->id)) genEvent->addPhoton(genPart);
-              else if (isAGluon(genPart->id) || isAQuark(genPart->id)) genEvent->addJet(genPart);
-            }
-            else if (genPart->genStatus==-1) genEvent->addMother(genPart);
-            p++;
           }
         }
-
-        if (doKinematics==doHiggsKinematics){
-          genEvent->constructVVCandidates(VVMode, VVDecayMode);
-          genEvent->addVVCandidateAppendages();
-          if (!hasGenHiggs.empty()){
-            for (int iH : hasGenHiggs){
-              MELACandidate* tmpCand = HiggsComparators::matchAHiggsToParticle(*genEvent, particleList.at(iH));
-              if (tmpCand){
-                if (!genCand) genCand=tmpCand;
-                else genCand = HiggsComparators::candComparator(genCand, tmpCand, HiggsComparators::BestZ1ThenZ2ScSumPt, VVMode);
-              }
-            }
-          }
-          if (!genCand) genCand = HiggsComparators::candidateSelector(*genEvent, HiggsComparators::BestZ1ThenZ2ScSumPt, VVMode);
-        }
-
+        if (!genCand) genCand = HiggsComparators::candidateSelector(*genEvent, HiggsComparators::BestZ1ThenZ2ScSumPt, VVMode);
       }
 
     }
+
   }
 }
 
@@ -242,18 +238,25 @@ void LHEHandler::readEvent(){
 
       //powheg
       else if (weightstype == unknown && wgtid == 2000){ weightstype = powheg; /*but do nothing, this is an NNLO variation*/ }
-      else if (weightstype == powheg && 1500 <= wgtid && wgtid <= 1602 && useNNPDF30){
-        if (wgtid == 1500){ founddefaultNLOweight = true; defaultNLOweight = wgtval; }
-        else LHEPDFVariationWgt.push_back(wgtval);
+      else if (weightstype == powheg && 1500 <= wgtid && wgtid <= 1602){ //these are the NLO pdf for NNPDF30 and variations
+        if (useNNPDF30){
+          if (wgtid == 1500){ founddefaultNLOweight = true; defaultNLOweight = wgtval; }
+          else LHEPDFVariationWgt.push_back(wgtval);
+        }
+        //else do nothing
       }
-      else if (weightstype == powheg && 1500 <= wgtid && wgtid <= 1602){/*do nothing, these are the NLO pdf for NNPDF30 and variations*/ }
+
       else if (weightstype == powheg && wgtid == 1700)                  {/*do nothing, this is the NNLO pdf for NNPDF30*/ }
       else if (weightstype == powheg && (wgtid == 1800 || wgtid == 1850 || wgtid == 1900 || wgtid == 1950)){/*do nothing, these are LO pdfs*/ }
       else if (weightstype == powheg && 2001 <= wgtid && wgtid <= 2111){/*do nothing, these are more NNLO variations*/ }
       else if (weightstype == powheg && wgtid >= 4000)                  {/*do nothing, these are other various weights*/ }
-      else if (weightstype == powheg && 3000 <= wgtid && wgtid <= 3102 && useNNPDF30){/*do nothing, these are the NLO pdf for NNPDF31 and variations*/ }
-      else if (weightstype == powheg && wgtid == 3000){ founddefaultNLOweight = true; defaultNLOweight = wgtval; }
-      else if (weightstype == powheg && 3001 <= wgtid && wgtid <= 3102) LHEPDFVariationWgt.push_back(wgtval);
+
+      else if (weightstype == powheg && 3000 <= wgtid && wgtid <= 3102){ //these are the NLO pdf for NNPDF31 and variations
+        if (!useNNPDF30){
+          if (wgtid == 3000){ founddefaultNLOweight = true; defaultNLOweight = wgtval; }
+          else LHEPDFVariationWgt.push_back(wgtval);
+        }
+      }
 
       else throw cms::Exception("LHEWeights") << "Don't know what to do with alternate weight id = " << wgtid << "(weightstype == " << weightstype << ")";
     }
@@ -279,7 +282,13 @@ void LHEHandler::readEvent(){
   // Handle LO samples 
   if (year == 2016 && LHEPDFVariationWgt.empty()){
     for (int iw=0; iw<(int) ((*lhe_evt)->weights().size()); iw++){
-      int wgtid=atoi((*lhe_evt)->weights().at(iw).id.c_str());
+      int wgtid;
+      try{
+        wgtid = stoi((*lhe_evt)->weights().at(iw).id.c_str());
+      }
+      catch (std::invalid_argument& e){
+        continue;  //we don't use non-numerical indices, but they exist in some 2016 MC samples
+      }
       if (wgtid>=10 && wgtid<=110){
         float wgtval=(*lhe_evt)->weights().at(iw).wgt / LHEOriginalWeight;
         LHEPDFVariationWgt.push_back(wgtval);
@@ -326,11 +335,11 @@ void LHEHandler::readEvent(){
       //based on NNPDF31_nlo_hessian_pdfas.info, which confirms that errorType() is symmhessian+as
       float centralWeight = defaultNLOweight;
       if (centralWeight == 0){
-        LHEWeight_PDFVariationUpDn ={ 0, 0 };
-        LHEWeight_AsMZUpDn ={ 0, 0 };
+        LHEWeight_PDFVariationUpDn = { 0, 0 };
+        LHEWeight_AsMZUpDn = { 0, 0 };
         edm::LogWarning warning("ZeroWeight");
-        warning << "default NLO PDF weight is 0\nIncoming particle id and pz:";
-        for (const auto& p : particleList) if (p->genStatus == -1) warning << "\n" << p->id << " " << p->z();
+        warning << "Default NLO PDF weight is 0\nIncoming particle id and pz:";
+        for (const auto& p:particleList) if (p->genStatus==-1) warning << "\n" << p->id << " " << p->z();
       }
       else{
         float errorsquared = 0;
@@ -339,7 +348,7 @@ void LHEHandler::readEvent(){
           errorsquared += difference*difference;
         }
         float error = sqrt(errorsquared);
-        LHEWeight_PDFVariationUpDn ={ (centralWeight + error) / reweightNNLOtoNLO(), (centralWeight - error) / reweightNNLOtoNLO() };
+        LHEWeight_PDFVariationUpDn = { (centralWeight + error) / reweightNNLOtoNLO(), (centralWeight - error) / reweightNNLOtoNLO() };
 
         if (LHEPDFAlphaSMZWgt.size()>1){
           float asdn = LHEPDFAlphaSMZWgt.at(0);
