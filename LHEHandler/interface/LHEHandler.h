@@ -17,6 +17,7 @@
 #include <MelaAnalytics/EventContainer/interface/MELAEvent.h>
 
 #include <vector>
+#include <cmath>
 
 
 class LHEHandler{
@@ -44,9 +45,13 @@ public:
   float const& getPDFScale() const;
   float reweightNNLOtoNLO() const;
 
+  float getWeightRescale() const; // Nominal weight should be getLHEOriginalWeight() * getWeightRescale()
+
   // Misc. functions needed for ordering the PDF weights
   static bool compareAbsIsLess(float val1, float val2);
+  static void suppressLargeWeights(std::vector<float>& wgt_array);
   static float findNearestOneSigma(float ref, int lowhigh, std::vector<float> const& wgt_array);
+  static float safeDivide(float numerator, float denominator){ return (!(std::isfinite(numerator) && std::isfinite(denominator)) || denominator==0.f ? 0.f : numerator/denominator); }
 
 protected:
 

@@ -95,7 +95,12 @@ float LHEHandler::reweightNNLOtoNLO() const{
   throw cms::Exception("LHEWeights") << "Shouldn't be calling this function for " << year;
 }
 
-
+float LHEHandler::getWeightRescale() const{
+  if (year == 2016) return 1.f;
+  else if (year == 2017 || year == 2018) return this->reweightNNLOtoNLO();
+  throw cms::Exception("LHEWeights") << "Year " << year << " not yet implemented in LHEHandler::getWeightRescale";
+  return 0.f;
+}
 
 void LHEHandler::extract(){
   if (!lhe_evt) cerr << "LHEHandler::extract: lhe_evt==0" << endl;
@@ -205,13 +210,13 @@ void LHEHandler::readEvent(){
 
   for (const auto& weight : (*lhe_evt)->weights()){
     int wgtid;
-    try {
+    try{
       wgtid = stoi(weight.id.c_str());
     }
     catch (std::invalid_argument& e){
       continue;  //we don't use non-numerical indices, but they exist in some 2016 MC samples
     }
-    float wgtval=weight.wgt / powhegOriginalWeight;
+    float wgtval = safeDivide(weight.wgt, powhegOriginalWeight);
     //cout << "PDF id = " << PDFid.at(0) << " " << wgtid << " -> " << wgtval << endl;
     if (year == 2016){
       if (wgtid<2000) LHEWeight.push_back(wgtval);
@@ -290,7 +295,7 @@ void LHEHandler::readEvent(){
         continue;  //we don't use non-numerical indices, but they exist in some 2016 MC samples
       }
       if (wgtid>=10 && wgtid<=110){
-        float wgtval=(*lhe_evt)->weights().at(iw).wgt / LHEOriginalWeight;
+        float wgtval=safeDivide((*lhe_evt)->weights().at(iw).wgt, LHEOriginalWeight);
         LHEPDFVariationWgt.push_back(wgtval);
       }
     }
@@ -302,7 +307,6 @@ void LHEHandler::readEvent(){
     LHEPDFVariationWgt.erase(firstalphasweight, LHEPDFVariationWgt.end());
   }
 
-
   // Find the proper PDF and alphas(mZ) variations
   if (!LHEWeight.empty()){
     if (year == 2016 || ((year == 2017 || year == 2018) && useNNPDF30)){
@@ -313,19 +317,21 @@ void LHEHandler::readEvent(){
       }
       else if (year == 2017 || year == 2018){
         centralWeight = defaultNLOweight;
-        divideby = reweightNNLOtoNLO();
+        divideby = this->reweightNNLOtoNLO();
       }
       else throw cms::Exception("LHEWeights") << "Unknown year " << year;
+
+      suppressLargeWeights(LHEPDFVariationWgt);
       std::sort(LHEPDFVariationWgt.begin(), LHEPDFVariationWgt.end(), compareAbsIsLess);
-      LHEWeight_PDFVariationUpDn.push_back(findNearestOneSigma(centralWeight, 1, LHEPDFVariationWgt) / divideby);
-      LHEWeight_PDFVariationUpDn.push_back(findNearestOneSigma(centralWeight, -1, LHEPDFVariationWgt) / divideby);
+      LHEWeight_PDFVariationUpDn.push_back(safeDivide(findNearestOneSigma(centralWeight, 1, LHEPDFVariationWgt), divideby));
+      LHEWeight_PDFVariationUpDn.push_back(safeDivide(findNearestOneSigma(centralWeight, -1, LHEPDFVariationWgt), divideby));
       if (LHEPDFAlphaSMZWgt.size()>1){
         float asdn = LHEPDFAlphaSMZWgt.at(0);
         float asup = LHEPDFAlphaSMZWgt.at(1);
         // Rescale alphas(mZ) variations from 0.118+-0.001 to 0.118+-0.0015
         // 0.001 is valid both for the alternates used in 2016 and for NNPDF30_nlo_nf_5_pdfas in 2017/18
-        LHEWeight_AsMZUpDn.push_back((centralWeight + (asup-centralWeight)*1.5) / divideby);
-        LHEWeight_AsMZUpDn.push_back((centralWeight + (asdn-centralWeight)*1.5) / divideby);
+        LHEWeight_AsMZUpDn.push_back(safeDivide((centralWeight + (asup-centralWeight)*1.5), divideby));
+        LHEWeight_AsMZUpDn.push_back(safeDivide((centralWeight + (asdn-centralWeight)*1.5), divideby));
       }
     }
     else if ((year == 2017 || year == 2018) && !useNNPDF30){
@@ -348,15 +354,16 @@ void LHEHandler::readEvent(){
           errorsquared += difference*difference;
         }
         float error = sqrt(errorsquared);
-        LHEWeight_PDFVariationUpDn = { (centralWeight + error) / reweightNNLOtoNLO(), (centralWeight - error) / reweightNNLOtoNLO() };
+        float divideby = this->reweightNNLOtoNLO();
+        LHEWeight_PDFVariationUpDn = { safeDivide((centralWeight + error), divideby), safeDivide((centralWeight - error), divideby) };
 
         if (LHEPDFAlphaSMZWgt.size()>1){
           float asdn = LHEPDFAlphaSMZWgt.at(0);
           float asup = LHEPDFAlphaSMZWgt.at(1);
           // Rescale alphas(mZ) variations from 0.118+-0.002 to 0.118+-0.0015
           //                           Note this number ^ is different than 2016!
-          LHEWeight_AsMZUpDn.push_back((centralWeight + (asup-centralWeight)*0.75) / reweightNNLOtoNLO());
-          LHEWeight_AsMZUpDn.push_back((centralWeight + (asdn-centralWeight)*0.75) / reweightNNLOtoNLO());
+          LHEWeight_AsMZUpDn.push_back(safeDivide((centralWeight + (asup-centralWeight)*0.75), divideby));
+          LHEWeight_AsMZUpDn.push_back(safeDivide((centralWeight + (asdn-centralWeight)*0.75), divideby));
         }
       }
     }
@@ -369,7 +376,7 @@ bool LHEHandler::compareAbsIsLess(float val1, float val2){ return std::abs(val1)
 float LHEHandler::findNearestOneSigma(float ref, int lowhigh, std::vector<float> const& wgt_array){
   int nrep = wgt_array.size();
   int pos_low=-1, pos_high=nrep;
-  for (int irep=0; irep<nrep; irep++){ // Assume ordered from low to high
+  for (int irep=0; irep<nrep; irep++){ // Assume ordered from low to high in absolute value
     float tmp = fabs(wgt_array.at(irep));
     if (fabs(tmp)<fabs(ref)) pos_low=irep;
     else if (fabs(tmp)>fabs(ref)){
@@ -394,3 +401,72 @@ float LHEHandler::findNearestOneSigma(float ref, int lowhigh, std::vector<float>
   else return ref;
 }
 
+void LHEHandler::suppressLargeWeights(std::vector<float>& wgt_array){
+  constexpr float c_wgt_thr=5.f;
+  constexpr float c_trunc_min=0.35f;
+  constexpr float c_trunc_max=0.7f;
+  if (wgt_array.empty()) return;
+
+  std::vector<float> weightListNP[2];
+  for (float const& weight:wgt_array){
+    if (weight<0.) weightListNP[0].push_back(fabs(weight));
+    else if (weight>0.) weightListNP[1].push_back(fabs(weight));
+  }
+
+  float weight_meanlow=0;
+  float weight_meanhigh=0;
+  float weight_thrlow=0;
+  float weight_thrhigh=0;
+  for (unsigned int inp=0; inp<2; inp++){
+    std::vector<float>& weightList = weightListNP[inp];
+    float& weight_mean = (inp==0 ? weight_meanlow : weight_meanhigh);
+    float& weight_thr = (inp==0 ? weight_thrlow : weight_thrhigh);
+    const unsigned int wsize=weightList.size();
+    if (wsize>0){
+      std::sort(weightList.begin(), weightList.end());
+      const unsigned int ibegin=float(wsize)*c_trunc_min;
+      const unsigned int iend=float(wsize)*c_trunc_max+1;
+      std::vector<float>::const_iterator it_begin=weightList.cbegin()+ibegin;
+      std::vector<float>::const_iterator it_end=weightList.cbegin()+iend;
+      // Find mean and rms
+      for (std::vector<float>::const_iterator it=it_begin; it!=it_end; it++){
+        float const& wgt = *it;
+        weight_mean += wgt;
+      }
+      weight_mean /= float(iend-ibegin);
+      unsigned int nhigh=0;
+      for (std::vector<float>::const_iterator it=it_begin; it!=it_end; it++){
+        float const& wgt = *it;
+        if (wgt>=weight_mean){ weight_thr += pow(wgt, 2); nhigh++; }
+      }
+      if (nhigh>0){
+        weight_thr /= float(nhigh);
+        weight_thr = sqrt(fabs(weight_thr-pow(weight_mean, 2)));
+        weight_thr = c_wgt_thr*weight_thr + weight_mean;
+      }
+      else weight_thr = c_wgt_thr*weight_mean;
+      //cout << "Weight threshold [" << inp << "]: " << weight_mean << " +" << weight_thr << "/-0" << endl;
+    }
+  }
+  weight_thrlow = -weight_thrlow;
+  weight_meanlow = -weight_meanlow;
+
+  {
+    float const diffthrlow = weight_thrlow - weight_meanlow;
+    float const diffthrhigh = weight_thrhigh - weight_meanhigh;
+    for (float& weight:wgt_array){
+      if (weight==0.) continue;
+      if (weight<weight_thrlow){
+        float weightdiff = weight - weight_meanlow;
+        weightdiff = pow(diffthrlow, 2)/weightdiff;
+        weight = weightdiff + weight_meanlow;
+      }
+      else if (weight>weight_thrhigh){
+        float weightdiff = weight - weight_meanhigh;
+        weightdiff = pow(diffthrhigh, 2)/weightdiff;
+        weight = weightdiff + weight_meanhigh;
+      }
+    }
+  }
+
+}
