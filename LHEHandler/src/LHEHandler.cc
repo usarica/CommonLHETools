@@ -321,7 +321,8 @@ void LHEHandler::readEvent(){
       }
       else throw cms::Exception("LHEWeights") << "Unknown year " << year;
 
-      suppressLargeWeights(LHEPDFVariationWgt);
+      // LHE weight suppresssion not needed
+      //suppressLargeWeights(LHEPDFVariationWgt);
       std::sort(LHEPDFVariationWgt.begin(), LHEPDFVariationWgt.end(), compareAbsIsLess);
       LHEWeight_PDFVariationUpDn.push_back(safeDivide(findNearestOneSigma(centralWeight, 1, LHEPDFVariationWgt), divideby));
       LHEWeight_PDFVariationUpDn.push_back(safeDivide(findNearestOneSigma(centralWeight, -1, LHEPDFVariationWgt), divideby));
