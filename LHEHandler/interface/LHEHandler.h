@@ -28,12 +28,12 @@ public:
     doHiggsKinematics=2
   };
   enum PDFChoice{
-    keepDefault=0,
+    keepDefaultPDF=0,
     tryNNPDF30,
     tryNNPDF31
   };
   enum QCDOrderChoice{
-    keepDefault=0,
+    keepDefaultQCDOrder=0,
     tryLO,
     tryNLO,
     tryNNLO
@@ -49,14 +49,12 @@ public:
 
   MELACandidate* getBestCandidate();
   float const& getLHEOriginalWeight() const; // Weight written in the <event> block, supposed to = genhepmcweight if no Pythia reweighting is done
-  float const& getPowhegOriginalWeight() const; // Weight from POWHEG before JHUGen reweighting, taken from alternate weight 1001.  If there are no alternate weights this is the same as the LHEOriginalWeight
+  float const& getMemberZeroWeight() const; // Weight from POWHEG before JHUGen reweighting, taken from alternate weight 1001.  If there are no alternate weights this is the same as the LHEOriginalWeight
+  float const& getWeightRescale() const; // Nominal weight should be getLHEOriginalWeight() * getWeightRescale()
   float getLHEWeight(unsigned int whichWeight, float defaultValue=1) const; // = {Weights written in LHE weight variations} / getLHEOriginalWeight()
   float getLHEWeight_PDFVariationUpDn(int whichUpDn, float defaultValue=1) const; // = {Weights written in LHE weight variations} / getLHEOriginalWeight()
   float getLHEWeigh_AsMZUpDn(int whichUpDn, float defaultValue=1) const; // = {Weights written in LHE weight variations} / getLHEOriginalWeight()
   float const& getPDFScale() const;
-  float reweightNNLOtoNLO() const;
-
-  float getWeightRescale() const; // Nominal weight should be getLHEOriginalWeight() * getWeightRescale()
 
   // Misc. functions needed for ordering the PDF weights
   static bool compareAbsIsLess(float val1, float val2);
@@ -87,9 +85,9 @@ protected:
   MELAEvent* genEvent;
   MELACandidate* genCand;
 
-  float defaultNLOweight;
+  float defaultMemberZeroWeight;
+  float defaultWeightScale;
   float LHEOriginalWeight;
-  float powhegOriginalWeight;
   std::vector<float> LHEWeight;
   std::vector<float> LHEWeight_PDFVariationUpDn;
   std::vector<float> LHEWeight_AsMZUpDn;
