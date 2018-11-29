@@ -54,6 +54,12 @@ public:
   static float safeDivide(float numerator, float denominator){ return (!(std::isfinite(numerator) && std::isfinite(denominator)) || denominator==0.f ? 0.f : numerator/denominator); }
 
 protected:
+  enum PDFVariationMode{
+    useNone=0,
+    useMC=1,
+    useHessian=2,
+    useAlternativePDFs=3
+  };
 
   // VVMode and VVDecayMode: See comment lines within MELAEvent::constructVVCandidates
   const int VVMode;

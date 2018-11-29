@@ -208,6 +208,7 @@ void LHEHandler::readEvent(){
     }
   }
 
+  PDFVariationMode pdfVarMode = useNone;
   for (const auto& weight : (*lhe_evt)->weights()){
     int wgtid;
     try{
@@ -220,13 +221,19 @@ void LHEHandler::readEvent(){
     //cout << "PDF id = " << PDFid.at(0) << " " << wgtid << " -> " << wgtval << endl;
     if (year == 2016){
       if (wgtid<2000) LHEWeight.push_back(wgtval);
-      else if (wgtid<3000) LHEPDFVariationWgt.push_back(wgtval); // Add PDF replicas and alphas(mZ) variations from the same pdf
+      else if (wgtid<3000){
+        if (pdfVarMode == useNone) pdfVarMode = useMC; // LEFT HERE
+        LHEPDFVariationWgt.push_back(wgtval); // Add PDF replicas and alphas(mZ) variations from the same pdf
+      }
     }
     else if (year == 2017 || year == 2018){
       //Madgraph 0 offset
       if (weightstype == unknown && wgtid == 1){ weightstype = madgraph_0offset; LHEWeight.push_back(wgtval); }
       else if (weightstype == madgraph_0offset && 2 <= wgtid && wgtid <= 9) LHEWeight.push_back(wgtval);
-      else if (weightstype == madgraph_0offset && 10 <= wgtid && wgtid <= 120){/*do nothing, these are the NNLO variations*/ }
+      else if (weightstype == madgraph_0offset && wgtid == 10){/*do nothing, this is the same NNLO member 0*/ }
+      else if (weightstype == madgraph_0offset && 11 <= wgtid && wgtid <= 112){/*do nothing, these are the NNLO PDF (<=110) and a_s (111, 112) variations*/ }
+      else if (weightstype == madgraph_0offset && (wgtid == 117 || wgtid == 118)){/*do nothing, these are the NNLO a_s=0.117/0.119 variations from a slightly different pdf set*/ }
+      else if (weightstype == madgraph_0offset && 113 <= wgtid && wgtid <= 120){/*do nothing, these are other NNLO a_s value variations*/ }
       else if (weightstype == madgraph_0offset && wgtid == 121){ founddefaultNLOweight = true; defaultNLOweight = wgtval; }
       else if (weightstype == madgraph_0offset && 122 <= wgtid && wgtid <= 223) LHEPDFVariationWgt.push_back(wgtval);
       else if (weightstype == madgraph_0offset && 224 <= wgtid && wgtid <= 1080){/*do nothing, these are other various weights*/ }
@@ -235,11 +242,15 @@ void LHEHandler::readEvent(){
       else if (weightstype == unknown && 1001 <= wgtid && wgtid <= 1009) LHEWeight.push_back(wgtval);
 
       //Madgraph 1000 offset
-      else if (wgtid == 1010 && weightstype == unknown) weightstype = madgraph_1000offset;
-      else if (weightstype == madgraph_1000offset && 1011 <= wgtid && wgtid <= 1120){/*do nothing, these are the NNLO variations*/ }
-      else if (weightstype == madgraph_1000offset && wgtid == 1121){ founddefaultNLOweight = true; defaultNLOweight = wgtval; }
-      else if (weightstype == madgraph_1000offset && 1122 <= wgtid && wgtid <= 1223) LHEPDFVariationWgt.push_back(wgtval);
-      else if (weightstype == madgraph_1000offset && 1224 <= wgtid && wgtid <= 2080){/*do nothing, these are other various weights*/ }
+      else if (wgtid == 1010 && weightstype == unknown) weightstype = madgraph_1000offset; // Begins NNPDF 3.1 NNLO a_s=0.118
+      else if (weightstype == madgraph_1000offset && 1011 <= wgtid && wgtid <= 1112){/*do nothing, these are the NNLO variations*/ } // Begins NNPDF 3.1 NNLO Hessian PDF and a_s=0.116/0.0120 variations
+      else if (weightstype == madgraph_1000offset && (wgtid == 1117 || wgtid == 1118)){/*do nothing, these are the NNLO a_s=0.117/0.119 variations from a slightly different pdf set*/ }
+      else if (weightstype == madgraph_1000offset && 1113 <= wgtid && wgtid <= 1120){/*do nothing, these are other NNLO a_s value variations*/ }
+      else if (weightstype == madgraph_1000offset && wgtid == 1121){ founddefaultNLOweight = true; defaultNLOweight = wgtval; } // Begins NNPDF 3.1 NLO a_s=0.118
+      else if (weightstype == madgraph_1000offset && 1122 <= wgtid && wgtid <= 1223) LHEPDFVariationWgt.push_back(wgtval); // Begins NNPDF 3.1 NLO Hessian PDF and a_s=0.116/0.0120 variations
+      else if (weightstype == madgraph_1000offset && 1224 <= wgtid && wgtid <= 1972){/*do nothing, these are other various weights*/ }
+      else if (weightstype == madgraph_1000offset && 1973 <= wgtid && wgtid <= 2075){/*do nothing, these are other various weights*/ }
+      else if (weightstype == madgraph_1000offset && 2076 <= wgtid && wgtid <= 2080){/*do nothing, these are other various weights*/ }
 
       //powheg
       else if (weightstype == unknown && wgtid == 2000){ weightstype = powheg; /*but do nothing, this is an NNLO variation*/ }
