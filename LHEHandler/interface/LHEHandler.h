@@ -27,9 +27,20 @@ public:
     doBasicKinematics=1,
     doHiggsKinematics=2
   };
+  enum PDFChoice{
+    keepDefault=0,
+    tryNNPDF30,
+    tryNNPDF31
+  };
+  enum QCDOrderChoice{
+    keepDefault=0,
+    tryLO,
+    tryNLO,
+    tryNNLO
+  };
 
-  LHEHandler(int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_);
-  LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_);
+  LHEHandler(int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_);
+  LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_);
   virtual ~LHEHandler();
   
   void setHandle(edm::Handle<LHEEventProduct>* lhe_evt_);
@@ -60,6 +71,10 @@ protected:
   const int VVDecayMode;
   const LHEHandler::KinematicsMode doKinematics;
   const int year;
+
+  // These options influence which pdf sets/members are selected
+  PDFChoice pdfChoice;
+  QCDOrderChoice orderChoice;
 
   edm::Handle<LHEEventProduct>* lhe_evt;
   std::vector<MELAParticle*> particleList;

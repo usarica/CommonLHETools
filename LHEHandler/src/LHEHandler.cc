@@ -25,24 +25,28 @@ using namespace PDGHelpers;
 //(LO samples like JHUGen and MCFM only have one pdf, NNPDF31_lo_as_0130.  Phantom only has NNPDF31_nnlo_hessian_pdfas.)
 const constexpr static bool useNNPDF30 = true;
 
-LHEHandler::LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_) :
+LHEHandler::LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_) :
 VVMode(VVMode_),
 VVDecayMode(VVDecayMode_),
 doKinematics(doKinematics_),
 year(year_),
-genEvent(0),
-genCand(0)
+pdfChoice(pdfChoice_),
+orderChoice(orderChoice_),
+genEvent(nullptr),
+genCand(nullptr)
 {
   setHandle(lhe_evt_); // Also calls clear()
   extract();
 }
-LHEHandler::LHEHandler(int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_) :
+LHEHandler::LHEHandler(int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_) :
 VVMode(VVMode_),
 VVDecayMode(VVDecayMode_),
 doKinematics(doKinematics_),
 year(year_),
-genEvent(0),
-genCand(0)
+pdfChoice(pdfChoice_),
+orderChoice(orderChoice_),
+genEvent(nullptr),
+genCand(nullptr)
 {
   clear();
 }
@@ -51,15 +55,12 @@ LHEHandler::~LHEHandler(){ clear(); }
 
 void LHEHandler::setHandle(edm::Handle<LHEEventProduct>* lhe_evt_){ clear(); lhe_evt=lhe_evt_; }
 void LHEHandler::clear(){
-  lhe_evt=0;
+  lhe_evt=nullptr;
 
-  if (genEvent!=0){ delete genEvent; genEvent=0; }
-  genCand=0;
+  if (genEvent){ delete genEvent; genEvent=nullptr; }
+  genCand=nullptr;
 
-  for (unsigned int p=0; p<particleList.size(); p++){
-    MELAParticle* tmpPart = (MELAParticle*)particleList.at(p);
-    if (tmpPart!=0) delete tmpPart;
-  }
+  for (MELAParticle*& tmpPart:particleList){ if (tmpPart) delete tmpPart; }
   particleList.clear();
 
   LHEWeight.clear();
