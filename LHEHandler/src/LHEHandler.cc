@@ -393,13 +393,15 @@ void LHEHandler::readEvent(){
   // Divide defaultWeightScale by defaultMemberZeroWeight to get a true scale factor
   defaultWeightScale = safeDivide(defaultWeightScale, defaultMemberZeroWeight);
 
-  if ((year == 2017 || year == 2018) && !(*lhe_evt)->weights().empty() && !(LHEWeight.size() == 9 && LHEPDFVariationWgt.size() == 102)){
-    throw cms::Exception("LHEWeights")
-      << "For " << year << " MC, expect to find either\n"
+  static bool warning_LHEWeight_NoLHEPDFVars=false;
+  if (!warning_LHEWeight_NoLHEPDFVars && (year == 2017 || year == 2018) && !(*lhe_evt)->weights().empty() && !(LHEWeight.size() == 9 && LHEPDFVariationWgt.size() == 102)){
+    edm::LogWarning warning("LHEWeights");
+    warning << "For " << year << " MC, PDF choice " << pdfChoice << ", and QCD order " << orderChoice << ", expect to find either\n"
       << " - no alternate LHE weights, or\n"
       << " - all of the following:\n"
       << "   - muR and muF variations (1001-1009, found " << LHEWeight.size() << " of them\n"
       << "   - NLO PDF weight variations (3001-3102, found " << LHEPDFVariationWgt.size() << " of them)";
+    warning_LHEWeight_NoLHEPDFVars=true;
   }
 
   if ((year == 2017 || year == 2018) && weightstype == madgraph_1000offset){   //but not 0offset!  0offset does it the same way as powheg

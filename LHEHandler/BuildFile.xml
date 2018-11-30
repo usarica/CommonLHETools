@@ -2,6 +2,7 @@
 
 <flags CPPFLAGS="-I$(CMSSW_BASE)/src/CommonLHETools/LHEHandler/interface/ -I$(CMSSW_BASE)/src/ZZMatrixElement/MELA/interface/" />
 
+
 <use name="FWCore/MessageLogger"/>
 <use name="FWCore/Utilities"/>
 <use name="DataFormats/Common"/>

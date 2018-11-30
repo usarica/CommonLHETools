@@ -4,6 +4,7 @@
 
 #include <FWCore/Framework/interface/EDAnalyzer.h>
 #include "FWCore/Framework/interface/Event.h"
+#include <FWCore/Framework/interface/MakerMacros.h>
 #include <FWCore/ParameterSet/interface/ParameterSet.h>
 #include <FWCore/Utilities/interface/InputTag.h>
 #include <FWCore/ServiceRegistry/interface/Service.h>
@@ -117,34 +118,43 @@ void LHEWeightAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& 
   vector<edm::Handle<LHEEventProduct> > lhe_handles;
   event.getManyByType(lhe_handles);
   if (!lhe_handles.empty()){
+    //std::cout << "New ev!" << std::endl;
     lhe_evt = lhe_handles.front();
+    //std::cout << "New hndl!" << std::endl;
 
     lheHandler_NNPDF30_NNLO->setHandle(&lhe_evt);
     lheHandler_NNPDF30_NNLO->extract();
     FillLHEWeights(lheHandler_NNPDF30_NNLO, LHEweight_Scaled_NNPDF30_NNLO, LHEweight_Original_NNPDF30_NNLO, LHEweight_MemberZero_NNPDF30_NNLO, LHEweight_QCDscale_muR1_muF1_NNPDF30_NNLO, LHEweight_QCDscale_muR1_muF2_NNPDF30_NNLO, LHEweight_QCDscale_muR1_muF0p5_NNPDF30_NNLO, LHEweight_QCDscale_muR2_muF1_NNPDF30_NNLO, LHEweight_QCDscale_muR2_muF2_NNPDF30_NNLO, LHEweight_QCDscale_muR2_muF0p5_NNPDF30_NNLO, LHEweight_QCDscale_muR0p5_muF1_NNPDF30_NNLO, LHEweight_QCDscale_muR0p5_muF2_NNPDF30_NNLO, LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_NNLO, LHEweight_PDFVariation_Up_NNPDF30_NNLO, LHEweight_PDFVariation_Dn_NNPDF30_NNLO, LHEweight_AsMZ_Up_NNPDF30_NNLO, LHEweight_AsMZ_Dn_NNPDF30_NNLO);
     lheHandler_NNPDF30_NNLO->clear();
+    //std::cout << "lheHandler_NNPDF30_NNLO done" << std::endl;
     lheHandler_NNPDF30_NLO->setHandle(&lhe_evt);
     lheHandler_NNPDF30_NLO->extract();
     FillLHEWeights(lheHandler_NNPDF30_NLO, LHEweight_Scaled_NNPDF30_NLO, LHEweight_Original_NNPDF30_NLO, LHEweight_MemberZero_NNPDF30_NLO, LHEweight_QCDscale_muR1_muF1_NNPDF30_NLO, LHEweight_QCDscale_muR1_muF2_NNPDF30_NLO, LHEweight_QCDscale_muR1_muF0p5_NNPDF30_NLO, LHEweight_QCDscale_muR2_muF1_NNPDF30_NLO, LHEweight_QCDscale_muR2_muF2_NNPDF30_NLO, LHEweight_QCDscale_muR2_muF0p5_NNPDF30_NLO, LHEweight_QCDscale_muR0p5_muF1_NNPDF30_NLO, LHEweight_QCDscale_muR0p5_muF2_NNPDF30_NLO, LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_NLO, LHEweight_PDFVariation_Up_NNPDF30_NLO, LHEweight_PDFVariation_Dn_NNPDF30_NLO, LHEweight_AsMZ_Up_NNPDF30_NLO, LHEweight_AsMZ_Dn_NNPDF30_NLO);
     lheHandler_NNPDF30_NLO->clear();
+    //std::cout << "lheHandler_NNPDF30_NLO done" << std::endl;
     lheHandler_NNPDF30_LO->setHandle(&lhe_evt);
     lheHandler_NNPDF30_LO->extract();
     FillLHEWeights(lheHandler_NNPDF30_LO, LHEweight_Scaled_NNPDF30_LO, LHEweight_Original_NNPDF30_LO, LHEweight_MemberZero_NNPDF30_LO, LHEweight_QCDscale_muR1_muF1_NNPDF30_LO, LHEweight_QCDscale_muR1_muF2_NNPDF30_LO, LHEweight_QCDscale_muR1_muF0p5_NNPDF30_LO, LHEweight_QCDscale_muR2_muF1_NNPDF30_LO, LHEweight_QCDscale_muR2_muF2_NNPDF30_LO, LHEweight_QCDscale_muR2_muF0p5_NNPDF30_LO, LHEweight_QCDscale_muR0p5_muF1_NNPDF30_LO, LHEweight_QCDscale_muR0p5_muF2_NNPDF30_LO, LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_LO, LHEweight_PDFVariation_Up_NNPDF30_LO, LHEweight_PDFVariation_Dn_NNPDF30_LO, LHEweight_AsMZ_Up_NNPDF30_LO, LHEweight_AsMZ_Dn_NNPDF30_LO);
     lheHandler_NNPDF30_LO->clear();
+    //std::cout << "lheHandler_NNPDF30_LO done" << std::endl;
     lheHandler_NNPDF31_NNLO->setHandle(&lhe_evt);
     lheHandler_NNPDF31_NNLO->extract();
     FillLHEWeights(lheHandler_NNPDF31_NNLO, LHEweight_Scaled_NNPDF31_NNLO, LHEweight_Original_NNPDF31_NNLO, LHEweight_MemberZero_NNPDF31_NNLO, LHEweight_QCDscale_muR1_muF1_NNPDF31_NNLO, LHEweight_QCDscale_muR1_muF2_NNPDF31_NNLO, LHEweight_QCDscale_muR1_muF0p5_NNPDF31_NNLO, LHEweight_QCDscale_muR2_muF1_NNPDF31_NNLO, LHEweight_QCDscale_muR2_muF2_NNPDF31_NNLO, LHEweight_QCDscale_muR2_muF0p5_NNPDF31_NNLO, LHEweight_QCDscale_muR0p5_muF1_NNPDF31_NNLO, LHEweight_QCDscale_muR0p5_muF2_NNPDF31_NNLO, LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_NNLO, LHEweight_PDFVariation_Up_NNPDF31_NNLO, LHEweight_PDFVariation_Dn_NNPDF31_NNLO, LHEweight_AsMZ_Up_NNPDF31_NNLO, LHEweight_AsMZ_Dn_NNPDF31_NNLO);
     lheHandler_NNPDF31_NNLO->clear();
+    //std::cout << "lheHandler_NNPDF31_NNLO done" << std::endl;
     lheHandler_NNPDF31_NLO->setHandle(&lhe_evt);
     lheHandler_NNPDF31_NLO->extract();
     FillLHEWeights(lheHandler_NNPDF31_NLO, LHEweight_Scaled_NNPDF31_NLO, LHEweight_Original_NNPDF31_NLO, LHEweight_MemberZero_NNPDF31_NLO, LHEweight_QCDscale_muR1_muF1_NNPDF31_NLO, LHEweight_QCDscale_muR1_muF2_NNPDF31_NLO, LHEweight_QCDscale_muR1_muF0p5_NNPDF31_NLO, LHEweight_QCDscale_muR2_muF1_NNPDF31_NLO, LHEweight_QCDscale_muR2_muF2_NNPDF31_NLO, LHEweight_QCDscale_muR2_muF0p5_NNPDF31_NLO, LHEweight_QCDscale_muR0p5_muF1_NNPDF31_NLO, LHEweight_QCDscale_muR0p5_muF2_NNPDF31_NLO, LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_NLO, LHEweight_PDFVariation_Up_NNPDF31_NLO, LHEweight_PDFVariation_Dn_NNPDF31_NLO, LHEweight_AsMZ_Up_NNPDF31_NLO, LHEweight_AsMZ_Dn_NNPDF31_NLO);
     lheHandler_NNPDF31_NLO->clear();
+    //std::cout << "lheHandler_NNPDF31_NLO done" << std::endl;
     lheHandler_NNPDF31_LO->setHandle(&lhe_evt);
     lheHandler_NNPDF31_LO->extract();
     FillLHEWeights(lheHandler_NNPDF31_LO, LHEweight_Scaled_NNPDF31_LO, LHEweight_Original_NNPDF31_LO, LHEweight_MemberZero_NNPDF31_LO, LHEweight_QCDscale_muR1_muF1_NNPDF31_LO, LHEweight_QCDscale_muR1_muF2_NNPDF31_LO, LHEweight_QCDscale_muR1_muF0p5_NNPDF31_LO, LHEweight_QCDscale_muR2_muF1_NNPDF31_LO, LHEweight_QCDscale_muR2_muF2_NNPDF31_LO, LHEweight_QCDscale_muR2_muF0p5_NNPDF31_LO, LHEweight_QCDscale_muR0p5_muF1_NNPDF31_LO, LHEweight_QCDscale_muR0p5_muF2_NNPDF31_LO, LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_LO, LHEweight_PDFVariation_Up_NNPDF31_LO, LHEweight_PDFVariation_Dn_NNPDF31_LO, LHEweight_AsMZ_Up_NNPDF31_LO, LHEweight_AsMZ_Dn_NNPDF31_LO);
     lheHandler_NNPDF31_LO->clear();
+    //std::cout << "lheHandler_NNPDF31_LO done" << std::endl;
 
     tree->Fill();
+    //std::cout << "Tree is filled!" << std::endl;
   }
 }
 
@@ -169,109 +179,109 @@ void LHEWeightAnalyzer::FillLHEWeights(LHEHandler const* lheHandler, float& LHEw
 
 void LHEWeightAnalyzer::beginJob(){
   edm::Service<TFileService> fs;
-  TTree* tree = fs->make<TTree>(theTreeName, "Event Summary");
+  tree = fs->make<TTree>(theTreeName, "Event Summary");
 
-  tree->SetBranchAddress("LHEweight_Original_NNPDF30_NNLO", &LHEweight_Original_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_Scaled_NNPDF30_NNLO", &LHEweight_Scaled_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_MemberZero_NNPDF30_NNLO", &LHEweight_MemberZero_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF1_NNPDF30_NNLO", &LHEweight_QCDscale_muR1_muF1_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF2_NNPDF30_NNLO", &LHEweight_QCDscale_muR1_muF2_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF0p5_NNPDF30_NNLO", &LHEweight_QCDscale_muR1_muF0p5_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF1_NNPDF30_NNLO", &LHEweight_QCDscale_muR2_muF1_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF2_NNPDF30_NNLO", &LHEweight_QCDscale_muR2_muF2_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF0p5_NNPDF30_NNLO", &LHEweight_QCDscale_muR2_muF0p5_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF1_NNPDF30_NNLO", &LHEweight_QCDscale_muR0p5_muF1_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF2_NNPDF30_NNLO", &LHEweight_QCDscale_muR0p5_muF2_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_NNLO", &LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_PDFVariation_Up_NNPDF30_NNLO", &LHEweight_PDFVariation_Up_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_PDFVariation_Dn_NNPDF30_NNLO", &LHEweight_PDFVariation_Dn_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_AsMZ_Up_NNPDF30_NNLO", &LHEweight_AsMZ_Up_NNPDF30_NNLO);
-  tree->SetBranchAddress("LHEweight_AsMZ_Dn_NNPDF30_NNLO", &LHEweight_AsMZ_Dn_NNPDF30_NNLO);
+  tree->Branch("LHEweight_Original_NNPDF30_NNLO", &LHEweight_Original_NNPDF30_NNLO);
+  tree->Branch("LHEweight_Scaled_NNPDF30_NNLO", &LHEweight_Scaled_NNPDF30_NNLO);
+  tree->Branch("LHEweight_MemberZero_NNPDF30_NNLO", &LHEweight_MemberZero_NNPDF30_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF1_NNPDF30_NNLO", &LHEweight_QCDscale_muR1_muF1_NNPDF30_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF2_NNPDF30_NNLO", &LHEweight_QCDscale_muR1_muF2_NNPDF30_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF0p5_NNPDF30_NNLO", &LHEweight_QCDscale_muR1_muF0p5_NNPDF30_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF1_NNPDF30_NNLO", &LHEweight_QCDscale_muR2_muF1_NNPDF30_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF2_NNPDF30_NNLO", &LHEweight_QCDscale_muR2_muF2_NNPDF30_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF0p5_NNPDF30_NNLO", &LHEweight_QCDscale_muR2_muF0p5_NNPDF30_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF1_NNPDF30_NNLO", &LHEweight_QCDscale_muR0p5_muF1_NNPDF30_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF2_NNPDF30_NNLO", &LHEweight_QCDscale_muR0p5_muF2_NNPDF30_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_NNLO", &LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_NNLO);
+  tree->Branch("LHEweight_PDFVariation_Up_NNPDF30_NNLO", &LHEweight_PDFVariation_Up_NNPDF30_NNLO);
+  tree->Branch("LHEweight_PDFVariation_Dn_NNPDF30_NNLO", &LHEweight_PDFVariation_Dn_NNPDF30_NNLO);
+  tree->Branch("LHEweight_AsMZ_Up_NNPDF30_NNLO", &LHEweight_AsMZ_Up_NNPDF30_NNLO);
+  tree->Branch("LHEweight_AsMZ_Dn_NNPDF30_NNLO", &LHEweight_AsMZ_Dn_NNPDF30_NNLO);
 
-  tree->SetBranchAddress("LHEweight_Original_NNPDF30_NLO", &LHEweight_Original_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_Scaled_NNPDF30_NLO", &LHEweight_Scaled_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_MemberZero_NNPDF30_NLO", &LHEweight_MemberZero_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF1_NNPDF30_NLO", &LHEweight_QCDscale_muR1_muF1_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF2_NNPDF30_NLO", &LHEweight_QCDscale_muR1_muF2_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF0p5_NNPDF30_NLO", &LHEweight_QCDscale_muR1_muF0p5_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF1_NNPDF30_NLO", &LHEweight_QCDscale_muR2_muF1_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF2_NNPDF30_NLO", &LHEweight_QCDscale_muR2_muF2_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF0p5_NNPDF30_NLO", &LHEweight_QCDscale_muR2_muF0p5_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF1_NNPDF30_NLO", &LHEweight_QCDscale_muR0p5_muF1_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF2_NNPDF30_NLO", &LHEweight_QCDscale_muR0p5_muF2_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_NLO", &LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_PDFVariation_Up_NNPDF30_NLO", &LHEweight_PDFVariation_Up_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_PDFVariation_Dn_NNPDF30_NLO", &LHEweight_PDFVariation_Dn_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_AsMZ_Up_NNPDF30_NLO", &LHEweight_AsMZ_Up_NNPDF30_NLO);
-  tree->SetBranchAddress("LHEweight_AsMZ_Dn_NNPDF30_NLO", &LHEweight_AsMZ_Dn_NNPDF30_NLO);
+  tree->Branch("LHEweight_Original_NNPDF30_NLO", &LHEweight_Original_NNPDF30_NLO);
+  tree->Branch("LHEweight_Scaled_NNPDF30_NLO", &LHEweight_Scaled_NNPDF30_NLO);
+  tree->Branch("LHEweight_MemberZero_NNPDF30_NLO", &LHEweight_MemberZero_NNPDF30_NLO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF1_NNPDF30_NLO", &LHEweight_QCDscale_muR1_muF1_NNPDF30_NLO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF2_NNPDF30_NLO", &LHEweight_QCDscale_muR1_muF2_NNPDF30_NLO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF0p5_NNPDF30_NLO", &LHEweight_QCDscale_muR1_muF0p5_NNPDF30_NLO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF1_NNPDF30_NLO", &LHEweight_QCDscale_muR2_muF1_NNPDF30_NLO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF2_NNPDF30_NLO", &LHEweight_QCDscale_muR2_muF2_NNPDF30_NLO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF0p5_NNPDF30_NLO", &LHEweight_QCDscale_muR2_muF0p5_NNPDF30_NLO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF1_NNPDF30_NLO", &LHEweight_QCDscale_muR0p5_muF1_NNPDF30_NLO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF2_NNPDF30_NLO", &LHEweight_QCDscale_muR0p5_muF2_NNPDF30_NLO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_NLO", &LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_NLO);
+  tree->Branch("LHEweight_PDFVariation_Up_NNPDF30_NLO", &LHEweight_PDFVariation_Up_NNPDF30_NLO);
+  tree->Branch("LHEweight_PDFVariation_Dn_NNPDF30_NLO", &LHEweight_PDFVariation_Dn_NNPDF30_NLO);
+  tree->Branch("LHEweight_AsMZ_Up_NNPDF30_NLO", &LHEweight_AsMZ_Up_NNPDF30_NLO);
+  tree->Branch("LHEweight_AsMZ_Dn_NNPDF30_NLO", &LHEweight_AsMZ_Dn_NNPDF30_NLO);
 
-  tree->SetBranchAddress("LHEweight_Original_NNPDF30_LO", &LHEweight_Original_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_Scaled_NNPDF30_LO", &LHEweight_Scaled_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_MemberZero_NNPDF30_LO", &LHEweight_MemberZero_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF1_NNPDF30_LO", &LHEweight_QCDscale_muR1_muF1_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF2_NNPDF30_LO", &LHEweight_QCDscale_muR1_muF2_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF0p5_NNPDF30_LO", &LHEweight_QCDscale_muR1_muF0p5_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF1_NNPDF30_LO", &LHEweight_QCDscale_muR2_muF1_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF2_NNPDF30_LO", &LHEweight_QCDscale_muR2_muF2_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF0p5_NNPDF30_LO", &LHEweight_QCDscale_muR2_muF0p5_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF1_NNPDF30_LO", &LHEweight_QCDscale_muR0p5_muF1_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF2_NNPDF30_LO", &LHEweight_QCDscale_muR0p5_muF2_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_LO", &LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_PDFVariation_Up_NNPDF30_LO", &LHEweight_PDFVariation_Up_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_PDFVariation_Dn_NNPDF30_LO", &LHEweight_PDFVariation_Dn_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_AsMZ_Up_NNPDF30_LO", &LHEweight_AsMZ_Up_NNPDF30_LO);
-  tree->SetBranchAddress("LHEweight_AsMZ_Dn_NNPDF30_LO", &LHEweight_AsMZ_Dn_NNPDF30_LO);
+  tree->Branch("LHEweight_Original_NNPDF30_LO", &LHEweight_Original_NNPDF30_LO);
+  tree->Branch("LHEweight_Scaled_NNPDF30_LO", &LHEweight_Scaled_NNPDF30_LO);
+  tree->Branch("LHEweight_MemberZero_NNPDF30_LO", &LHEweight_MemberZero_NNPDF30_LO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF1_NNPDF30_LO", &LHEweight_QCDscale_muR1_muF1_NNPDF30_LO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF2_NNPDF30_LO", &LHEweight_QCDscale_muR1_muF2_NNPDF30_LO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF0p5_NNPDF30_LO", &LHEweight_QCDscale_muR1_muF0p5_NNPDF30_LO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF1_NNPDF30_LO", &LHEweight_QCDscale_muR2_muF1_NNPDF30_LO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF2_NNPDF30_LO", &LHEweight_QCDscale_muR2_muF2_NNPDF30_LO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF0p5_NNPDF30_LO", &LHEweight_QCDscale_muR2_muF0p5_NNPDF30_LO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF1_NNPDF30_LO", &LHEweight_QCDscale_muR0p5_muF1_NNPDF30_LO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF2_NNPDF30_LO", &LHEweight_QCDscale_muR0p5_muF2_NNPDF30_LO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_LO", &LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_LO);
+  tree->Branch("LHEweight_PDFVariation_Up_NNPDF30_LO", &LHEweight_PDFVariation_Up_NNPDF30_LO);
+  tree->Branch("LHEweight_PDFVariation_Dn_NNPDF30_LO", &LHEweight_PDFVariation_Dn_NNPDF30_LO);
+  tree->Branch("LHEweight_AsMZ_Up_NNPDF30_LO", &LHEweight_AsMZ_Up_NNPDF30_LO);
+  tree->Branch("LHEweight_AsMZ_Dn_NNPDF30_LO", &LHEweight_AsMZ_Dn_NNPDF30_LO);
 
-  tree->SetBranchAddress("LHEweight_Original_NNPDF31_NNLO", &LHEweight_Original_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_Scaled_NNPDF31_NNLO", &LHEweight_Scaled_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_MemberZero_NNPDF31_NNLO", &LHEweight_MemberZero_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF1_NNPDF31_NNLO", &LHEweight_QCDscale_muR1_muF1_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF2_NNPDF31_NNLO", &LHEweight_QCDscale_muR1_muF2_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF0p5_NNPDF31_NNLO", &LHEweight_QCDscale_muR1_muF0p5_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF1_NNPDF31_NNLO", &LHEweight_QCDscale_muR2_muF1_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF2_NNPDF31_NNLO", &LHEweight_QCDscale_muR2_muF2_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF0p5_NNPDF31_NNLO", &LHEweight_QCDscale_muR2_muF0p5_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF1_NNPDF31_NNLO", &LHEweight_QCDscale_muR0p5_muF1_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF2_NNPDF31_NNLO", &LHEweight_QCDscale_muR0p5_muF2_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_NNLO", &LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_PDFVariation_Up_NNPDF31_NNLO", &LHEweight_PDFVariation_Up_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_PDFVariation_Dn_NNPDF31_NNLO", &LHEweight_PDFVariation_Dn_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_AsMZ_Up_NNPDF31_NNLO", &LHEweight_AsMZ_Up_NNPDF31_NNLO);
-  tree->SetBranchAddress("LHEweight_AsMZ_Dn_NNPDF31_NNLO", &LHEweight_AsMZ_Dn_NNPDF31_NNLO);
+  tree->Branch("LHEweight_Original_NNPDF31_NNLO", &LHEweight_Original_NNPDF31_NNLO);
+  tree->Branch("LHEweight_Scaled_NNPDF31_NNLO", &LHEweight_Scaled_NNPDF31_NNLO);
+  tree->Branch("LHEweight_MemberZero_NNPDF31_NNLO", &LHEweight_MemberZero_NNPDF31_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF1_NNPDF31_NNLO", &LHEweight_QCDscale_muR1_muF1_NNPDF31_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF2_NNPDF31_NNLO", &LHEweight_QCDscale_muR1_muF2_NNPDF31_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF0p5_NNPDF31_NNLO", &LHEweight_QCDscale_muR1_muF0p5_NNPDF31_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF1_NNPDF31_NNLO", &LHEweight_QCDscale_muR2_muF1_NNPDF31_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF2_NNPDF31_NNLO", &LHEweight_QCDscale_muR2_muF2_NNPDF31_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF0p5_NNPDF31_NNLO", &LHEweight_QCDscale_muR2_muF0p5_NNPDF31_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF1_NNPDF31_NNLO", &LHEweight_QCDscale_muR0p5_muF1_NNPDF31_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF2_NNPDF31_NNLO", &LHEweight_QCDscale_muR0p5_muF2_NNPDF31_NNLO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_NNLO", &LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_NNLO);
+  tree->Branch("LHEweight_PDFVariation_Up_NNPDF31_NNLO", &LHEweight_PDFVariation_Up_NNPDF31_NNLO);
+  tree->Branch("LHEweight_PDFVariation_Dn_NNPDF31_NNLO", &LHEweight_PDFVariation_Dn_NNPDF31_NNLO);
+  tree->Branch("LHEweight_AsMZ_Up_NNPDF31_NNLO", &LHEweight_AsMZ_Up_NNPDF31_NNLO);
+  tree->Branch("LHEweight_AsMZ_Dn_NNPDF31_NNLO", &LHEweight_AsMZ_Dn_NNPDF31_NNLO);
 
-  tree->SetBranchAddress("LHEweight_Original_NNPDF31_NLO", &LHEweight_Original_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_Scaled_NNPDF31_NLO", &LHEweight_Scaled_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_MemberZero_NNPDF31_NLO", &LHEweight_MemberZero_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF1_NNPDF31_NLO", &LHEweight_QCDscale_muR1_muF1_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF2_NNPDF31_NLO", &LHEweight_QCDscale_muR1_muF2_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF0p5_NNPDF31_NLO", &LHEweight_QCDscale_muR1_muF0p5_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF1_NNPDF31_NLO", &LHEweight_QCDscale_muR2_muF1_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF2_NNPDF31_NLO", &LHEweight_QCDscale_muR2_muF2_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF0p5_NNPDF31_NLO", &LHEweight_QCDscale_muR2_muF0p5_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF1_NNPDF31_NLO", &LHEweight_QCDscale_muR0p5_muF1_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF2_NNPDF31_NLO", &LHEweight_QCDscale_muR0p5_muF2_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_NLO", &LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_PDFVariation_Up_NNPDF31_NLO", &LHEweight_PDFVariation_Up_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_PDFVariation_Dn_NNPDF31_NLO", &LHEweight_PDFVariation_Dn_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_AsMZ_Up_NNPDF31_NLO", &LHEweight_AsMZ_Up_NNPDF31_NLO);
-  tree->SetBranchAddress("LHEweight_AsMZ_Dn_NNPDF31_NLO", &LHEweight_AsMZ_Dn_NNPDF31_NLO);
+  tree->Branch("LHEweight_Original_NNPDF31_NLO", &LHEweight_Original_NNPDF31_NLO);
+  tree->Branch("LHEweight_Scaled_NNPDF31_NLO", &LHEweight_Scaled_NNPDF31_NLO);
+  tree->Branch("LHEweight_MemberZero_NNPDF31_NLO", &LHEweight_MemberZero_NNPDF31_NLO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF1_NNPDF31_NLO", &LHEweight_QCDscale_muR1_muF1_NNPDF31_NLO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF2_NNPDF31_NLO", &LHEweight_QCDscale_muR1_muF2_NNPDF31_NLO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF0p5_NNPDF31_NLO", &LHEweight_QCDscale_muR1_muF0p5_NNPDF31_NLO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF1_NNPDF31_NLO", &LHEweight_QCDscale_muR2_muF1_NNPDF31_NLO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF2_NNPDF31_NLO", &LHEweight_QCDscale_muR2_muF2_NNPDF31_NLO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF0p5_NNPDF31_NLO", &LHEweight_QCDscale_muR2_muF0p5_NNPDF31_NLO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF1_NNPDF31_NLO", &LHEweight_QCDscale_muR0p5_muF1_NNPDF31_NLO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF2_NNPDF31_NLO", &LHEweight_QCDscale_muR0p5_muF2_NNPDF31_NLO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_NLO", &LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_NLO);
+  tree->Branch("LHEweight_PDFVariation_Up_NNPDF31_NLO", &LHEweight_PDFVariation_Up_NNPDF31_NLO);
+  tree->Branch("LHEweight_PDFVariation_Dn_NNPDF31_NLO", &LHEweight_PDFVariation_Dn_NNPDF31_NLO);
+  tree->Branch("LHEweight_AsMZ_Up_NNPDF31_NLO", &LHEweight_AsMZ_Up_NNPDF31_NLO);
+  tree->Branch("LHEweight_AsMZ_Dn_NNPDF31_NLO", &LHEweight_AsMZ_Dn_NNPDF31_NLO);
 
-  tree->SetBranchAddress("LHEweight_Original_NNPDF31_LO", &LHEweight_Original_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_Scaled_NNPDF31_LO", &LHEweight_Scaled_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_MemberZero_NNPDF31_LO", &LHEweight_MemberZero_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF1_NNPDF31_LO", &LHEweight_QCDscale_muR1_muF1_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF2_NNPDF31_LO", &LHEweight_QCDscale_muR1_muF2_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR1_muF0p5_NNPDF31_LO", &LHEweight_QCDscale_muR1_muF0p5_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF1_NNPDF31_LO", &LHEweight_QCDscale_muR2_muF1_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF2_NNPDF31_LO", &LHEweight_QCDscale_muR2_muF2_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR2_muF0p5_NNPDF31_LO", &LHEweight_QCDscale_muR2_muF0p5_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF1_NNPDF31_LO", &LHEweight_QCDscale_muR0p5_muF1_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF2_NNPDF31_LO", &LHEweight_QCDscale_muR0p5_muF2_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_LO", &LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_PDFVariation_Up_NNPDF31_LO", &LHEweight_PDFVariation_Up_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_PDFVariation_Dn_NNPDF31_LO", &LHEweight_PDFVariation_Dn_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_AsMZ_Up_NNPDF31_LO", &LHEweight_AsMZ_Up_NNPDF31_LO);
-  tree->SetBranchAddress("LHEweight_AsMZ_Dn_NNPDF31_LO", &LHEweight_AsMZ_Dn_NNPDF31_LO);
+  tree->Branch("LHEweight_Original_NNPDF31_LO", &LHEweight_Original_NNPDF31_LO);
+  tree->Branch("LHEweight_Scaled_NNPDF31_LO", &LHEweight_Scaled_NNPDF31_LO);
+  tree->Branch("LHEweight_MemberZero_NNPDF31_LO", &LHEweight_MemberZero_NNPDF31_LO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF1_NNPDF31_LO", &LHEweight_QCDscale_muR1_muF1_NNPDF31_LO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF2_NNPDF31_LO", &LHEweight_QCDscale_muR1_muF2_NNPDF31_LO);
+  tree->Branch("LHEweight_QCDscale_muR1_muF0p5_NNPDF31_LO", &LHEweight_QCDscale_muR1_muF0p5_NNPDF31_LO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF1_NNPDF31_LO", &LHEweight_QCDscale_muR2_muF1_NNPDF31_LO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF2_NNPDF31_LO", &LHEweight_QCDscale_muR2_muF2_NNPDF31_LO);
+  tree->Branch("LHEweight_QCDscale_muR2_muF0p5_NNPDF31_LO", &LHEweight_QCDscale_muR2_muF0p5_NNPDF31_LO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF1_NNPDF31_LO", &LHEweight_QCDscale_muR0p5_muF1_NNPDF31_LO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF2_NNPDF31_LO", &LHEweight_QCDscale_muR0p5_muF2_NNPDF31_LO);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_LO", &LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_LO);
+  tree->Branch("LHEweight_PDFVariation_Up_NNPDF31_LO", &LHEweight_PDFVariation_Up_NNPDF31_LO);
+  tree->Branch("LHEweight_PDFVariation_Dn_NNPDF31_LO", &LHEweight_PDFVariation_Dn_NNPDF31_LO);
+  tree->Branch("LHEweight_AsMZ_Up_NNPDF31_LO", &LHEweight_AsMZ_Up_NNPDF31_LO);
+  tree->Branch("LHEweight_AsMZ_Dn_NNPDF31_LO", &LHEweight_AsMZ_Dn_NNPDF31_LO);
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
@@ -282,3 +292,6 @@ void LHEWeightAnalyzer::beginRun(edm::Run const& iRun, edm::EventSetup const&){}
 
 // ------------ method called when ending the processing of a run  ------------
 void LHEWeightAnalyzer::endRun(edm::Run const& iRun, edm::EventSetup const&){}
+
+
+DEFINE_FWK_MODULE(LHEWeightAnalyzer);
