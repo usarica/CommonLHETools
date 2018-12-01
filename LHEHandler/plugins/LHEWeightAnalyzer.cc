@@ -4,13 +4,16 @@
 
 #include <FWCore/Framework/interface/EDAnalyzer.h>
 #include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/Run.h"
 #include <FWCore/Framework/interface/MakerMacros.h>
 #include <FWCore/ParameterSet/interface/ParameterSet.h>
 #include <FWCore/Utilities/interface/InputTag.h>
+#include <FWCore/MessageLogger/interface/MessageLogger.h>
 #include <FWCore/ServiceRegistry/interface/Service.h>
 #include <CommonTools/UtilAlgos/interface/TFileService.h>
 
 #include <CommonLHETools/LHEHandler/interface/LHEHandler.h>
+#include <SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h>
 
 #include "TTree.h"
 
@@ -28,7 +31,7 @@ using namespace edm;
 //
 // class declaration
 //
-class LHEWeightAnalyzer : public edm::EDAnalyzer {
+class LHEWeightAnalyzer : public edm::EDAnalyzer{
 public:
 
   explicit LHEWeightAnalyzer(const edm::ParameterSet&);
@@ -58,6 +61,7 @@ protected:
   LHEHandler* lheHandler_NNPDF31_LO;
 
   edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoToken;
+  edm::EDGetTokenT<GenEventInfoProduct> genInfoToken;
 
 };
 
@@ -70,6 +74,8 @@ LHEWeightAnalyzer::LHEWeightAnalyzer(const edm::ParameterSet& pset) :
 {
   consumesMany<LHEEventProduct>();
   lheRunInfoToken = consumes<LHERunInfoProduct, edm::InRun>(edm::InputTag("externalLHEProducer"));
+  genInfoToken = consumes<GenEventInfoProduct>(edm::InputTag("generator"));
+
   lheHandler_NNPDF30_NNLO = new LHEHandler(
     -1, -1,
     (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
@@ -114,12 +120,15 @@ LHEWeightAnalyzer::~LHEWeightAnalyzer(){
 
 void LHEWeightAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& eSetup){
   // LHE information
-  edm::Handle<LHEEventProduct> lhe_evt;
   vector<edm::Handle<LHEEventProduct> > lhe_handles;
   event.getManyByType(lhe_handles);
+  
+  edm::Handle<GenEventInfoProduct> gen_handle;
+  event.getByToken(genInfoToken, gen_handle);
+
   if (!lhe_handles.empty()){
     //std::cout << "New ev!" << std::endl;
-    lhe_evt = lhe_handles.front();
+    edm::Handle<LHEEventProduct>& lhe_evt = lhe_handles.front();
     //std::cout << "New hndl!" << std::endl;
 
     lheHandler_NNPDF30_NNLO->setHandle(&lhe_evt);
@@ -287,11 +296,38 @@ void LHEWeightAnalyzer::beginJob(){
 // ------------ method called once each job just after ending the event loop  ------------
 void LHEWeightAnalyzer::endJob(){}
 
-// ------------ method called when starting to processes a run  ------------
-void LHEWeightAnalyzer::beginRun(edm::Run const& iRun, edm::EventSetup const&){}
+// ------------ method called when starting to process a run  ------------
+void LHEWeightAnalyzer::beginRun(edm::Run const& iRun, edm::EventSetup const&){
+  static bool firstRun=true;
+  if (firstRun){
+    edm::Handle<LHERunInfoProduct> lhe_runinfo;
+    iRun.getByLabel(edm::InputTag("externalLHEProducer"), lhe_runinfo);
+    lheHandler_NNPDF30_NNLO->setHeaderFromRunInfo(&lhe_runinfo);
+    lheHandler_NNPDF30_NLO->setHeaderFromRunInfo(&lhe_runinfo);
+    lheHandler_NNPDF30_LO->setHeaderFromRunInfo(&lhe_runinfo);
+    lheHandler_NNPDF31_NNLO->setHeaderFromRunInfo(&lhe_runinfo);
+    lheHandler_NNPDF31_NLO->setHeaderFromRunInfo(&lhe_runinfo);
+    lheHandler_NNPDF31_LO->setHeaderFromRunInfo(&lhe_runinfo);
+    firstRun=false;
+  }
+}
 
-// ------------ method called when ending the processing of a run  ------------
-void LHEWeightAnalyzer::endRun(edm::Run const& iRun, edm::EventSetup const&){}
+// ------------ method called when ending to process a run  ------------
+void LHEWeightAnalyzer::endRun(edm::Run const& iRun, edm::EventSetup const&){
+  /*
+  edm::Handle<LHERunInfoProduct> run;
+  typedef std::vector<LHERunInfoProduct::Header>::const_iterator headers_const_iterator;
+  iRun.getByToken(lheRunInfoToken, run);
+  LHERunInfoProduct myLHERunInfoProduct = *(run.product());
+  for (auto iter=myLHERunInfoProduct.headers_begin(); iter!=myLHERunInfoProduct.headers_end(); iter++){
+    std::cout << iter->tag() << std::endl;
+    std::vector<std::string> lines = iter->lines();
+    for (unsigned int iLine = 0; iLine<lines.size(); iLine++) {
+      std::cout << lines.at(iLine);
+    }
+  }
+  */
+}
 
 
 DEFINE_FWK_MODULE(LHEWeightAnalyzer);

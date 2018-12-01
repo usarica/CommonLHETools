@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("testLHEWeights")
 
 
-procname = "VBFH2000_2017"
+procname = "tZq_2017"
 fNames = None
 if procname == "WWZ_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/94X_mc2017_realistic_v11-v1/100000/4231F556-3A26-E811-AB1D-002590D60038.root')
@@ -13,6 +13,8 @@ elif procname == "VBFH2000_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/VBF_HToZZTo4L_M2000_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/00000/5CADB5C5-B404-E811-B7E0-002590D9D8B2.root')
 elif procname == "DYJetsToLL_M50_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v1/50000/7642F20E-30DC-E711-9548-0025905A60B8.root')
+elif procname == "tZq_2017":
+  fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/tZq_ll_4f_ckm_NLO_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/20000/041438B1-3C41-E811-BF9B-0025905B85DE.root')
 
 
 process.source = cms.Source("PoolSource",

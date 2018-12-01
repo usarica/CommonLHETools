@@ -42,8 +42,9 @@ public:
   LHEHandler(int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_);
   LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_);
   virtual ~LHEHandler();
-  
+
   void setHandle(edm::Handle<LHEEventProduct>* lhe_evt_);
+  void setHeaderFromRunInfo(edm::Handle<LHERunInfoProduct>* lhe_run);
   void extract();
   void clear();
 
@@ -55,6 +56,7 @@ public:
   float getLHEWeight_PDFVariationUpDn(int whichUpDn, float defaultValue=1) const; // = {Weights written in LHE weight variations} / getLHEOriginalWeight()
   float getLHEWeigh_AsMZUpDn(int whichUpDn, float defaultValue=1) const; // = {Weights written in LHE weight variations} / getLHEOriginalWeight()
   float const& getPDFScale() const;
+  bool hasHeader() const;
 
   // Misc. functions needed for ordering the PDF weights
   static bool compareAbsIsLess(float val1, float val2);
@@ -68,6 +70,12 @@ protected:
     useMC=1,
     useHessian=2,
     useAlternativePDFs=3
+  };
+  enum AlternateWeightsType{
+    unknown,
+    powheg,
+    madgraph_0offset,
+    madgraph_1000offset
   };
 
   // VVMode and VVDecayMode: See comment lines within MELAEvent::constructVVCandidates
@@ -94,14 +102,9 @@ protected:
   std::vector<int> PDFid;
   float PDFScale;
 
-  void readEvent();
+  std::vector<std::string> LHEHeader;
 
-  enum AlternateWeightsType {
-    unknown,
-    powheg,
-    madgraph_0offset,
-    madgraph_1000offset
-  };
+  void readEvent();
 
 };
 
