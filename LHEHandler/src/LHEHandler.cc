@@ -557,19 +557,22 @@ void LHEHandler::readEvent(){
     warning_LHEWeight_NoLHEPDFVars=true;
   }
 
-  static bool warning_LHEWeight_swapped=false;
-  if ((year == 2016 || year == 2017 || year == 2018) && weightstype == madgraph_1000offset && LHEWeight.size() == 9){ // but not 0offset!  0offset does it the same way as powheg
-    if (!warning_LHEWeight_swapped){
-      edm::LogWarning warning("LHEWeights");
-      warning << "For " << year << " MC and weight type " << weightstype << ", the matrix of LHE muR/muF weights is transposed.";
-      warning_LHEWeight_swapped=true;
+  static bool warning_LHEWeight_transposed=false;
+  if (weightstype == madgraph_1000offset && LHEWeight.size() == 9){ // but not 0offset!  0offset does it the same way as powheg
+    if (year == 2016 || year == 2017 || year == 2018){
+      if (!warning_LHEWeight_transposed){
+        edm::LogWarning warning("LHEWeightTransposed");
+        warning << "For " << year << " MC and weight type " << weightstype << ", the matrix of LHE muR/muF weights is transposed.";
+        warning_LHEWeight_transposed=true;
+      }
+      LHEWeight={
+        LHEWeight[0], LHEWeight[3], LHEWeight[6],
+        LHEWeight[1], LHEWeight[4], LHEWeight[7],
+        LHEWeight[2], LHEWeight[5], LHEWeight[8]
+      };
     }
-    LHEWeight={
-      LHEWeight[0], LHEWeight[3], LHEWeight[6],
-      LHEWeight[1], LHEWeight[4], LHEWeight[7],
-      LHEWeight[2], LHEWeight[5], LHEWeight[8]
-    };
-  };
+    else throw cms::Exception("LHEWeightTransposed") << "Unknown year " << year;
+  }
 
   if (LHEPDFVariationWgt.size() > 101){
     std::vector<float>::iterator firstalphasweight = LHEPDFVariationWgt.begin() + 100; //= iterator to LHEPDFVariationWgt[100] = 101st entry
