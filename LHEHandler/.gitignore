@@ -1,3 +1,4 @@
+*.log
 test/*.root
 test/*.txt
 test/*.log

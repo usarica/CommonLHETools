@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("testLHEWeights")
 
 
-procname = "tZq_2017"
+procname = "tZq_2016"
 fNames = None
 if procname == "WWZ_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/94X_mc2017_realistic_v11-v1/100000/4231F556-3A26-E811-AB1D-002590D60038.root')
@@ -13,8 +13,32 @@ elif procname == "VBFH2000_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/VBF_HToZZTo4L_M2000_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/00000/5CADB5C5-B404-E811-B7E0-002590D9D8B2.root')
 elif procname == "DYJetsToLL_M50_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v1/50000/7642F20E-30DC-E711-9548-0025905A60B8.root')
+elif procname == "DYJetsToLL_M-4to50_HT-400to600_2017":
+  fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/DYJetsToLL_M-4to50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/80000/FCF2C9A0-B605-E811-8B19-008CFAC93F4C.root')
 elif procname == "tZq_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/tZq_ll_4f_ckm_NLO_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/20000/041438B1-3C41-E811-BF9B-0025905B85DE.root')
+
+elif procname == "WWZ_2016":
+  fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/WWZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/B814DCC1-18B7-E611-AD77-0CC47AD98F68.root')
+elif procname == "VBFH2000_2016":
+  fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/VBF_HToZZTo4L_M2500_13TeV_powheg2_JHUgenV698_pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/F41652E3-EDD4-E611-9B03-001E67397DF5.root')
+elif procname == "DYJetsToLL_M50_2016":
+  fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/90000/FE8A7852-66E4-E611-B5D0-002590E7E01A.root')
+elif procname == "DYJetsToLL_M-5to50_HT-70to100_2016":
+  fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/DYJetsToLL_M-5to50_HT-70to100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/90000/E678AB87-12F0-E611-92D5-02163E014428.root')
+elif procname == "DY3JetsToLL_M-10to50_2016":
+  fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/DY3JetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/0414608F-FAC9-E611-83FC-0CC47A4D767E.root')
+elif procname == "tZq_2016":
+  fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/tZq_ll_4f_ckm_NLO_13TeV-amcatnlo-herwigpp/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/90000/FE94710A-CA3D-E711-81F6-0242AC130004.root')
+
+
+theYear = None
+if "2018" in procname:
+   theYear=2018
+elif "2017" in procname:
+   theYear=2017
+elif "2016" in procname:
+   theYear=2016
 
 
 process.source = cms.Source("PoolSource",
@@ -34,7 +58,7 @@ process.CondDB = cms.PSet(
 )
 
 process.OutTree = cms.EDAnalyzer("LHEWeightAnalyzer",
-    year = cms.int32(2017),
+    year = cms.int32(theYear),
 )
 
 process.MessageLogger = cms.Service("MessageLogger",
