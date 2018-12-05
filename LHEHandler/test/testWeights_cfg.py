@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("testLHEWeights")
 
 
-procname = "tZq_2016"
+procname = "TTToHadronic_2018"
 fNames = None
 if procname == "WWZ_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/94X_mc2017_realistic_v11-v1/100000/4231F556-3A26-E811-AB1D-002590D60038.root')
@@ -30,6 +30,9 @@ elif procname == "DY3JetsToLL_M-10to50_2016":
   fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/DY3JetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/0414608F-FAC9-E611-83FC-0CC47A4D767E.root')
 elif procname == "tZq_2016":
   fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/tZq_ll_4f_ckm_NLO_13TeV-amcatnlo-herwigpp/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/90000/FE94710A-CA3D-E711-81F6-0242AC130004.root')
+
+elif procname == "TTToHadronic_2018":
+  fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/60000/84347EC0-60B4-5145-8F92-37F1975CA79D.root')
 
 
 theYear = None
@@ -61,90 +64,102 @@ process.OutTree = cms.EDAnalyzer("LHEWeightAnalyzer",
     year = cms.int32(theYear),
 )
 
-process.MessageLogger = cms.Service("MessageLogger",
-    FrameworkJobReport = cms.untracked.PSet(
-        FwkJob = cms.untracked.PSet(
-            limit = cms.untracked.int32(10000000),
-            optionalPSet = cms.untracked.bool(True)
-        ),
-        default = cms.untracked.PSet(
-            limit = cms.untracked.int32(0)
-        ),
-        optionalPSet = cms.untracked.bool(True)
-    ),
-    categories = cms.untracked.vstring('FwkJob',
-        'FwkReport',
-        'FwkSummary',
-        'Root_NoDictionary'),
-    cerr = cms.untracked.PSet(
-        FwkJob = cms.untracked.PSet(
-            limit = cms.untracked.int32(0),
-            optionalPSet = cms.untracked.bool(True)
-        ),
-        FwkReport = cms.untracked.PSet(
-            limit = cms.untracked.int32(10000000),
-            optionalPSet = cms.untracked.bool(True),
-            reportEvery = cms.untracked.int32(1000)
-        ),
-        FwkSummary = cms.untracked.PSet(
-            limit = cms.untracked.int32(10000000),
-            optionalPSet = cms.untracked.bool(True),
-            reportEvery = cms.untracked.int32(1)
-        ),
-        INFO = cms.untracked.PSet(
-            limit = cms.untracked.int32(0)
-        ),
-        Root_NoDictionary = cms.untracked.PSet(
-            limit = cms.untracked.int32(0),
-            optionalPSet = cms.untracked.bool(True)
-        ),
-        default = cms.untracked.PSet(
-            limit = cms.untracked.int32(10000000)
-        ),
-        noTimeStamps = cms.untracked.bool(False),
-        optionalPSet = cms.untracked.bool(True),
-        threshold = cms.untracked.string('INFO')
-    ),
-    cerr_stats = cms.untracked.PSet(
-        optionalPSet = cms.untracked.bool(True),
-        output = cms.untracked.string('cerr'),
-        threshold = cms.untracked.string('WARNING')
-    ),
-    cout = cms.untracked.PSet(
-        placeholder = cms.untracked.bool(True)
-    ),
-    debugModules = cms.untracked.vstring(),
-    debugs = cms.untracked.PSet(
-        placeholder = cms.untracked.bool(True)
-    ),
-    default = cms.untracked.PSet(
+#process.MessageLogger = cms.Service("MessageLogger",
+    #FrameworkJobReport = cms.untracked.PSet(
+        #FwkJob = cms.untracked.PSet(
+            #limit = cms.untracked.int32(10000000),
+            #optionalPSet = cms.untracked.bool(True)
+        #),
+        #default = cms.untracked.PSet(
+            #limit = cms.untracked.int32(0)
+        #),
+        #optionalPSet = cms.untracked.bool(True)
+    #),
+    #categories = cms.untracked.vstring('FwkJob',
+        #'FwkReport',
+        #'FwkSummary',
+        #'Root_NoDictionary'),
+    #cerr = cms.untracked.PSet(
+        #FwkJob = cms.untracked.PSet(
+            #limit = cms.untracked.int32(0),
+            #optionalPSet = cms.untracked.bool(True)
+        #),
+        #FwkReport = cms.untracked.PSet(
+            #limit = cms.untracked.int32(10000000),
+            #optionalPSet = cms.untracked.bool(True),
+            #reportEvery = cms.untracked.int32(1000)
+        #),
+        #FwkSummary = cms.untracked.PSet(
+            #limit = cms.untracked.int32(10000000),
+            #optionalPSet = cms.untracked.bool(True),
+            #reportEvery = cms.untracked.int32(1)
+        #),
+        #INFO = cms.untracked.PSet(
+            #limit = cms.untracked.int32(0)
+        #),
+        #Root_NoDictionary = cms.untracked.PSet(
+            #limit = cms.untracked.int32(0),
+            #optionalPSet = cms.untracked.bool(True)
+        #),
+        #default = cms.untracked.PSet(
+            #limit = cms.untracked.int32(10000000)
+        #),
+        #noTimeStamps = cms.untracked.bool(False),
+        #optionalPSet = cms.untracked.bool(True),
+        #threshold = cms.untracked.string('INFO')
+    #),
+    #cerr_stats = cms.untracked.PSet(
+        #optionalPSet = cms.untracked.bool(True),
+        #output = cms.untracked.string('cerr'),
+        #threshold = cms.untracked.string('WARNING')
+    #),
+    #cout = cms.untracked.PSet(
+        #placeholder = cms.untracked.bool(True)
+    #),
+    #debugModules = cms.untracked.vstring(),
+    #debugs = cms.untracked.PSet(
+        #placeholder = cms.untracked.bool(True)
+    #),
+    #default = cms.untracked.PSet(
 
-    ),
-    destinations = cms.untracked.vstring('warnings',
-        'errors',
-        'infos',
-        'debugs',
-        'cout',
-        'cerr'),
-    errors = cms.untracked.PSet(
-        placeholder = cms.untracked.bool(True)
-    ),
-    fwkJobReports = cms.untracked.vstring('FrameworkJobReport'),
-    infos = cms.untracked.PSet(
-        Root_NoDictionary = cms.untracked.PSet(
-            limit = cms.untracked.int32(0),
-            optionalPSet = cms.untracked.bool(True)
-        ),
-        optionalPSet = cms.untracked.bool(True),
-        placeholder = cms.untracked.bool(True)
-    ),
-    statistics = cms.untracked.vstring('cerr_stats'),
-    suppressDebug = cms.untracked.vstring(),
-    suppressInfo = cms.untracked.vstring(),
-    suppressWarning = cms.untracked.vstring(),
-    warnings = cms.untracked.PSet(
-        placeholder = cms.untracked.bool(True)
-    )
+    #),
+    #destinations = cms.untracked.vstring('warnings',
+        #'errors',
+        #'infos',
+        #'debugs',
+        #'cout',
+        #'cerr'),
+    #errors = cms.untracked.PSet(
+        #placeholder = cms.untracked.bool(True)
+    #),
+    #fwkJobReports = cms.untracked.vstring('FrameworkJobReport'),
+    #infos = cms.untracked.PSet(
+        #Root_NoDictionary = cms.untracked.PSet(
+            #limit = cms.untracked.int32(0),
+            #optionalPSet = cms.untracked.bool(True)
+        #),
+        #optionalPSet = cms.untracked.bool(True),
+        #placeholder = cms.untracked.bool(True)
+    #),
+    #statistics = cms.untracked.vstring('cerr_stats'),
+    #suppressDebug = cms.untracked.vstring(),
+    #suppressInfo = cms.untracked.vstring(),
+    #suppressWarning = cms.untracked.vstring(),
+    #warnings = cms.untracked.PSet(
+        #placeholder = cms.untracked.bool(True)
+    #)
+#)
+process.MessageLogger = cms.Service("MessageLogger",
+   destinations = cms.untracked.vstring(
+      'cout',
+      'cerr'
+   ),
+   cout = cms.untracked.PSet(
+      threshold = cms.untracked.string('INFO')
+   ),
+   cerr = cms.untracked.PSet(
+      threshold = cms.untracked.string('ERROR')
+   )
 )
 
 
