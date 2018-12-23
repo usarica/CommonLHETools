@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("testLHEWeights")
 
 
-procname = "TTToHadronic_2018"
+procname = "WZTo3LNu_2017"
 fNames = None
 if procname == "WWZ_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/94X_mc2017_realistic_v11-v1/100000/4231F556-3A26-E811-AB1D-002590D60038.root')
@@ -17,6 +17,8 @@ elif procname == "DYJetsToLL_M-4to50_HT-400to600_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/DYJetsToLL_M-4to50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/80000/FCF2C9A0-B605-E811-8B19-008CFAC93F4C.root')
 elif procname == "tZq_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/tZq_ll_4f_ckm_NLO_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/20000/041438B1-3C41-E811-BF9B-0025905B85DE.root')
+elif procname == "WZTo3LNu_2017":
+  fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/WZTo3LNu_3Jets_MLL-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/70000/BC5C9D9E-2965-E811-8F93-E0071B73B6C0.root')
 
 elif procname == "WWZ_2016":
   fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/WWZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/B814DCC1-18B7-E611-AD77-0CC47AD98F68.root')
@@ -33,6 +35,10 @@ elif procname == "tZq_2016":
 
 elif procname == "TTToHadronic_2018":
   fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/60000/84347EC0-60B4-5145-8F92-37F1975CA79D.root')
+elif procname == "TTTo2L2Nu_2018":
+  fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/1C576984-A8C6-B348-97FB-EEDC216ABDBD.root')
+elif procname == "QCD_Pt-15to20_EMEnriched_2018":
+  fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/QCD_Pt-15to20_EMEnriched_TuneCP5_13TeV_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15_ext1-v2/20000/E2FB35F4-1F40-4548-8DBE-2A6575206A6F.root')
 
 
 theYear = None
@@ -154,12 +160,78 @@ process.MessageLogger = cms.Service("MessageLogger",
       'cout',
       'cerr'
    ),
+   FrameworkJobReport = cms.untracked.PSet(
+      FwkJob = cms.untracked.PSet(
+         limit = cms.untracked.int32(10000000),
+         optionalPSet = cms.untracked.bool(True)
+      ),
+      default = cms.untracked.PSet(
+         limit = cms.untracked.int32(0)
+      ),
+      optionalPSet = cms.untracked.bool(True)
+   ),
+   fwkJobReports = cms.untracked.vstring('FrameworkJobReport'),
+   categories = cms.untracked.vstring(
+      'FwkJob',
+      'FwkReport',
+      'FwkSummary',
+      'Root_NoDictionary'
+   ),
    cout = cms.untracked.PSet(
-      threshold = cms.untracked.string('INFO')
+      FwkJob = cms.untracked.PSet(
+         limit = cms.untracked.int32(0),
+         optionalPSet = cms.untracked.bool(True)
+      ),
+      FwkReport = cms.untracked.PSet(
+         limit = cms.untracked.int32(10000),
+         optionalPSet = cms.untracked.bool(True),
+         reportEvery = cms.untracked.int32(1000)
+      ),
+      FwkSummary = cms.untracked.PSet(
+         limit = cms.untracked.int32(10000000),
+         optionalPSet = cms.untracked.bool(True),
+         reportEvery = cms.untracked.int32(1)
+      ),
+      Root_NoDictionary = cms.untracked.PSet(
+         limit = cms.untracked.int32(0),
+         optionalPSet = cms.untracked.bool(True)
+      ),
+      noTimeStamps = cms.untracked.bool(False),
+      optionalPSet = cms.untracked.bool(True),
+      threshold = cms.untracked.string('INFO'),
    ),
    cerr = cms.untracked.PSet(
-      threshold = cms.untracked.string('ERROR')
-   )
+      FwkJob = cms.untracked.PSet(
+         limit = cms.untracked.int32(0),
+         optionalPSet = cms.untracked.bool(True)
+      ),
+      FwkReport = cms.untracked.PSet(
+         limit = cms.untracked.int32(0),
+         optionalPSet = cms.untracked.bool(True),
+         reportEvery = cms.untracked.int32(1000)
+      ),
+      FwkSummary = cms.untracked.PSet(
+         limit = cms.untracked.int32(10000000),
+         optionalPSet = cms.untracked.bool(True),
+         reportEvery = cms.untracked.int32(1)
+      ),
+      Root_NoDictionary = cms.untracked.PSet(
+         limit = cms.untracked.int32(0),
+         optionalPSet = cms.untracked.bool(True)
+      ),
+      noTimeStamps = cms.untracked.bool(False),
+      optionalPSet = cms.untracked.bool(True),
+      threshold = cms.untracked.string('ERROR'),
+   ),
+   cerr_stats = cms.untracked.PSet(
+      optionalPSet = cms.untracked.bool(True),
+      output = cms.untracked.string('cerr'),
+      threshold = cms.untracked.string('WARNING')
+   ),
+   statistics = cms.untracked.vstring('cerr_stats'),
+   suppressDebug = cms.untracked.vstring(),
+   suppressInfo = cms.untracked.vstring(),
+   suppressWarning = cms.untracked.vstring(),
 )
 
 

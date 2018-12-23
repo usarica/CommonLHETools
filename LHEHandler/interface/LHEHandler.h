@@ -21,6 +21,9 @@
 
 
 class LHEHandler{
+protected:
+  static int maxlines_print_header;
+
 public:
   enum KinematicsMode{
     noKinematics=0,
@@ -64,6 +67,9 @@ public:
   static float findNearestOneSigma(float ref, int lowhigh, std::vector<float> const& wgt_array);
   static float safeDivide(float numerator, float denominator){ return (!(std::isfinite(numerator) && std::isfinite(denominator)) || denominator==0.f ? 0.f : numerator/denominator); }
 
+  // Misc. functions for the operation of printouts
+  static void set_maxlines_print_header(int nlines){ LHEHandler::maxlines_print_header=nlines; }
+
 protected:
   enum PDFVariationMode{
     useNone=0,
@@ -105,6 +111,10 @@ protected:
   std::vector<std::string> LHEHeader;
 
   void readEvent();
+
+  // Include functions for exceptional cases from a separate file here
+  // so that these functions are members of the LHEHandler class.
+#include "LHEHandler_ExceptionalCases.h"
 
 };
 

@@ -17,6 +17,7 @@
 
 #include "TTree.h"
 
+float LHEweight_Scaled_DefaultPDF; float LHEweight_Original_DefaultPDF; float LHEweight_MemberZero_DefaultPDF; float LHEweight_QCDscale_muR1_muF1_DefaultPDF; float LHEweight_QCDscale_muR1_muF2_DefaultPDF; float LHEweight_QCDscale_muR1_muF0p5_DefaultPDF; float LHEweight_QCDscale_muR2_muF1_DefaultPDF; float LHEweight_QCDscale_muR2_muF2_DefaultPDF; float LHEweight_QCDscale_muR2_muF0p5_DefaultPDF; float LHEweight_QCDscale_muR0p5_muF1_DefaultPDF; float LHEweight_QCDscale_muR0p5_muF2_DefaultPDF; float LHEweight_QCDscale_muR0p5_muF0p5_DefaultPDF; float LHEweight_PDFVariation_Up_DefaultPDF; float LHEweight_PDFVariation_Dn_DefaultPDF; float LHEweight_AsMZ_Up_DefaultPDF; float LHEweight_AsMZ_Dn_DefaultPDF;
 
 float LHEweight_Scaled_NNPDF30_LO; float LHEweight_Original_NNPDF30_LO; float LHEweight_MemberZero_NNPDF30_LO; float LHEweight_QCDscale_muR1_muF1_NNPDF30_LO; float LHEweight_QCDscale_muR1_muF2_NNPDF30_LO; float LHEweight_QCDscale_muR1_muF0p5_NNPDF30_LO; float LHEweight_QCDscale_muR2_muF1_NNPDF30_LO; float LHEweight_QCDscale_muR2_muF2_NNPDF30_LO; float LHEweight_QCDscale_muR2_muF0p5_NNPDF30_LO; float LHEweight_QCDscale_muR0p5_muF1_NNPDF30_LO; float LHEweight_QCDscale_muR0p5_muF2_NNPDF30_LO; float LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_LO; float LHEweight_PDFVariation_Up_NNPDF30_LO; float LHEweight_PDFVariation_Dn_NNPDF30_LO; float LHEweight_AsMZ_Up_NNPDF30_LO; float LHEweight_AsMZ_Dn_NNPDF30_LO;
 float LHEweight_Scaled_NNPDF30_NLO; float LHEweight_Original_NNPDF30_NLO; float LHEweight_MemberZero_NNPDF30_NLO; float LHEweight_QCDscale_muR1_muF1_NNPDF30_NLO; float LHEweight_QCDscale_muR1_muF2_NNPDF30_NLO; float LHEweight_QCDscale_muR1_muF0p5_NNPDF30_NLO; float LHEweight_QCDscale_muR2_muF1_NNPDF30_NLO; float LHEweight_QCDscale_muR2_muF2_NNPDF30_NLO; float LHEweight_QCDscale_muR2_muF0p5_NNPDF30_NLO; float LHEweight_QCDscale_muR0p5_muF1_NNPDF30_NLO; float LHEweight_QCDscale_muR0p5_muF2_NNPDF30_NLO; float LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_NLO; float LHEweight_PDFVariation_Up_NNPDF30_NLO; float LHEweight_PDFVariation_Dn_NNPDF30_NLO; float LHEweight_AsMZ_Up_NNPDF30_NLO; float LHEweight_AsMZ_Dn_NNPDF30_NLO;
@@ -47,18 +48,19 @@ protected:
 
   virtual void analyze(const edm::Event&, const edm::EventSetup&);
 
-  virtual void FillLHEWeights(LHEHandler const* lheHandler, float& LHEweight_Scaled, float& LHEweight_Original, float& LHEweight_MemberZero, float& LHEweight_QCDscale_muR1_muF1, float& LHEweight_QCDscale_muR1_muF2, float& LHEweight_QCDscale_muR1_muF0p5, float& LHEweight_QCDscale_muR2_muF1, float& LHEweight_QCDscale_muR2_muF2, float& LHEweight_QCDscale_muR2_muF0p5, float& LHEweight_QCDscale_muR0p5_muF1, float& LHEweight_QCDscale_muR0p5_muF2, float& LHEweight_QCDscale_muR0p5_muF0p5, float& LHEweight_PDFVariation_Up, float& LHEweight_PDFVariation_Dn, float& LHEweight_AsMZ_Up, float& LHEweight_AsMZ_Dn);
+  virtual void FillLHEWeights(std::unique_ptr<LHEHandler> const& lheHandler, float& LHEweight_Scaled, float& LHEweight_Original, float& LHEweight_MemberZero, float& LHEweight_QCDscale_muR1_muF1, float& LHEweight_QCDscale_muR1_muF2, float& LHEweight_QCDscale_muR1_muF0p5, float& LHEweight_QCDscale_muR2_muF1, float& LHEweight_QCDscale_muR2_muF2, float& LHEweight_QCDscale_muR2_muF0p5, float& LHEweight_QCDscale_muR0p5_muF1, float& LHEweight_QCDscale_muR0p5_muF2, float& LHEweight_QCDscale_muR0p5_muF0p5, float& LHEweight_PDFVariation_Up, float& LHEweight_PDFVariation_Dn, float& LHEweight_AsMZ_Up, float& LHEweight_AsMZ_Dn);
 
   // ----------member data ---------------------------
   int year;
   TString theTreeName;
   TTree* tree;
-  LHEHandler* lheHandler_NNPDF30_NNLO;
-  LHEHandler* lheHandler_NNPDF30_NLO;
-  LHEHandler* lheHandler_NNPDF30_LO;
-  LHEHandler* lheHandler_NNPDF31_NNLO;
-  LHEHandler* lheHandler_NNPDF31_NLO;
-  LHEHandler* lheHandler_NNPDF31_LO;
+  std::unique_ptr<LHEHandler> lheHandler_DefaultPDF;
+  std::unique_ptr<LHEHandler> lheHandler_NNPDF30_NNLO;
+  std::unique_ptr<LHEHandler> lheHandler_NNPDF30_NLO;
+  std::unique_ptr<LHEHandler> lheHandler_NNPDF30_LO;
+  std::unique_ptr<LHEHandler> lheHandler_NNPDF31_NNLO;
+  std::unique_ptr<LHEHandler> lheHandler_NNPDF31_NLO;
+  std::unique_ptr<LHEHandler> lheHandler_NNPDF31_LO;
 
   edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoToken;
   edm::EDGetTokenT<GenEventInfoProduct> genInfoToken;
@@ -76,32 +78,40 @@ LHEWeightAnalyzer::LHEWeightAnalyzer(const edm::ParameterSet& pset) :
   lheRunInfoToken = consumes<LHERunInfoProduct, edm::InRun>(edm::InputTag("externalLHEProducer"));
   genInfoToken = consumes<GenEventInfoProduct>(edm::InputTag("generator"));
 
-  lheHandler_NNPDF30_NNLO = new LHEHandler(
+  if (year==2016) LHEHandler::set_maxlines_print_header(1000);
+  else LHEHandler::set_maxlines_print_header(-1);
+
+  lheHandler_DefaultPDF = std::make_unique<LHEHandler>(
+    -1, -1,
+    (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
+    year, LHEHandler::keepDefaultPDF, LHEHandler::keepDefaultQCDOrder
+  );
+  lheHandler_NNPDF30_NNLO = std::make_unique<LHEHandler>(
     -1, -1,
     (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
     year, LHEHandler::tryNNPDF30, LHEHandler::tryNNLO
   );
-  lheHandler_NNPDF30_NLO = new LHEHandler(
+  lheHandler_NNPDF30_NLO = std::make_unique<LHEHandler>(
     -1, -1,
     (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
     year, LHEHandler::tryNNPDF30, LHEHandler::tryNLO
   );
-  lheHandler_NNPDF30_LO = new LHEHandler(
+  lheHandler_NNPDF30_LO = std::make_unique<LHEHandler>(
     -1, -1,
     (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
     year, LHEHandler::tryNNPDF30, LHEHandler::tryLO
   );
-  lheHandler_NNPDF31_NNLO = new LHEHandler(
+  lheHandler_NNPDF31_NNLO = std::make_unique<LHEHandler>(
     -1, -1,
     (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
     year, LHEHandler::tryNNPDF31, LHEHandler::tryNNLO
   );
-  lheHandler_NNPDF31_NLO = new LHEHandler(
+  lheHandler_NNPDF31_NLO = std::make_unique<LHEHandler>(
     -1, -1,
     (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
     year, LHEHandler::tryNNPDF31, LHEHandler::tryNLO
   );
-  lheHandler_NNPDF31_LO = new LHEHandler(
+  lheHandler_NNPDF31_LO = std::make_unique<LHEHandler>(
     -1, -1,
     (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
     year, LHEHandler::tryNNPDF31, LHEHandler::tryLO
@@ -109,12 +119,7 @@ LHEWeightAnalyzer::LHEWeightAnalyzer(const edm::ParameterSet& pset) :
 }
 
 LHEWeightAnalyzer::~LHEWeightAnalyzer(){
-  delete lheHandler_NNPDF30_NNLO;
-  delete lheHandler_NNPDF30_NLO;
-  delete lheHandler_NNPDF30_LO;
-  delete lheHandler_NNPDF31_NNLO;
-  delete lheHandler_NNPDF31_NLO;
-  delete lheHandler_NNPDF31_LO;
+  // No need to delete unique_ptrs
 }
 
 
@@ -126,11 +131,15 @@ void LHEWeightAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& 
   edm::Handle<GenEventInfoProduct> gen_handle;
   event.getByToken(genInfoToken, gen_handle);
 
+  static bool firstEvent=true;
   if (!lhe_handles.empty()){
     //std::cout << "New ev!" << std::endl;
     edm::Handle<LHEEventProduct>& lhe_evt = lhe_handles.front();
     //std::cout << "New hndl!" << std::endl;
 
+    lheHandler_DefaultPDF->setHandle(&lhe_evt);
+    lheHandler_DefaultPDF->extract();
+    FillLHEWeights(lheHandler_DefaultPDF, LHEweight_Scaled_DefaultPDF, LHEweight_Original_DefaultPDF, LHEweight_MemberZero_DefaultPDF, LHEweight_QCDscale_muR1_muF1_DefaultPDF, LHEweight_QCDscale_muR1_muF2_DefaultPDF, LHEweight_QCDscale_muR1_muF0p5_DefaultPDF, LHEweight_QCDscale_muR2_muF1_DefaultPDF, LHEweight_QCDscale_muR2_muF2_DefaultPDF, LHEweight_QCDscale_muR2_muF0p5_DefaultPDF, LHEweight_QCDscale_muR0p5_muF1_DefaultPDF, LHEweight_QCDscale_muR0p5_muF2_DefaultPDF, LHEweight_QCDscale_muR0p5_muF0p5_DefaultPDF, LHEweight_PDFVariation_Up_DefaultPDF, LHEweight_PDFVariation_Dn_DefaultPDF, LHEweight_AsMZ_Up_DefaultPDF, LHEweight_AsMZ_Dn_DefaultPDF);
     lheHandler_NNPDF30_NNLO->setHandle(&lhe_evt);
     lheHandler_NNPDF30_NNLO->extract();
     FillLHEWeights(lheHandler_NNPDF30_NNLO, LHEweight_Scaled_NNPDF30_NNLO, LHEweight_Original_NNPDF30_NNLO, LHEweight_MemberZero_NNPDF30_NNLO, LHEweight_QCDscale_muR1_muF1_NNPDF30_NNLO, LHEweight_QCDscale_muR1_muF2_NNPDF30_NNLO, LHEweight_QCDscale_muR1_muF0p5_NNPDF30_NNLO, LHEweight_QCDscale_muR2_muF1_NNPDF30_NNLO, LHEweight_QCDscale_muR2_muF2_NNPDF30_NNLO, LHEweight_QCDscale_muR2_muF0p5_NNPDF30_NNLO, LHEweight_QCDscale_muR0p5_muF1_NNPDF30_NNLO, LHEweight_QCDscale_muR0p5_muF2_NNPDF30_NNLO, LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_NNLO, LHEweight_PDFVariation_Up_NNPDF30_NNLO, LHEweight_PDFVariation_Dn_NNPDF30_NNLO, LHEweight_AsMZ_Up_NNPDF30_NNLO, LHEweight_AsMZ_Dn_NNPDF30_NNLO);
@@ -165,9 +174,15 @@ void LHEWeightAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& 
     tree->Fill();
     //std::cout << "Tree is filled!" << std::endl;
   }
+  else if (firstEvent){
+    edm::LogWarning warning("InvalidLHEHandle");
+    warning << "LHEEventProduct is invalid!";
+  }
+
+  if (firstEvent) firstEvent=false;
 }
 
-void LHEWeightAnalyzer::FillLHEWeights(LHEHandler const* lheHandler, float& LHEweight_Scaled, float& LHEweight_Original, float& LHEweight_MemberZero, float& LHEweight_QCDscale_muR1_muF1, float& LHEweight_QCDscale_muR1_muF2, float& LHEweight_QCDscale_muR1_muF0p5, float& LHEweight_QCDscale_muR2_muF1, float& LHEweight_QCDscale_muR2_muF2, float& LHEweight_QCDscale_muR2_muF0p5, float& LHEweight_QCDscale_muR0p5_muF1, float& LHEweight_QCDscale_muR0p5_muF2, float& LHEweight_QCDscale_muR0p5_muF0p5, float& LHEweight_PDFVariation_Up, float& LHEweight_PDFVariation_Dn, float& LHEweight_AsMZ_Up, float& LHEweight_AsMZ_Dn){
+void LHEWeightAnalyzer::FillLHEWeights(std::unique_ptr<LHEHandler> const& lheHandler, float& LHEweight_Scaled, float& LHEweight_Original, float& LHEweight_MemberZero, float& LHEweight_QCDscale_muR1_muF1, float& LHEweight_QCDscale_muR1_muF2, float& LHEweight_QCDscale_muR1_muF0p5, float& LHEweight_QCDscale_muR2_muF1, float& LHEweight_QCDscale_muR2_muF2, float& LHEweight_QCDscale_muR2_muF0p5, float& LHEweight_QCDscale_muR0p5_muF1, float& LHEweight_QCDscale_muR0p5_muF2, float& LHEweight_QCDscale_muR0p5_muF0p5, float& LHEweight_PDFVariation_Up, float& LHEweight_PDFVariation_Dn, float& LHEweight_AsMZ_Up, float& LHEweight_AsMZ_Dn){
   LHEweight_Original = lheHandler->getLHEOriginalWeight();
   LHEweight_Scaled = LHEweight_Original*lheHandler->getWeightRescale();
   LHEweight_MemberZero = lheHandler->getMemberZeroWeight();
@@ -189,6 +204,23 @@ void LHEWeightAnalyzer::FillLHEWeights(LHEHandler const* lheHandler, float& LHEw
 void LHEWeightAnalyzer::beginJob(){
   edm::Service<TFileService> fs;
   tree = fs->make<TTree>(theTreeName, "Event Summary");
+
+  tree->Branch("LHEweight_Original_DefaultPDF", &LHEweight_Original_DefaultPDF);
+  tree->Branch("LHEweight_Scaled_DefaultPDF", &LHEweight_Scaled_DefaultPDF);
+  tree->Branch("LHEweight_MemberZero_DefaultPDF", &LHEweight_MemberZero_DefaultPDF);
+  tree->Branch("LHEweight_QCDscale_muR1_muF1_DefaultPDF", &LHEweight_QCDscale_muR1_muF1_DefaultPDF);
+  tree->Branch("LHEweight_QCDscale_muR1_muF2_DefaultPDF", &LHEweight_QCDscale_muR1_muF2_DefaultPDF);
+  tree->Branch("LHEweight_QCDscale_muR1_muF0p5_DefaultPDF", &LHEweight_QCDscale_muR1_muF0p5_DefaultPDF);
+  tree->Branch("LHEweight_QCDscale_muR2_muF1_DefaultPDF", &LHEweight_QCDscale_muR2_muF1_DefaultPDF);
+  tree->Branch("LHEweight_QCDscale_muR2_muF2_DefaultPDF", &LHEweight_QCDscale_muR2_muF2_DefaultPDF);
+  tree->Branch("LHEweight_QCDscale_muR2_muF0p5_DefaultPDF", &LHEweight_QCDscale_muR2_muF0p5_DefaultPDF);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF1_DefaultPDF", &LHEweight_QCDscale_muR0p5_muF1_DefaultPDF);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF2_DefaultPDF", &LHEweight_QCDscale_muR0p5_muF2_DefaultPDF);
+  tree->Branch("LHEweight_QCDscale_muR0p5_muF0p5_DefaultPDF", &LHEweight_QCDscale_muR0p5_muF0p5_DefaultPDF);
+  tree->Branch("LHEweight_PDFVariation_Up_DefaultPDF", &LHEweight_PDFVariation_Up_DefaultPDF);
+  tree->Branch("LHEweight_PDFVariation_Dn_DefaultPDF", &LHEweight_PDFVariation_Dn_DefaultPDF);
+  tree->Branch("LHEweight_AsMZ_Up_DefaultPDF", &LHEweight_AsMZ_Up_DefaultPDF);
+  tree->Branch("LHEweight_AsMZ_Dn_DefaultPDF", &LHEweight_AsMZ_Dn_DefaultPDF);
 
   tree->Branch("LHEweight_Original_NNPDF30_NNLO", &LHEweight_Original_NNPDF30_NNLO);
   tree->Branch("LHEweight_Scaled_NNPDF30_NNLO", &LHEweight_Scaled_NNPDF30_NNLO);
@@ -302,6 +334,7 @@ void LHEWeightAnalyzer::beginRun(edm::Run const& iRun, edm::EventSetup const&){
   if (firstRun){
     edm::Handle<LHERunInfoProduct> lhe_runinfo;
     iRun.getByLabel(edm::InputTag("externalLHEProducer"), lhe_runinfo);
+    lheHandler_DefaultPDF->setHeaderFromRunInfo(&lhe_runinfo);
     lheHandler_NNPDF30_NNLO->setHeaderFromRunInfo(&lhe_runinfo);
     lheHandler_NNPDF30_NLO->setHeaderFromRunInfo(&lhe_runinfo);
     lheHandler_NNPDF30_LO->setHeaderFromRunInfo(&lhe_runinfo);
