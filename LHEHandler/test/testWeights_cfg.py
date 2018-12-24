@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("testLHEWeights")
 
 
-procname = "WWZ_2017"
+procname = "VBFH2000_2017"
 fNames = None
 if procname == "WWZ_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/94X_mc2017_realistic_v11-v1/100000/4231F556-3A26-E811-AB1D-002590D60038.root')
@@ -32,6 +32,8 @@ elif procname == "DY3JetsToLL_M-10to50_2016":
   fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/DY3JetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/0414608F-FAC9-E611-83FC-0CC47A4D767E.root')
 elif procname == "tZq_2016":
   fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/tZq_ll_4f_ckm_NLO_13TeV-amcatnlo-herwigpp/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/90000/FE94710A-CA3D-E711-81F6-0242AC130004.root')
+elif procname == "bbHToWWTo2L2Nu_2016":
+  fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/bbHToWWTo2L2Nu_M-125_4FS_ybyt_13TeV_amcatnlo/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/80000/00324D0A-14CA-E611-8E17-0090FAA57E54.root')
 
 elif procname == "TTToHadronic_2018":
   fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/60000/84347EC0-60B4-5145-8F92-37F1975CA79D.root')

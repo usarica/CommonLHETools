@@ -582,7 +582,7 @@ void LHEHandler::readEvent(){
     }
     else throw cms::Exception("LHEWeights") << "Unknown year " << year;
   }
-  // Handle LO samples with 101 alternative weights
+  // Handle LO samples with 101 or 103 alternative weights
   if (year == 2016 && (LHEPDFVariationWgt.size()==101 || LHEPDFVariationWgt.size()==103)) LHEPDFVariationWgt.erase(LHEPDFVariationWgt.begin(), LHEPDFVariationWgt.begin()+1);
   /*
   static bool firsttimeaccount=true;
@@ -683,7 +683,7 @@ void LHEHandler::readEvent(){
       //see the routine starting on line 101 of PDFSet.cc in LHAPDF-6.2.1
       //based on NNPDF31_nlo_hessian_pdfas.info, which confirms that errorType() is symmhessian+as
       float error = 0.f;
-      for (const auto& wt : LHEPDFVariationWgt) error += pow(wt - 1.f, 2);
+      for (const auto& wt:LHEPDFVariationWgt) error += pow(wt - 1.f, 2);
       error = sqrt(error);
       
       LHEWeight_PDFVariationUpDn ={ (1.f + error), (1.f - error) };
@@ -692,7 +692,7 @@ void LHEHandler::readEvent(){
         float asdn = LHEPDFAlphaSMZWgt.at(0);
         float asup = LHEPDFAlphaSMZWgt.at(1);
         // Rescale alphas(mZ) variations from 0.118+-0.002 to 0.118+-0.0015
-        //                           Note this number ^ is different than 2016!
+        //                           Note this number (^) is different than 2016!
         LHEWeight_AsMZUpDn.push_back(1.f + (asup-1.f)*0.75);
         LHEWeight_AsMZUpDn.push_back(1.f + (asdn-1.f)*0.75);
       }

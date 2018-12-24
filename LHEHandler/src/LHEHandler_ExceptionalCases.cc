@@ -1,3 +1,4 @@
+#include <FWCore/Utilities/interface/EDMException.h>
 #include "LHEHandler.h"
 // No need for LHEHandler_ExceptionalCases.h
 
@@ -6,6 +7,9 @@ using namespace std;
 
 
 bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_nf_4(){
+  if (year == 2016) return false;
+  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+
   for (auto const& line:LHEHeader){
     if (line.find("<weight id=\"1010\"> PDF=  320900 NNPDF31_nnlo_as_0118_nf_4 </weight>")!=std::string::npos) return true;
   }
@@ -13,6 +17,9 @@ bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_nf_4(){
 }
 // This is a fun one...
 bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case1(){
+  if (year == 2016) return false;
+  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+
   // This block of strings is only part of what needs to be tested
   const std::vector<std::string> searchBlock{
     "weight id=\"1002\" MUR=\"1.0\" MUF=\"1.0\" DYN_SCALE=\"1\" PDF=\"306000\"",
@@ -80,6 +87,9 @@ bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case1(
   return (beginTest && matchAll);
 }
 bool LHEHandler::test_specialPDF_NNPDF30_nlo_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1(){
+  if (year == 2016) return false;
+  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+
   const std::vector<std::vector<std::string>> searchBlock{
     {"weight id", "1001", "muR=0.10000E+01 muF=0.10000E+01"},
     {"weight id", "2001", "pdfset=292001"}
