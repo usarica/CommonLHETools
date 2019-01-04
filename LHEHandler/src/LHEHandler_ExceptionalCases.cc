@@ -6,7 +6,7 @@
 using namespace std;
 
 
-bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_nf_4(){
+bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_nf_4_Madgraph_1000offset_Case1(){
   if (year == 2016) return false;
   else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
 
@@ -93,6 +93,26 @@ bool LHEHandler::test_specialPDF_NNPDF30_nlo_nf_4_pdfas_Madgraph_1000offset_POWH
   const std::vector<std::vector<std::string>> searchBlock{
     {"weight id", "1001", "muR=0.10000E+01 muF=0.10000E+01"},
     {"weight id", "2001", "pdfset=292001"}
+  };
+
+  std::vector<std::vector<std::string>>::const_iterator itBlock=searchBlock.cbegin();
+  for (auto const& line:LHEHeader){
+    if (itBlock==searchBlock.cend()) break;
+    bool foundAll=true;
+    for (std::string const& sline:(*itBlock)) foundAll &= (line.find(sline)!=std::string::npos);
+    if (foundAll) itBlock++;
+  }
+  return (!searchBlock.empty() && itBlock==searchBlock.cend());
+}
+// This is a case where the ordering is sort of wrong...
+bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1(){
+  if (year == 2016) return false;
+  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+
+  const std::vector<std::vector<std::string>> searchBlock{
+    { "weight id", "1001", "lhapdf=320900" },
+    { "weight id", "1500", "lhapdf=306000" },
+    { "weight id", "2000", "lhapdf=320900" }
   };
 
   std::vector<std::vector<std::string>>::const_iterator itBlock=searchBlock.cbegin();

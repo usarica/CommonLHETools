@@ -19,6 +19,8 @@ elif procname == "tZq_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/tZq_ll_4f_ckm_NLO_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/20000/041438B1-3C41-E811-BF9B-0025905B85DE.root')
 elif procname == "WZTo3LNu_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/WZTo3LNu_3Jets_MLL-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/70000/BC5C9D9E-2965-E811-8F93-E0071B73B6C0.root')
+elif procname == "ST_t-channel_top_2017": # specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1
+  fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8/MINIAODSIM/PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/50000/605F3C1B-C269-E811-A974-0CC47A7DFFCA.root')
 
 elif procname == "WWZ_2016":
   fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/WWZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/B814DCC1-18B7-E611-AD77-0CC47AD98F68.root')
