@@ -124,3 +124,23 @@ bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1(
   }
   return (!searchBlock.empty() && itBlock==searchBlock.cend());
 }
+bool LHEHandler::test_specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1(){
+  if (year == 2016 || year == 2017) return false;
+  else if (year != 2018) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+
+  const std::vector<std::vector<std::string>> searchBlock{
+    { "id", "1", "315200" }, // NNPDF31_lo_as_0130
+    { "id", "111", "306000" }, // NNPDF31_nnlo_hessian_pdfas
+    { "id", "222", "305800" }, // NNPDF31_nlo_hessian_pdfas
+    { "id", "1074", "292200" } // NNPDF30_nlo_nf_5_pdfas
+  };
+
+  std::vector<std::vector<std::string>>::const_iterator itBlock=searchBlock.cbegin();
+  for (auto const& line:LHEHeader){
+    if (itBlock==searchBlock.cend()) break;
+    bool foundAll=true;
+    for (std::string const& sline:(*itBlock)) foundAll &= (line.find(sline)!=std::string::npos);
+    if (foundAll) itBlock++;
+  }
+  return (!searchBlock.empty() && itBlock==searchBlock.cend());
+}
