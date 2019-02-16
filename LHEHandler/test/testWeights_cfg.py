@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("testLHEWeights")
 
 
-procname = "SMS-T1tbs_RPV_mGluino1700_2018"
+procname = "SMS-T1tbs_RPV_mGluino1000_2017"
 fNames = None
 if procname == "WWZ_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/94X_mc2017_realistic_v11-v1/100000/4231F556-3A26-E811-AB1D-002590D60038.root')
@@ -21,6 +21,8 @@ elif procname == "WZTo3LNu_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/WZTo3LNu_3Jets_MLL-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/70000/BC5C9D9E-2965-E811-8F93-E0071B73B6C0.root')
 elif procname == "ST_t-channel_top_2017": # specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8/MINIAODSIM/PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/50000/605F3C1B-C269-E811-A974-0CC47A7DFFCA.root')
+elif procname == "SMS-T1tbs_RPV_mGluino1000_2017": # specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1
+  fNames=cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/SMS-T1tbs_RPV_mGluino1000_TuneCP2_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/40000/2CE3691D-0B23-E911-8E3D-AC1F6B0DE0BA.root')
 
 elif procname == "WWZ_2016":
   fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/WWZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/B814DCC1-18B7-E611-AD77-0CC47AD98F68.root')
@@ -43,7 +45,7 @@ elif procname == "TTTo2L2Nu_2018":
   fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/1C576984-A8C6-B348-97FB-EEDC216ABDBD.root')
 elif procname == "QCD_Pt-15to20_EMEnriched_2018":
   fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/QCD_Pt-15to20_EMEnriched_TuneCP5_13TeV_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15_ext1-v2/20000/E2FB35F4-1F40-4548-8DBE-2A6575206A6F.root')
-elif procname == "SMS-T1tbs_RPV_mGluino1700_2018": # specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1
+elif procname == "SMS-T1tbs_RPV_mGluino1700_2018": # specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1 (same as above)
   fNames=cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/SMS-T1tbs_RPV_mGluino1700_TuneCP2_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/80000/09C0F76D-916C-D241-B32F-79FEDF4CF463.root')
 
 theYear = None

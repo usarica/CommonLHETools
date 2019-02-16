@@ -125,8 +125,8 @@ bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1(
   return (!searchBlock.empty() && itBlock==searchBlock.cend());
 }
 bool LHEHandler::test_specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1(){
-  if (year == 2016 || year == 2017) return false;
-  else if (year != 2018) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+  if (year == 2016) return false;
+  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
 
   const std::vector<std::vector<std::string>> searchBlock{
     { "id", "1", "315200" }, // NNPDF31_lo_as_0130
