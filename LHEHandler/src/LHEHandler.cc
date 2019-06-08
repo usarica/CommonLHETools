@@ -1,6 +1,8 @@
 #include <FWCore/MessageLogger/interface/MessageLogger.h>
 #include <FWCore/Utilities/interface/EDMException.h>
 #include <MelaAnalytics/EventContainer/interface/HiggsComparators.h>
+#include <MelaAnalytics/EventContainer/interface/TopComparators.h>
+#include <ZZMatrixElement/MELA/interface/MELAStreamHelpers.hh>
 #include <iomanip>
 #include <iostream>
 #include <cstdlib>
@@ -16,6 +18,7 @@ typedef std::vector<std::pair<int, int>> vectorIntPair;
 
 using namespace std;
 using namespace PDGHelpers;
+using namespace MELAStreamHelpers;
 
 
 // Static member initialization
@@ -97,6 +100,7 @@ void LHEHandler::clear(){
   defaultWeightScale=1;
 }
 
+MELAEvent* LHEHandler::getEvent(){ return genEvent; }
 MELACandidate* LHEHandler::getBestCandidate(){ return genCand; }
 float const& LHEHandler::getLHEOriginalWeight() const{ return this->LHEOriginalWeight; }
 float const& LHEHandler::getMemberZeroWeight() const{ return this->defaultMemberZeroWeight; }
@@ -132,6 +136,8 @@ bool LHEHandler::hasHeader() const{ return !LHEHeader.empty(); }
 
 
 void LHEHandler::extract(){
+  //static bool firstEvent=false;
+
   if (!lhe_evt) cerr << "LHEHandler::extract: lhe_evt==0" << endl;
   else if (!lhe_evt->isValid()) cerr << "LHEHandler::extract: lhe_evt invalid!" << endl;
   else{
@@ -143,13 +149,18 @@ void LHEHandler::extract(){
     if (doKinematics>=doBasicKinematics){
 
       genEvent = new MELAEvent();
-      vectorInt writtenGenCandIndex;
+      vector<MELAParticle*> writtenGenCands;
+      vector<MELAParticle*> writtenGenTopCands;
 
       {
-        int p=0;
         for (MELAParticle* genPart:particleList){
+          //if (firstEvent) MELAout << "LHE particle (status " << genPart->genStatus << "): " << *genPart << endl;
+          if (isATopQuark(genPart->id)){
+            writtenGenTopCands.push_back(genPart);
+            if (genPart->genStatus==1) genEvent->addIntermediate(genPart);
+          }
           if (doKinematics==doHiggsKinematics && isAHiggs(genPart->id)){
-            writtenGenCandIndex.push_back(p);
+            writtenGenCands.push_back(genPart);
             if (VVMode==-1 && (genPart->genStatus==1 || genPart->genStatus==2)) genEvent->addIntermediate(genPart);
           }
           if (genPart->genStatus==1){
@@ -159,20 +170,40 @@ void LHEHandler::extract(){
             else if (isAGluon(genPart->id) || isAQuark(genPart->id)) genEvent->addJet(genPart);
           }
           else if (genPart->genStatus==-1) genEvent->addMother(genPart);
-          p++;
+        }
+      }
+
+      //if (firstEvent){
+      //  MELAout << "All gen particles:" << endl;
+      //  for (auto const* part:genEvent->getParticles()) MELAout << *part << endl;
+      //}
+
+      genEvent->constructTopCandidates();
+      //if (firstEvent){
+      //  MELAout << "Gen tops after constructTopCandidates:" << endl;
+      //  for (auto const* top:genEvent->getTopCandidates()) MELAout << *top << endl;
+      //}
+      // Disable top unmatched to a gen. top
+      {
+        vector<MELATopCandidate_t*> matchedTops;
+        for (auto* writtenGenTopCand:writtenGenTopCands){
+          //if (firstEvent) MELAout << "Comparing written top " << *writtenGenTopCand << " (status=" << writtenGenTopCand->genStatus << ") to gen event tops" << endl;
+          MELATopCandidate_t* tmpCand = TopComparators::matchATopToParticle(*genEvent, writtenGenTopCand);
+          if (tmpCand) matchedTops.push_back(tmpCand);
+        }
+        for (MELATopCandidate_t* tmpCand:genEvent->getTopCandidates()){
+          if (std::find(matchedTops.begin(), matchedTops.end(), tmpCand)==matchedTops.end()) tmpCand->setSelected(false);
         }
       }
 
       if (doKinematics==doHiggsKinematics){
         genEvent->constructVVCandidates(VVMode, VVDecayMode);
         genEvent->addVVCandidateAppendages();
-        if (!writtenGenCandIndex.empty()){
-          for (const int& iC:writtenGenCandIndex){
-            MELACandidate* tmpCand = HiggsComparators::matchAHiggsToParticle(*genEvent, particleList.at(iC));
-            if (tmpCand){
-              if (!genCand) genCand = tmpCand;
-              else genCand = HiggsComparators::candComparator(genCand, tmpCand, HiggsComparators::BestZ1ThenZ2ScSumPt, VVMode);
-            }
+        for (auto* writtenGenCand:writtenGenCands){
+          MELACandidate* tmpCand = HiggsComparators::matchAHiggsToParticle(*genEvent, writtenGenCand);
+          if (tmpCand){
+            if (!genCand) genCand = tmpCand;
+            else genCand = HiggsComparators::candComparator(genCand, tmpCand, HiggsComparators::BestZ1ThenZ2ScSumPt, VVMode);
           }
         }
         if (!genCand) genCand = HiggsComparators::candidateSelector(*genEvent, HiggsComparators::BestZ1ThenZ2ScSumPt, VVMode);
@@ -181,6 +212,7 @@ void LHEHandler::extract(){
     }
 
   }
+  //firstEvent=false;
 }
 
 void LHEHandler::readEvent(){

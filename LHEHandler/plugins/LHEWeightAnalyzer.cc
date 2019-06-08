@@ -27,6 +27,10 @@ float LHEweight_Scaled_NNPDF31_LO; float LHEweight_Original_NNPDF31_LO; float LH
 float LHEweight_Scaled_NNPDF31_NLO; float LHEweight_Original_NNPDF31_NLO; float LHEweight_MemberZero_NNPDF31_NLO; float LHEweight_QCDscale_muR1_muF1_NNPDF31_NLO; float LHEweight_QCDscale_muR1_muF2_NNPDF31_NLO; float LHEweight_QCDscale_muR1_muF0p5_NNPDF31_NLO; float LHEweight_QCDscale_muR2_muF1_NNPDF31_NLO; float LHEweight_QCDscale_muR2_muF2_NNPDF31_NLO; float LHEweight_QCDscale_muR2_muF0p5_NNPDF31_NLO; float LHEweight_QCDscale_muR0p5_muF1_NNPDF31_NLO; float LHEweight_QCDscale_muR0p5_muF2_NNPDF31_NLO; float LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_NLO; float LHEweight_PDFVariation_Up_NNPDF31_NLO; float LHEweight_PDFVariation_Dn_NNPDF31_NLO; float LHEweight_AsMZ_Up_NNPDF31_NLO; float LHEweight_AsMZ_Dn_NNPDF31_NLO;
 float LHEweight_Scaled_NNPDF31_NNLO; float LHEweight_Original_NNPDF31_NNLO; float LHEweight_MemberZero_NNPDF31_NNLO; float LHEweight_QCDscale_muR1_muF1_NNPDF31_NNLO; float LHEweight_QCDscale_muR1_muF2_NNPDF31_NNLO; float LHEweight_QCDscale_muR1_muF0p5_NNPDF31_NNLO; float LHEweight_QCDscale_muR2_muF1_NNPDF31_NNLO; float LHEweight_QCDscale_muR2_muF2_NNPDF31_NNLO; float LHEweight_QCDscale_muR2_muF0p5_NNPDF31_NNLO; float LHEweight_QCDscale_muR0p5_muF1_NNPDF31_NNLO; float LHEweight_QCDscale_muR0p5_muF2_NNPDF31_NNLO; float LHEweight_QCDscale_muR0p5_muF0p5_NNPDF31_NNLO; float LHEweight_PDFVariation_Up_NNPDF31_NNLO; float LHEweight_PDFVariation_Dn_NNPDF31_NNLO; float LHEweight_AsMZ_Up_NNPDF31_NNLO; float LHEweight_AsMZ_Dn_NNPDF31_NNLO;
 
+unsigned int ntops;
+std::vector<float> tops_pt, tops_eta, tops_phi, tops_mass;
+
+
 using namespace std;
 using namespace edm;
 //
@@ -52,6 +56,7 @@ protected:
 
   // ----------member data ---------------------------
   int year;
+  LHEHandler::KinematicsMode kinMode;
   TString theTreeName;
   TTree* tree;
   std::unique_ptr<LHEHandler> lheHandler_DefaultPDF;
@@ -71,6 +76,7 @@ protected:
 
 LHEWeightAnalyzer::LHEWeightAnalyzer(const edm::ParameterSet& pset) :
   year(pset.getParameter<int>("year")),
+  kinMode((LHEHandler::KinematicsMode) pset.getParameter<int>("kinMode")),
   theTreeName("weightsTree"),
   tree(nullptr)
 {
@@ -83,37 +89,37 @@ LHEWeightAnalyzer::LHEWeightAnalyzer(const edm::ParameterSet& pset) :
 
   lheHandler_DefaultPDF = std::make_unique<LHEHandler>(
     -1, -1,
-    (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
+    kinMode,
     year, LHEHandler::keepDefaultPDF, LHEHandler::keepDefaultQCDOrder
   );
   lheHandler_NNPDF30_NNLO = std::make_unique<LHEHandler>(
     -1, -1,
-    (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
+    LHEHandler::noKinematics,
     year, LHEHandler::tryNNPDF30, LHEHandler::tryNNLO
   );
   lheHandler_NNPDF30_NLO = std::make_unique<LHEHandler>(
     -1, -1,
-    (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
+    LHEHandler::noKinematics,
     year, LHEHandler::tryNNPDF30, LHEHandler::tryNLO
   );
   lheHandler_NNPDF30_LO = std::make_unique<LHEHandler>(
     -1, -1,
-    (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
+    LHEHandler::noKinematics,
     year, LHEHandler::tryNNPDF30, LHEHandler::tryLO
   );
   lheHandler_NNPDF31_NNLO = std::make_unique<LHEHandler>(
     -1, -1,
-    (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
+    LHEHandler::noKinematics,
     year, LHEHandler::tryNNPDF31, LHEHandler::tryNNLO
   );
   lheHandler_NNPDF31_NLO = std::make_unique<LHEHandler>(
     -1, -1,
-    (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
+    LHEHandler::noKinematics,
     year, LHEHandler::tryNNPDF31, LHEHandler::tryNLO
   );
   lheHandler_NNPDF31_LO = std::make_unique<LHEHandler>(
     -1, -1,
-    (false ? LHEHandler::doHiggsKinematics : LHEHandler::noKinematics),
+    LHEHandler::noKinematics,
     year, LHEHandler::tryNNPDF31, LHEHandler::tryLO
   );
 }
@@ -140,6 +146,20 @@ void LHEWeightAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& 
     lheHandler_DefaultPDF->setHandle(&lhe_evt);
     lheHandler_DefaultPDF->extract();
     FillLHEWeights(lheHandler_DefaultPDF, LHEweight_Scaled_DefaultPDF, LHEweight_Original_DefaultPDF, LHEweight_MemberZero_DefaultPDF, LHEweight_QCDscale_muR1_muF1_DefaultPDF, LHEweight_QCDscale_muR1_muF2_DefaultPDF, LHEweight_QCDscale_muR1_muF0p5_DefaultPDF, LHEweight_QCDscale_muR2_muF1_DefaultPDF, LHEweight_QCDscale_muR2_muF2_DefaultPDF, LHEweight_QCDscale_muR2_muF0p5_DefaultPDF, LHEweight_QCDscale_muR0p5_muF1_DefaultPDF, LHEweight_QCDscale_muR0p5_muF2_DefaultPDF, LHEweight_QCDscale_muR0p5_muF0p5_DefaultPDF, LHEweight_PDFVariation_Up_DefaultPDF, LHEweight_PDFVariation_Dn_DefaultPDF, LHEweight_AsMZ_Up_DefaultPDF, LHEweight_AsMZ_Dn_DefaultPDF);
+    
+    // Special case for this handler is to fill the event kinematics
+    if (kinMode!=LHEHandler::noKinematics){
+      MELAEvent* genEvent = lheHandler_DefaultPDF->getEvent();
+      for (auto const* top:genEvent->getTopCandidates()){
+        if (!top->passSelection) continue;
+        tops_pt.push_back(top->pt());
+        tops_eta.push_back(top->eta());
+        tops_phi.push_back(top->phi());
+        tops_mass.push_back(top->m());
+      }
+      ntops=tops_mass.size();
+    }
+
     lheHandler_NNPDF30_NNLO->setHandle(&lhe_evt);
     lheHandler_NNPDF30_NNLO->extract();
     FillLHEWeights(lheHandler_NNPDF30_NNLO, LHEweight_Scaled_NNPDF30_NNLO, LHEweight_Original_NNPDF30_NNLO, LHEweight_MemberZero_NNPDF30_NNLO, LHEweight_QCDscale_muR1_muF1_NNPDF30_NNLO, LHEweight_QCDscale_muR1_muF2_NNPDF30_NNLO, LHEweight_QCDscale_muR1_muF0p5_NNPDF30_NNLO, LHEweight_QCDscale_muR2_muF1_NNPDF30_NNLO, LHEweight_QCDscale_muR2_muF2_NNPDF30_NNLO, LHEweight_QCDscale_muR2_muF0p5_NNPDF30_NNLO, LHEweight_QCDscale_muR0p5_muF1_NNPDF30_NNLO, LHEweight_QCDscale_muR0p5_muF2_NNPDF30_NNLO, LHEweight_QCDscale_muR0p5_muF0p5_NNPDF30_NNLO, LHEweight_PDFVariation_Up_NNPDF30_NNLO, LHEweight_PDFVariation_Dn_NNPDF30_NNLO, LHEweight_AsMZ_Up_NNPDF30_NNLO, LHEweight_AsMZ_Dn_NNPDF30_NNLO);
@@ -173,6 +193,9 @@ void LHEWeightAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& 
 
     tree->Fill();
     //std::cout << "Tree is filled!" << std::endl;
+    if (kinMode!=LHEHandler::noKinematics){
+      tops_pt.clear(); tops_eta.clear(); tops_phi.clear(); tops_mass.clear();
+    }
   }
   else if (firstEvent){
     edm::LogWarning warning("InvalidLHEHandle");
@@ -323,6 +346,15 @@ void LHEWeightAnalyzer::beginJob(){
   tree->Branch("LHEweight_PDFVariation_Dn_NNPDF31_LO", &LHEweight_PDFVariation_Dn_NNPDF31_LO);
   tree->Branch("LHEweight_AsMZ_Up_NNPDF31_LO", &LHEweight_AsMZ_Up_NNPDF31_LO);
   tree->Branch("LHEweight_AsMZ_Dn_NNPDF31_LO", &LHEweight_AsMZ_Dn_NNPDF31_LO);
+
+  if (kinMode == LHEHandler::doBasicKinematics){
+    tree->Branch("ntops", &ntops);
+    tree->Branch("tops_pt", &tops_pt);
+    tree->Branch("tops_eta", &tops_eta);
+    tree->Branch("tops_phi", &tops_phi);
+    tree->Branch("tops_mass", &tops_mass);
+  }
+
 }
 
 // ------------ method called once each job just after ending the event loop  ------------

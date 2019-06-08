@@ -51,6 +51,7 @@ public:
   void extract();
   void clear();
 
+  MELAEvent* getEvent();
   MELACandidate* getBestCandidate();
   float const& getLHEOriginalWeight() const; // Weight written in the <event> block, supposed to = genhepmcweight if no Pythia reweighting is done
   float const& getMemberZeroWeight() const; // Weight from POWHEG before JHUGen reweighting, taken from alternate weight 1001.  If there are no alternate weights this is the same as the LHEOriginalWeight
