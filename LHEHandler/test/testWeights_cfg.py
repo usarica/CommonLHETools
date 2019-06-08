@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("testLHEWeights")
 
 
-theKinMode=1
+theKinMode=0
 
 procname = "TTTo2L2Nu_2018"
 fNames = None
