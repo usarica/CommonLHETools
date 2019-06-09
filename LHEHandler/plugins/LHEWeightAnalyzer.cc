@@ -148,7 +148,7 @@ void LHEWeightAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& 
     FillLHEWeights(lheHandler_DefaultPDF, LHEweight_Scaled_DefaultPDF, LHEweight_Original_DefaultPDF, LHEweight_MemberZero_DefaultPDF, LHEweight_QCDscale_muR1_muF1_DefaultPDF, LHEweight_QCDscale_muR1_muF2_DefaultPDF, LHEweight_QCDscale_muR1_muF0p5_DefaultPDF, LHEweight_QCDscale_muR2_muF1_DefaultPDF, LHEweight_QCDscale_muR2_muF2_DefaultPDF, LHEweight_QCDscale_muR2_muF0p5_DefaultPDF, LHEweight_QCDscale_muR0p5_muF1_DefaultPDF, LHEweight_QCDscale_muR0p5_muF2_DefaultPDF, LHEweight_QCDscale_muR0p5_muF0p5_DefaultPDF, LHEweight_PDFVariation_Up_DefaultPDF, LHEweight_PDFVariation_Dn_DefaultPDF, LHEweight_AsMZ_Up_DefaultPDF, LHEweight_AsMZ_Dn_DefaultPDF);
     
     // Special case for this handler is to fill the event kinematics
-    if (kinMode!=LHEHandler::noKinematics){
+    if (kinMode==LHEHandler::doBasicKinematics){
       MELAEvent* genEvent = lheHandler_DefaultPDF->getEvent();
       for (auto const* top:genEvent->getTopCandidates()){
         if (!top->passSelection) continue;

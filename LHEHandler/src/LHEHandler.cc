@@ -167,7 +167,7 @@ void LHEHandler::extract(){
             if (isALepton(genPart->id)) genEvent->addLepton(genPart);
             else if (isANeutrino(genPart->id)) genEvent->addNeutrino(genPart);
             else if (isAPhoton(genPart->id)) genEvent->addPhoton(genPart);
-            else if (isAGluon(genPart->id) || isAQuark(genPart->id)) genEvent->addJet(genPart);
+            else if (isAKnownJet(genPart->id) && !isATopQuark(genPart->id)) genEvent->addJet(genPart);
           }
           else if (genPart->genStatus==-1) genEvent->addMother(genPart);
         }
@@ -183,7 +183,7 @@ void LHEHandler::extract(){
       //  MELAout << "Gen tops after constructTopCandidates:" << endl;
       //  for (auto const* top:genEvent->getTopCandidates()) MELAout << *top << endl;
       //}
-      // Disable top unmatched to a gen. top
+      // Disable tops unmatched to a gen. top
       {
         vector<MELATopCandidate_t*> matchedTops;
         for (auto* writtenGenTopCand:writtenGenTopCands){
