@@ -1,18 +1,21 @@
 # CommonLHETools
+
 Common LHE tools for HIG and SUS analyses
 
-Checkout instructions:
+## Checkout instructions:
 
+```
 git cms-init
+```
 
-# MELA Analytics
-git clone https://github.com/usarica/MelaAnalytics.git
-(cd MelaAnalytics; git checkout -b from-v11 v1.1)
-
-# MELA
+### MELA
 git clone https://github.com/cms-analysis/HiggsAnalysis-ZZMatrixElement.git ZZMatrixElement
-(cd ZZMatrixElement; git checkout -b from-v217b1 v2.1.7b1; source setup.sh -j 12;)
+(cd ZZMatrixElement; git checkout -b from-v221 v2.2.1; source setup.sh -j;)
 
-# Common LHE tools
+### MELA Analytics
+git clone https://github.com/usarica/MelaAnalytics.git
+(cd MelaAnalytics; git checkout -b from-v15 v1.5)
+
+### Common LHE tools
 git clone https://github.com/usarica/CommonLHETools.git
-(cd CommonLHETools; git checkout -b from-v121 v1.2.1)
+(cd CommonLHETools; git checkout -b from-v130 v1.3.0)
