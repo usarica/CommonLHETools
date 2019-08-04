@@ -32,7 +32,7 @@ int LHEHandler::maxlines_print_header=1000;
 //FIXME: only applies to POWHEG samples, not to madgraph.  Madgraph is always reweighted to NNPDF31_nlo_hessian_pdfas.
 //(LO samples like JHUGen and MCFM only have one pdf, NNPDF31_lo_as_0130.  Phantom only has NNPDF31_nnlo_hessian_pdfas.)
 
-LHEHandler::LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_) :
+LHEHandler::LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, MELAEvent::CandidateVVMode VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_) :
 VVMode(VVMode_),
 VVDecayMode(VVDecayMode_),
 doKinematics(doKinematics_),
@@ -55,7 +55,7 @@ genCand(nullptr)
   setHandle(lhe_evt_); // Also calls clear()
   extract();
 }
-LHEHandler::LHEHandler(int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_) :
+LHEHandler::LHEHandler(MELAEvent::CandidateVVMode VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_) :
 VVMode(VVMode_),
 VVDecayMode(VVDecayMode_),
 doKinematics(doKinematics_),
@@ -161,7 +161,7 @@ void LHEHandler::extract(){
           }
           if (doKinematics==doHiggsKinematics && isAHiggs(genPart->id)){
             writtenGenCands.push_back(genPart);
-            if (VVMode==-1 && (genPart->genStatus==1 || genPart->genStatus==2)) genEvent->addIntermediate(genPart);
+            if (VVMode==MELAEvent::UndecayedMode && (genPart->genStatus==1 || genPart->genStatus==2)) genEvent->addIntermediate(genPart);
           }
           if (genPart->genStatus==1){
             if (isALepton(genPart->id)) genEvent->addLepton(genPart);

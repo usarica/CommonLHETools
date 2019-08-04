@@ -3,6 +3,9 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("testLHEWeights")
 
 
+# See MELAEvent.h for the VVModes and MELAEvent.cc for the VVDecayModes
+theVVMode=0
+theVVDecayMode=-1
 theKinMode=0
 
 procname = "TTTo2L2Nu_2018"
@@ -81,6 +84,8 @@ process.CondDB = cms.PSet(
 process.OutTree = cms.EDAnalyzer(
    "LHEWeightAnalyzer",
    year = cms.int32(theYear),
+   VVMode = cms.int32(theVVMode),
+   VVDecayMode = cms.int32(theVVDecayMode),
    kinMode = cms.int32(theKinMode)
 )
 

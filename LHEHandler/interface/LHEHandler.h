@@ -42,8 +42,8 @@ public:
     tryNNLO
   };
 
-  LHEHandler(int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_);
-  LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, int VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_);
+  LHEHandler(MELAEvent::CandidateVVMode VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_);
+  LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, MELAEvent::CandidateVVMode VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_);
   virtual ~LHEHandler();
 
   void setHandle(edm::Handle<LHEEventProduct>* lhe_evt_);
@@ -86,7 +86,7 @@ protected:
   };
 
   // VVMode and VVDecayMode: See comment lines within MELAEvent::constructVVCandidates
-  const int VVMode;
+  const MELAEvent::CandidateVVMode VVMode;
   const int VVDecayMode;
   const LHEHandler::KinematicsMode doKinematics;
   const int year;

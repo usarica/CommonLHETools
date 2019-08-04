@@ -56,6 +56,8 @@ protected:
 
   // ----------member data ---------------------------
   int year;
+  MELAEvent::CandidateVVMode VVMode;
+  int VVDecayMode;
   LHEHandler::KinematicsMode kinMode;
   TString theTreeName;
   TTree* tree;
@@ -76,6 +78,8 @@ protected:
 
 LHEWeightAnalyzer::LHEWeightAnalyzer(const edm::ParameterSet& pset) :
   year(pset.getParameter<int>("year")),
+  VVMode((MELAEvent::CandidateVVMode) pset.getParameter<int>("VVMode")),
+  VVDecayMode(pset.getParameter<int>("VVDecayMode")),
   kinMode((LHEHandler::KinematicsMode) pset.getParameter<int>("kinMode")),
   theTreeName("weightsTree"),
   tree(nullptr)
@@ -88,37 +92,37 @@ LHEWeightAnalyzer::LHEWeightAnalyzer(const edm::ParameterSet& pset) :
   else LHEHandler::set_maxlines_print_header(-1);
 
   lheHandler_DefaultPDF = std::make_unique<LHEHandler>(
-    -1, -1,
+    VVMode, VVDecayMode,
     kinMode,
     year, LHEHandler::keepDefaultPDF, LHEHandler::keepDefaultQCDOrder
   );
   lheHandler_NNPDF30_NNLO = std::make_unique<LHEHandler>(
-    -1, -1,
+    VVMode, VVDecayMode,
     LHEHandler::noKinematics,
     year, LHEHandler::tryNNPDF30, LHEHandler::tryNNLO
   );
   lheHandler_NNPDF30_NLO = std::make_unique<LHEHandler>(
-    -1, -1,
+    VVMode, VVDecayMode,
     LHEHandler::noKinematics,
     year, LHEHandler::tryNNPDF30, LHEHandler::tryNLO
   );
   lheHandler_NNPDF30_LO = std::make_unique<LHEHandler>(
-    -1, -1,
+    VVMode, VVDecayMode,
     LHEHandler::noKinematics,
     year, LHEHandler::tryNNPDF30, LHEHandler::tryLO
   );
   lheHandler_NNPDF31_NNLO = std::make_unique<LHEHandler>(
-    -1, -1,
+    VVMode, VVDecayMode,
     LHEHandler::noKinematics,
     year, LHEHandler::tryNNPDF31, LHEHandler::tryNNLO
   );
   lheHandler_NNPDF31_NLO = std::make_unique<LHEHandler>(
-    -1, -1,
+    VVMode, VVDecayMode,
     LHEHandler::noKinematics,
     year, LHEHandler::tryNNPDF31, LHEHandler::tryNLO
   );
   lheHandler_NNPDF31_LO = std::make_unique<LHEHandler>(
-    -1, -1,
+    VVMode, VVDecayMode,
     LHEHandler::noKinematics,
     year, LHEHandler::tryNNPDF31, LHEHandler::tryLO
   );
