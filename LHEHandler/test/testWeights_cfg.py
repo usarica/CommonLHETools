@@ -8,7 +8,7 @@ theVVMode=0
 theVVDecayMode=-1
 theKinMode=0
 
-procname = "TTTo2L2Nu_2018"
+procname = "WJetsToLNu_1J_amcatnloFXFX_2017"
 fNames = None
 if procname == "WWZ_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/94X_mc2017_realistic_v11-v1/100000/4231F556-3A26-E811-AB1D-002590D60038.root')
@@ -28,6 +28,8 @@ elif procname == "ST_t-channel_top_2017": # specialPDF_NNPDF31_NNLO_as_0118_nf_4
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8/MINIAODSIM/PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/50000/605F3C1B-C269-E811-A974-0CC47A7DFFCA.root')
 elif procname == "SMS-T1tbs_RPV_mGluino1000_2017": # specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1
   fNames=cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/SMS-T1tbs_RPV_mGluino1000_TuneCP2_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/40000/2CE3691D-0B23-E911-8E3D-AC1F6B0DE0BA.root')
+elif procname == "WJetsToLNu_1J_amcatnloFXFX_2017": # specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2
+  fNames=cms.untracked.vstring("/store/mc/RunIIFall17MiniAODv2/WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/70000/4E375373-2F58-E911-87E2-0CC47AFB80E4.root")
 
 elif procname == "WWZ_2016":
   fNames = cms.untracked.vstring('/store/mc/RunIISummer16MiniAODv2/WWZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/B814DCC1-18B7-E611-AD77-0CC47AD98F68.root')

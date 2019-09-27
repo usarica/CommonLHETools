@@ -86,6 +86,26 @@ bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case1(
 
   return (beginTest && matchAll);
 }
+// This is just a waste of storage...
+bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2(){
+  if (year == 2016) return false;
+  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+
+  const std::vector<std::vector<std::string>> searchBlock{
+    { "weight id", "1001", "muR=0.10000E+01 muF=0.10000E+01" },
+    { "weight id", "1011", "MUR=\"1.0\" MUF=\"1.0\"" }
+  };
+
+  std::vector<std::vector<std::string>>::const_iterator itBlock=searchBlock.cbegin();
+  for (auto const& line:LHEHeader){
+    if (itBlock==searchBlock.cend()) break;
+    bool foundAll=true;
+    for (std::string const& sline:(*itBlock)) foundAll &= (line.find(sline)!=std::string::npos);
+    if (foundAll) itBlock++;
+  }
+  return (!searchBlock.empty() && itBlock==searchBlock.cend());
+}
+
 bool LHEHandler::test_specialPDF_NNPDF30_nlo_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1(){
   if (year == 2016) return false;
   else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
