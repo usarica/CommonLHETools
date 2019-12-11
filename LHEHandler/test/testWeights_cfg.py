@@ -8,7 +8,7 @@ theVVMode=0
 theVVDecayMode=-1
 theKinMode=0
 
-procname = "WJetsToLNu_1J_amcatnloFXFX_2017"
+procname = "ST_t-channel_antitop_5f_TuneCP5_13TeV-powheg-pythia8_2018"
 fNames = None
 if procname == "WWZ_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/94X_mc2017_realistic_v11-v1/100000/4231F556-3A26-E811-AB1D-002590D60038.root')
@@ -56,7 +56,8 @@ elif procname == "SMS-T1tbs_RPV_mGluino1700_2018": # specialPDF_NNPDF31_lo_as_01
   fNames=cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/SMS-T1tbs_RPV_mGluino1700_TuneCP2_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/80000/09C0F76D-916C-D241-B32F-79FEDF4CF463.root')
 elif procname == "TTTT_hhat_0p0_TuneCP5_13TeV-madgraph-pythia8_2018":
   fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/TTTT_hhat_0p0_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/230000/259DBBEA-976B-4C4A-8AA9-E39781E1E730.root')
-
+elif procname == "ST_t-channel_antitop_5f_TuneCP5_13TeV-powheg-pythia8_2018":
+  fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/ST_t-channel_antitop_5f_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/80000/77FFA8DF-9F84-6C48-A5C9-E155B3360C64.root')
 
 theYear = None
 if "2018" in procname:

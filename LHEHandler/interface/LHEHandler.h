@@ -70,6 +70,7 @@ public:
 
   // Misc. functions for the operation of printouts
   static void set_maxlines_print_header(int nlines){ LHEHandler::maxlines_print_header=nlines; }
+  void printHeader(bool error) const;
 
 protected:
   enum PDFVariationMode{

@@ -269,19 +269,7 @@ void LHEHandler::readEvent(){
 
   static bool print_PDFInformation=false;
   if (!print_PDFInformation){
-    if (!LHEHeader.empty()){
-      std::stringstream header_stream;
-      {
-        int nlines=0;
-        for (auto const& line:LHEHeader){
-          if (LHEHandler::maxlines_print_header>=0 && nlines>=LHEHandler::maxlines_print_header) break;
-          header_stream << line;
-          nlines++;
-        }
-      }
-      edm::LogInfo pdfheaderinfo("PDFHeaderInfo");
-      pdfheaderinfo << header_stream.str();
-    }
+    printHeader(false);
     if (PDFid.empty()){
       if (LHEHeader.empty()){
         edm::LogWarning warning("PDFWarning");
@@ -443,8 +431,10 @@ void LHEHandler::readEvent(){
         else if (1500 <= wgtid && wgtid <= 1602) {/*do nothing, these are other various weights*/ }
         else if (3400 <= wgtid && wgtid <= 5030) {/*do nothing, these are other various weights*/ }
 
-        else throw cms::Exception("LHEWeights") << "Exceptional case specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1: Don't know what to do with alternate weight id = " << wgtid << "(weightstype == " << weightstype << ")";
-
+        else{
+          printHeader(true);
+          throw cms::Exception("LHEWeights") << "Exceptional case specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1: Don't know what to do with alternate weight id = " << wgtid << "(weightstype == " << weightstype << ")";
+        }
         continue;
       }
       else if (specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1){
@@ -502,7 +492,10 @@ void LHEHandler::readEvent(){
         }
         else if (1177 <= wgtid && wgtid <= 1180){/*do nothing, these are other various weights*/ }
 
-        else throw cms::Exception("LHEWeights") << "Exceptional case specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1: Don't know what to do with alternate weight id = " << wgtid << "(weightstype == " << weightstype << ")";
+        else{
+          printHeader(true);
+          throw cms::Exception("LHEWeights") << "Exceptional case specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1: Don't know what to do with alternate weight id = " << wgtid << "(weightstype == " << weightstype << ")";
+        }
 
         continue;
       }
@@ -791,9 +784,15 @@ void LHEHandler::readEvent(){
         }
       }
 
-      else throw cms::Exception("LHEWeights") << "Don't know what to do with alternate weight id = " << wgtid << "(weightstype == " << weightstype << ")";
+      else{
+        printHeader(true);
+        throw cms::Exception("LHEWeights") << "Don't know what to do with alternate weight id = " << wgtid << "(weightstype == " << weightstype << ")";
+      }
     }
-    else throw cms::Exception("LHEWeights") << "Unknown year " << year;
+    else{
+      printHeader(true);
+      throw cms::Exception("LHEWeights") << "Unknown year " << year;
+    }
   }
   // Handle LO samples with 101 or 103 alternative weights
   if (year == 2016 && (LHEPDFVariationWgt.size()==101 || LHEPDFVariationWgt.size()==103)) LHEPDFVariationWgt.erase(LHEPDFVariationWgt.begin(), LHEPDFVariationWgt.begin()+1);
@@ -865,7 +864,10 @@ void LHEHandler::readEvent(){
         LHEWeight[2], LHEWeight[5], LHEWeight[8]
       };
     }
-    else throw cms::Exception("LHEWeightTransposed") << "Unknown year " << year;
+    else{
+      printHeader(true);
+      throw cms::Exception("LHEWeightTransposed") << "Unknown year " << year;
+    }
   }
 
   if (LHEPDFVariationWgt.size() > 101){
@@ -909,6 +911,28 @@ void LHEHandler::readEvent(){
         LHEWeight_AsMZUpDn.push_back(1.f + (asup-1.f)*0.75);
         LHEWeight_AsMZUpDn.push_back(1.f + (asdn-1.f)*0.75);
       }
+    }
+  }
+}
+
+void LHEHandler::printHeader(bool error) const{
+  if (!LHEHeader.empty()){
+    std::stringstream header_stream;
+    {
+      int nlines=0;
+      for (auto const& line:LHEHeader){
+        if (LHEHandler::maxlines_print_header>=0 && nlines>=LHEHandler::maxlines_print_header) break;
+        header_stream << line;
+        nlines++;
+      }
+    }
+    if (error){
+      edm::LogError pdfheadererror("PDFHeaderError");
+      pdfheadererror << header_stream.str();
+    }
+    else{
+      edm::LogInfo pdfheaderinfo("PDFHeaderInfo");
+      pdfheaderinfo << header_stream.str();
     }
   }
 }
