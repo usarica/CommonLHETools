@@ -126,7 +126,7 @@ float const& LHEHandler::getPDFScale() const{ return PDFScale; }
 void LHEHandler::setHeaderFromRunInfo(edm::Handle<LHERunInfoProduct>* lhe_run){
   if (this->hasHeader()) return;
   if (!lhe_run) return;
-  if (!lhe_run->isValid()) return;
+  if (!lhe_run->isValid()) throw cms::Exception("LHEHeader") << "LHERunInfoProduct handle is invalid!";
   for (auto iter=lhe_run->product()->headers_begin(); iter!=lhe_run->product()->headers_end(); iter++){
     std::vector<std::string> const& lines = iter->lines();
     LHEHeader.insert(LHEHeader.end(), lines.begin(), lines.end());
@@ -433,7 +433,7 @@ void LHEHandler::readEvent(){
 
         else{
           printHeader(true);
-          throw cms::Exception("LHEWeights") << "Exceptional case specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1: Don't know what to do with alternate weight id = " << wgtid << "(weightstype == " << weightstype << ")";
+          throw cms::Exception("LHEWeights") << "Exceptional case specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1: Don't know what to do with alternate weight id = " << wgtid << " (weightstype == " << weightstype << ")";
         }
         continue;
       }
@@ -494,7 +494,7 @@ void LHEHandler::readEvent(){
 
         else{
           printHeader(true);
-          throw cms::Exception("LHEWeights") << "Exceptional case specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1: Don't know what to do with alternate weight id = " << wgtid << "(weightstype == " << weightstype << ")";
+          throw cms::Exception("LHEWeights") << "Exceptional case specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1: Don't know what to do with alternate weight id = " << wgtid << " (weightstype == " << weightstype << ")";
         }
 
         continue;
@@ -786,7 +786,7 @@ void LHEHandler::readEvent(){
 
       else{
         printHeader(true);
-        throw cms::Exception("LHEWeights") << "Don't know what to do with alternate weight id = " << wgtid << "(weightstype == " << weightstype << ")";
+        throw cms::Exception("LHEWeights") << "Don't know what to do with alternate weight id = " << wgtid << " (weightstype == " << weightstype << ")";
       }
     }
     else{
@@ -914,6 +914,8 @@ void LHEHandler::readEvent(){
     }
   }
 }
+
+std::vector<std::string> const& LHEHandler::getHeader() const{ return LHEHeader; }
 
 void LHEHandler::printHeader(bool error) const{
   if (!LHEHeader.empty()){

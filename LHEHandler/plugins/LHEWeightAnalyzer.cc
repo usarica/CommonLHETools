@@ -135,7 +135,7 @@ LHEWeightAnalyzer::~LHEWeightAnalyzer(){
 
 void LHEWeightAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& eSetup){
   // LHE information
-  vector<edm::Handle<LHEEventProduct> > lhe_handles;
+  std::vector<edm::Handle<LHEEventProduct> > lhe_handles;
   event.getManyByType(lhe_handles);
   
   edm::Handle<GenEventInfoProduct> gen_handle;

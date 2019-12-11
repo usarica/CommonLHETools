@@ -61,6 +61,7 @@ public:
   float getLHEWeigh_AsMZUpDn(int whichUpDn, float defaultValue=1) const; // = {Weights written in LHE weight variations} / getLHEOriginalWeight()
   float const& getPDFScale() const;
   bool hasHeader() const;
+  std::vector<std::string> const& getHeader() const;
 
   // Misc. functions needed for ordering the PDF weights
   static bool compareAbsIsLess(float val1, float val2);
