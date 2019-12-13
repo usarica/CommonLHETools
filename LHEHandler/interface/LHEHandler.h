@@ -62,6 +62,7 @@ public:
   float const& getPDFScale() const;
   bool hasHeader() const;
   std::vector<std::string> const& getHeader() const;
+  std::vector<MELAParticle*> const& getParticleList() const;
 
   // Misc. functions needed for ordering the PDF weights
   static bool compareAbsIsLess(float val1, float val2);

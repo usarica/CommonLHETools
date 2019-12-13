@@ -917,6 +917,8 @@ void LHEHandler::readEvent(){
 
 std::vector<std::string> const& LHEHandler::getHeader() const{ return LHEHeader; }
 
+std::vector<MELAParticle*> const& LHEHandler::getParticleList() const{ return particleList; }
+
 void LHEHandler::printHeader(bool error) const{
   if (!LHEHeader.empty()){
     std::stringstream header_stream;
