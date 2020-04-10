@@ -105,8 +105,47 @@ bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2(
   }
   return (!searchBlock.empty() && itBlock==searchBlock.cend());
 }
+// This is a straightforward one...
+bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case1(){
+  if (year == 2016) return false;
+  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
 
-bool LHEHandler::test_specialPDF_NNPDF30_nlo_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1(){
+  const std::vector<std::vector<std::string>> searchBlock{
+    { "weight", "325300", "1001" }, // NNPDF31_nnlo_as_0118_mc_hessian_pdfas central PDF
+
+    { "weight", "325300", "1010" }, // NNPDF31_nnlo_as_0118_mc_hessian_pdfas weight vars. begin
+    { "weight", "325402", "1112" }, // NNPDF31_nnlo_as_0118_mc_hessian_pdfas end
+
+    { "weight", "316200", "1113" }, // NNPDF31_nnlo_as_0118_mc begin
+    { "weight", "316300", "1213" }, // NNPDF31_nnlo_as_0118_mc end
+
+    { "weight", "306000", "1214" }, // NNPDF31_nnlo_hessian_pdfas begin
+    { "weight", "306102", "1316" }, // NNPDF31_nnlo_hessian_pdfas end
+
+    { "weight", "305800", "1325" }, // NNPDF31_nlo_hessian_pdfas begin
+    { "weight", "305902", "1427" }, // NNPDF31_nlo_hessian_pdfas end
+
+    { "weight", "292200", "2177" }, // NNPDF30_nlo_nf_5_pdfas begin
+    { "weight", "292302", "2279" }, // NNPDF30_nlo_nf_5_pdfas end
+
+    { "weight", "292600", "2280" }, // NNPDF30_nnlo_nf_5_pdfas
+    { "weight", "315000", "2281" }, // NNPDF31_lo_as_0118
+    { "weight", "315200", "2282" }, // NNPDF31_lo_as_0130
+    { "weight", "262000", "2283" }, // NNPDF30_lo_as_0118
+    { "weight", "263000", "2284" } // NNPDF30_lo_as_0130
+  };
+
+  std::vector<std::vector<std::string>>::const_iterator itBlock=searchBlock.cbegin();
+  for (auto const& line:LHEHeader){
+    if (itBlock==searchBlock.cend()) break;
+    bool foundAll=true;
+    for (std::string const& sline:(*itBlock)) foundAll &= (line.find(sline)!=std::string::npos);
+    if (foundAll) itBlock++;
+  }
+  return (!searchBlock.empty() && itBlock==searchBlock.cend());
+}
+
+bool LHEHandler::test_specialPDF_NNPDF30_NLO_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1(){
   if (year == 2016) return false;
   else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
 
@@ -144,7 +183,7 @@ bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1(
   }
   return (!searchBlock.empty() && itBlock==searchBlock.cend());
 }
-bool LHEHandler::test_specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1(){
+bool LHEHandler::test_specialPDF_NNPDF31_LO_as_0130_Madgraph_0offset_Case1(){
   if (year == 2016) return false;
   else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
 

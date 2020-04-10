@@ -245,12 +245,13 @@ void LHEHandler::readEvent(){
 
   // PDF information
   static bool doPDFChecks=false;
-  static bool specialPDF_NNPDF30_nlo_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1=false;
+  static bool specialPDF_NNPDF30_NLO_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1=false;
   static bool specialPDF_NNPDF31_NNLO_as_0118_nf_4_Madgraph_1000offset_Case1=false;
   static bool specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case1=false;
   static bool specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2=false;
   static bool specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1=false;
-  static bool specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1=false;
+  static bool specialPDF_NNPDF31_LO_as_0130_Madgraph_0offset_Case1=false;
+  static bool specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case1=true;
   PDFScale = -1;
   if ((*lhe_evt)->pdf()){
     PDFScale = (*lhe_evt)->pdf()->scalePDF;
@@ -261,9 +262,10 @@ void LHEHandler::readEvent(){
     specialPDF_NNPDF31_NNLO_as_0118_nf_4_Madgraph_1000offset_Case1 = test_specialPDF_NNPDF31_NNLO_as_0118_nf_4_Madgraph_1000offset_Case1();
     specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case1 = test_specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case1();
     specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2 = test_specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2();
-    specialPDF_NNPDF30_nlo_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1 = test_specialPDF_NNPDF30_nlo_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1();
+    specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case1 = test_specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case1();
+    specialPDF_NNPDF30_NLO_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1 = test_specialPDF_NNPDF30_NLO_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1();
     specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1 = test_specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1();
-    specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1 = test_specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1();
+    specialPDF_NNPDF31_LO_as_0130_Madgraph_0offset_Case1 = test_specialPDF_NNPDF31_LO_as_0130_Madgraph_0offset_Case1();
     doPDFChecks=true;
   }
 
@@ -299,17 +301,21 @@ void LHEHandler::readEvent(){
       edm::LogWarning warning("SpecialPDFWarning");
       warning << "specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2 is enabled!";
     }
-    if (specialPDF_NNPDF30_nlo_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1){
+    if (specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case1){
       edm::LogWarning warning("SpecialPDFWarning");
-      warning << "specialPDF_NNPDF30_nlo_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1 is enabled!";
+      warning << "specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case1 is enabled!";
+    }
+    if (specialPDF_NNPDF30_NLO_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1){
+      edm::LogWarning warning("SpecialPDFWarning");
+      warning << "specialPDF_NNPDF30_NLO_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1 is enabled!";
     }
     if (specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1){
       edm::LogWarning warning("SpecialPDFWarning");
       warning << "specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1 is enabled!";
     }
-    if (specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1){
+    if (specialPDF_NNPDF31_LO_as_0130_Madgraph_0offset_Case1){
       edm::LogWarning warning("SpecialPDFWarning");
-      warning << "specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1 is enabled!";
+      warning << "specialPDF_NNPDF31_LO_as_0130_Madgraph_0offset_Case1 is enabled!";
     }
     print_PDFInformation=true;
   }
@@ -428,8 +434,8 @@ void LHEHandler::readEvent(){
           if (pdfChoice==tryNNPDF30 && (orderChoice==keepDefaultQCDOrder || orderChoice==tryNNLO)){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
         }
 
-        else if (1500 <= wgtid && wgtid <= 1602) {/*do nothing, these are other various weights*/ }
-        else if (3400 <= wgtid && wgtid <= 5030) {/*do nothing, these are other various weights*/ }
+        else if (1500 <= wgtid && wgtid <= 1602) { /*do nothing, these are other various weights*/ }
+        else if (3400 <= wgtid && wgtid <= 5030) { /*do nothing, these are other various weights*/ }
 
         else{
           printHeader(true);
@@ -437,7 +443,7 @@ void LHEHandler::readEvent(){
         }
         continue;
       }
-      else if (specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1){
+      else if (specialPDF_NNPDF31_LO_as_0130_Madgraph_0offset_Case1){
         //Madgraph 0 offset
         weightstype = madgraph_0offset;
         if (1 <= wgtid && wgtid <= 9) LHEWeight.push_back(wgtval);
@@ -461,8 +467,8 @@ void LHEHandler::readEvent(){
             }
           }
         }
-        else if ((wgtid == 218 || wgtid == 219)){/*do nothing, these are the NNLO a_s=0.117/0.119 variations from a slightly different pdf set*/ }
-        else if (214 <= wgtid && wgtid <= 221){/*do nothing, these are other NNLO a_s value variations*/ }
+        else if ((wgtid == 218 || wgtid == 219)){ /*do nothing, these are the NNLO a_s=0.117/0.119 variations from a slightly different pdf set*/ }
+        else if (214 <= wgtid && wgtid <= 221){ /*do nothing, these are other NNLO a_s value variations*/ }
         else if (222 <= wgtid && wgtid <= 324){
           /*These are the NNPDF 3.1 NLO PDF and a_s variations (Hessian-type)*/
           if ((pdfChoice==keepDefaultPDF || pdfChoice==tryNNPDF31) && orderChoice==tryNLO){
@@ -473,7 +479,7 @@ void LHEHandler::readEvent(){
             }
           }
         }
-        else if (325 <= wgtid && wgtid <= 1073){/*do nothing, these are other various weights*/ }
+        else if (325 <= wgtid && wgtid <= 1073){ /*do nothing, these are other various weights*/ }
         else if (1074 <= wgtid && wgtid <= 1176){
           /*These are the NNPDF 3.0 NLO PDF and a_s variations (Hessian-type)*/
           if (pdfChoice==tryNNPDF30 && orderChoice==tryNLO){
@@ -490,11 +496,66 @@ void LHEHandler::readEvent(){
         else if (wgtid == 1180){ // This is NNPDF 3.0 LO with a_s=0.130, no variations
           if (pdfChoice==tryNNPDF30 && (orderChoice==keepDefaultQCDOrder || orderChoice==tryLO)){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
         }
-        else if (1177 <= wgtid && wgtid <= 1180){/*do nothing, these are other various weights*/ }
+        else if (1177 <= wgtid && wgtid <= 1180){ /*do nothing, these are other various weights*/ }
 
         else{
           printHeader(true);
-          throw cms::Exception("LHEWeights") << "Exceptional case specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1: Don't know what to do with alternate weight id = " << wgtid << " (weightstype == " << weightstype << ")";
+          throw cms::Exception("LHEWeights") << "Exceptional case specialPDF_NNPDF31_LO_as_0130_Madgraph_0offset_Case1: Don't know what to do with alternate weight id = " << wgtid << " (weightstype == " << weightstype << ")";
+        }
+
+        continue;
+      }
+      else if (specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case1){
+        weightstype = madgraph_1000offset;
+        if (1001 <= wgtid && wgtid <= 1009){
+          LHEWeight.push_back(wgtval);
+        }
+        else if (wgtid == 1010){ // This is member 0 of NNPDF31_nnlo_as_0118_mc_hessian_pdfas variations
+          defaultMemberZeroWeight = wgtval; found_defaultMemberZeroWeight=true;
+          if ((pdfChoice==keepDefaultPDF || pdfChoice==tryNNPDF31) && (orderChoice==keepDefaultQCDOrder || orderChoice==tryNNLO)){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
+        }
+        else if (1011 <= wgtid && wgtid <= 1112){ // These are the NNPDF31_nnlo_as_0118_mc_hessian_pdfas variations with a_s (Hessian-type)
+          if ((pdfChoice==keepDefaultPDF || pdfChoice==tryNNPDF31) && (orderChoice==keepDefaultQCDOrder || orderChoice==tryNNLO)){
+            LHEPDFVariationWgt.push_back(wgtval);
+            if (pdfVarMode == useNone) pdfVarMode = useHessian;
+          }
+        }
+        else if (1113 <= wgtid && wgtid <= 1213){ /* do nothing */ } // These are the NNPDF31_nnlo_as_0118_mc variations with a_s (MC-type)
+        else if (1214 <= wgtid && wgtid <= 1316){ /* do nothing */ } // These are the NNPDF31_nnlo_hessian_pdfas variations with a_s (Hessian-type)
+        else if (1317 <= wgtid && wgtid <= 1324){ /*do nothing, these are weights for NNPDF 3.1 NNLO PDFs with different a_s values*/ }
+        else if (1325 <= wgtid && wgtid <= 1427){ // These are the NNPDF 3.1 NLO PDF and a_s variations (Hessian-type)
+          if ((pdfChoice==keepDefaultPDF || pdfChoice==tryNNPDF31) && orderChoice==tryNLO){
+            if (wgtid == 1325){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
+            else{
+              LHEPDFVariationWgt.push_back(wgtval);
+              if (pdfVarMode == useNone) pdfVarMode = useHessian;
+            }
+          }
+        }
+        else if (1428 <= wgtid && wgtid <= 2176){ /*do nothing, these are weights for other PDFs*/ }
+        else if (2177 <= wgtid && wgtid <= 2279){ // These are the NNPDF 3.0 NLO PDF and MC variations
+          if (pdfChoice==tryNNPDF30 && orderChoice==tryNLO){
+            if (wgtid == 2177){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
+            else{
+              LHEPDFVariationWgt.push_back(wgtval);
+              if (pdfVarMode == useNone) pdfVarMode = useMC;
+            }
+          }
+        }
+        else if (wgtid == 2280){ // This is NNPDF 3.0 NNLO with a_s=0.118, no variations
+          if (pdfChoice==tryNNPDF30 && (orderChoice==keepDefaultQCDOrder || orderChoice==tryNNLO)){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
+        }
+        else if (wgtid == 2282){ // This is NNPDF 3.1 LO with a_s=0.130, no variations
+          if ((pdfChoice==keepDefaultPDF || pdfChoice==tryNNPDF31) && orderChoice==tryLO){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
+        }
+        else if (wgtid == 2284){ // This is NNPDF 3.0 LO with a_s=0.130, no variations
+          if (pdfChoice==tryNNPDF30 && orderChoice==tryLO){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
+        }
+        else if (2280 <= wgtid && wgtid <= 2284){ /*do nothing, these are other various weights*/ }
+
+        else{
+          printHeader(true);
+          throw cms::Exception("LHEWeights") << "Exceptional case specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case1: Don't know what to do with alternate weight id = " << wgtid << " (weightstype == " << weightstype << ")";
         }
 
         continue;
@@ -516,8 +577,8 @@ void LHEHandler::readEvent(){
           if (pdfVarMode == useNone) pdfVarMode = useHessian;
         }
       }
-      else if (weightstype == madgraph_0offset && (wgtid == 117 || wgtid == 118)){/*do nothing, these are the NNLO a_s=0.117/0.119 variations from a slightly different pdf set*/ }
-      else if (weightstype == madgraph_0offset && 113 <= wgtid && wgtid <= 120){/*do nothing, these are other NNLO a_s value variations*/ }
+      else if (weightstype == madgraph_0offset && (wgtid == 117 || wgtid == 118)){ /*do nothing, these are the NNLO a_s=0.117/0.119 variations from a slightly different pdf set*/ }
+      else if (weightstype == madgraph_0offset && 113 <= wgtid && wgtid <= 120){ /*do nothing, these are other NNLO a_s value variations*/ }
       else if (weightstype == madgraph_0offset && 121 <= wgtid && wgtid <= 223){
         /*These are the NNPDF 3.1 NLO PDF and a_s variations (Hessian-type)*/
         if ((pdfChoice==keepDefaultPDF || pdfChoice==tryNNPDF31) && orderChoice==tryNLO){
@@ -546,7 +607,7 @@ void LHEHandler::readEvent(){
       else if (weightstype == madgraph_0offset && wgtid == 1080){ // This is NNPDF 3.0 LO with a_s=0.130, no variations
         if (pdfChoice==tryNNPDF30 && orderChoice==tryLO){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
       }
-      else if (weightstype == madgraph_0offset && 224 <= wgtid && wgtid <= 1080){/*do nothing, these are other various weights*/ }
+      else if (weightstype == madgraph_0offset && 224 <= wgtid && wgtid <= 1080){ /*do nothing, these are other various weights*/ }
 
       //QCD variations for all the other weight types
       else if (specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case1 && weightstype == unknown && 1001 <= wgtid && wgtid <= 1045){
@@ -603,7 +664,7 @@ void LHEHandler::readEvent(){
       else if (specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case1 && weightstype == madgraph_1000offset && wgtid == 2116){ // This is NNPDF 3.0 LO with a_s=0.130, no variations
         if (pdfChoice==tryNNPDF30 && orderChoice==tryLO){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
       }
-      else if (specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case1 && weightstype == madgraph_1000offset && 2112 <= wgtid && wgtid <= 2116){/*do nothing, these are other various weights*/ }
+      else if (specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case1 && weightstype == madgraph_1000offset && 2112 <= wgtid && wgtid <= 2116){ /*do nothing, these are other various weights*/ }
       // specialPDF_NNPDF31_NNLO_as_0118_nf_4_Madgraph_1000offset_Case1 with madgraph_1000offset
       else if (specialPDF_NNPDF31_NNLO_as_0118_nf_4_Madgraph_1000offset_Case1 && weightstype == madgraph_1000offset && 1011 <= wgtid && wgtid <= 1110){ // These are the NNPDF 3.1 NNLO PDF variations (MC-type)
         if ((pdfChoice==keepDefaultPDF || pdfChoice==tryNNPDF31) && (orderChoice==keepDefaultQCDOrder || orderChoice==tryNNLO)){
@@ -671,7 +732,7 @@ void LHEHandler::readEvent(){
       else if (specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2 && weightstype == madgraph_1000offset && wgtid == 2081){ // This is NNPDF 3.0 LO with a_s=0.130, no variations
         if (pdfChoice==tryNNPDF30 && orderChoice==tryLO){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
       }
-      else if (specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2 && weightstype == madgraph_1000offset && 2077 <= wgtid && wgtid <= 2081){/*do nothing, these are other various weights*/ }
+      else if (specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2 && weightstype == madgraph_1000offset && 2077 <= wgtid && wgtid <= 2081){ /*do nothing, these are other various weights*/ }
       // Regular madgraph_1000offset
       else if (weightstype == madgraph_1000offset && 1011 <= wgtid && wgtid <= 1112){ // These are the NNPDF 3.1 NNLO PDF (<=1110) and a_s (1111, 1112) variations (Hessian-type)
         if ((pdfChoice==keepDefaultPDF || pdfChoice==tryNNPDF31) && (orderChoice==keepDefaultQCDOrder || orderChoice==tryNNLO)){
@@ -709,12 +770,12 @@ void LHEHandler::readEvent(){
       else if (weightstype == madgraph_1000offset && wgtid == 2080){ // This is NNPDF 3.0 LO with a_s=0.130, no variations
         if (pdfChoice==tryNNPDF30 && orderChoice==tryLO){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
       }
-      else if (weightstype == madgraph_1000offset && 2076 <= wgtid && wgtid <= 2080){/*do nothing, these are other various weights*/ }
+      else if (weightstype == madgraph_1000offset && 2076 <= wgtid && wgtid <= 2080){ /*do nothing, these are other various weights*/ }
 
       //powheg
       else if (weightstype == unknown && (wgtid == 2000 || wgtid == 2001)){ // This is the NNPDF 3.1 NNLO central value, but do nothing if wgtid == 2000
         weightstype = powheg;
-        if (specialPDF_NNPDF30_nlo_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1){ // How fun is that?! This special case is actually an NNPDF 3.0 NLO type!
+        if (specialPDF_NNPDF30_NLO_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1){ // How fun is that?! This special case is actually an NNPDF 3.0 NLO type!
           if (wgtid == 2000){
             defaultMemberZeroWeight = wgtval; found_defaultMemberZeroWeight=true;
             if ((pdfChoice==keepDefaultPDF || pdfChoice==tryNNPDF30) && (orderChoice==keepDefaultQCDOrder || orderChoice==tryNLO)){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
@@ -738,7 +799,7 @@ void LHEHandler::readEvent(){
         }
       }
       else if (weightstype == powheg && 2001 <= wgtid && wgtid <= 2102){ // These are more NNLO variations
-        if (specialPDF_NNPDF30_nlo_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1){ // How fun is that?! This special case is actually an NNPDF 3.0 NLO type!
+        if (specialPDF_NNPDF30_NLO_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1){ // How fun is that?! This special case is actually an NNPDF 3.0 NLO type!
           if ((pdfChoice==keepDefaultPDF || pdfChoice==tryNNPDF30) && (orderChoice==keepDefaultQCDOrder || orderChoice==tryNLO)){
             LHEPDFVariationWgt.push_back(wgtval);
             if (pdfVarMode == useNone) pdfVarMode = useMC;
@@ -771,8 +832,8 @@ void LHEHandler::readEvent(){
       else if (weightstype == powheg && wgtid == 1950){ // This is the LO pdf for NNPDF 3.0 with a_s=0.130, no variations
         if (pdfChoice==tryNNPDF30 && orderChoice==tryLO){ defaultWeightScale = wgtval; found_defaultWeightScale = true; }
       }
-      else if (weightstype == powheg && (wgtid == 1800 || wgtid == 1900)){/*do nothing, these are LO pdfs*/ }
-      else if (weightstype == powheg && wgtid >= 4000)                  {/*do nothing, these are other various weights*/ }
+      else if (weightstype == powheg && (wgtid == 1800 || wgtid == 1900)){ /*do nothing, these are LO pdfs*/ }
+      else if (weightstype == powheg && wgtid >= 4000)                  { /*do nothing, these are other various weights*/ }
 
       else if (weightstype == powheg && 3000 <= wgtid && wgtid <= 3102){ // These are the NNPDF3.1 NLO and variations
         if ((pdfChoice==keepDefaultPDF || pdfChoice==tryNNPDF31) && orderChoice==tryNLO){

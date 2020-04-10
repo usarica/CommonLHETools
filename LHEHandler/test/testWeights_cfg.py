@@ -8,7 +8,7 @@ theVVMode=0
 theVVDecayMode=-1
 theKinMode=0
 
-procname = "ST_t-channel_antitop_5f_TuneCP5_13TeV-powheg-pythia8_2018"
+procname = "ZGTo2LG_PtG-130_TuneCP5_13TeV-amcatnloFXFX-pythia8_2018"
 fNames = None
 if procname == "WWZ_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/94X_mc2017_realistic_v11-v1/100000/4231F556-3A26-E811-AB1D-002590D60038.root')
@@ -26,7 +26,7 @@ elif procname == "WZTo3LNu_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/WZTo3LNu_3Jets_MLL-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/70000/BC5C9D9E-2965-E811-8F93-E0071B73B6C0.root')
 elif procname == "ST_t-channel_top_2017": # specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8/MINIAODSIM/PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/50000/605F3C1B-C269-E811-A974-0CC47A7DFFCA.root')
-elif procname == "SMS-T1tbs_RPV_mGluino1000_2017": # specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1
+elif procname == "SMS-T1tbs_RPV_mGluino1000_2017": # specialPDF_NNPDF31_LO_as_0130_Madgraph_0offset_Case1
   fNames=cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/SMS-T1tbs_RPV_mGluino1000_TuneCP2_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/40000/2CE3691D-0B23-E911-8E3D-AC1F6B0DE0BA.root')
 elif procname == "WJetsToLNu_1J_amcatnloFXFX_2017": # specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2
   fNames=cms.untracked.vstring("/store/mc/RunIIFall17MiniAODv2/WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/70000/4E375373-2F58-E911-87E2-0CC47AFB80E4.root")
@@ -52,12 +52,14 @@ elif procname == "TTTo2L2Nu_2018":
   fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/1C576984-A8C6-B348-97FB-EEDC216ABDBD.root')
 elif procname == "QCD_Pt-15to20_EMEnriched_2018":
   fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/QCD_Pt-15to20_EMEnriched_TuneCP5_13TeV_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15_ext1-v2/20000/E2FB35F4-1F40-4548-8DBE-2A6575206A6F.root')
-elif procname == "SMS-T1tbs_RPV_mGluino1700_2018": # specialPDF_NNPDF31_lo_as_0130_Madgraph_0offset_Case1 (same as above)
+elif procname == "SMS-T1tbs_RPV_mGluino1700_2018": # specialPDF_NNPDF31_LO_as_0130_Madgraph_0offset_Case1 (same as above)
   fNames=cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/SMS-T1tbs_RPV_mGluino1700_TuneCP2_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/80000/09C0F76D-916C-D241-B32F-79FEDF4CF463.root')
 elif procname == "TTTT_hhat_0p0_TuneCP5_13TeV-madgraph-pythia8_2018":
   fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/TTTT_hhat_0p0_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/230000/259DBBEA-976B-4C4A-8AA9-E39781E1E730.root')
 elif procname == "ST_t-channel_antitop_5f_TuneCP5_13TeV-powheg-pythia8_2018":
   fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/ST_t-channel_antitop_5f_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/80000/77FFA8DF-9F84-6C48-A5C9-E155B3360C64.root')
+elif procname == "ZGTo2LG_PtG-130_TuneCP5_13TeV-amcatnloFXFX-pythia8_2018": # specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case1
+  fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/ZGTo2LG_PtG-130_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/0CCFD0D3-8AC3-F546-A94C-08CEE9E24825.root')
 
 theYear = None
 if "2018" in procname:
