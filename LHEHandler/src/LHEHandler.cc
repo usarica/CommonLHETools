@@ -885,10 +885,17 @@ void LHEHandler::readEvent(){
     float lheweight0 = LHEWeight.at(0);
     for (float& w:LHEWeight) w = safeDivide(w, lheweight0);
   }
-  // Divide PDF variation weights by the member 0 weight that corresponds to thte variations
+  // Divide PDF variation weights by the member 0 weight that corresponds to the variations
   for (float& w:LHEPDFVariationWgt) w = safeDivide(w, defaultWeightScale);
   // Divide defaultWeightScale by defaultMemberZeroWeight to get a true scale factor
   defaultWeightScale = safeDivide(defaultWeightScale, defaultMemberZeroWeight);
+  static bool print_warning_defaultWeightScale = false;
+  if (!print_warning_defaultWeightScale && pdfChoice==keepDefaultPDF && defaultWeightScale==0.){
+    edm::LogWarning warning("LHEWeights");
+    warning << "defaultWeightScale=0 for some of the events when using the default PDF set.";
+    //for (const auto& weight : (*lhe_evt)->weights()) MELAerr << weight.id << " = " << weight.wgt << endl;
+    print_warning_defaultWeightScale = true;
+  }
 
   static bool warning_LHEWeight_NoLHEPDFVars=false;
   if (!warning_LHEWeight_NoLHEPDFVars){

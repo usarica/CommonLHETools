@@ -8,14 +8,14 @@ theVVMode=0
 theVVDecayMode=-1
 theKinMode=0
 
-procname = "ZGTo2LG_PtG-130_TuneCP5_13TeV-amcatnloFXFX-pythia8_2018"
+procname = "VBFH2000_2017"
 fNames = None
 if procname == "WWZ_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/94X_mc2017_realistic_v11-v1/100000/4231F556-3A26-E811-AB1D-002590D60038.root')
 elif procname == "ggTo4eContin_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/GluGluToContinToZZTo4e_13TeV_MCFM701_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v1/00000/CEE57585-15FC-E711-87A0-0CC47AD98D06.root')
 elif procname == "VBFH2000_2017":
-  fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/VBF_HToZZTo4L_M2000_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/00000/5CADB5C5-B404-E811-B7E0-002590D9D8B2.root')
+  fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/VBF_HToZZTo4L_M2000_13TeV_powheg2_JHUGenV7011_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/00000/E61892A0-C0B9-E811-B2DF-001E67E6A166.root')
 elif procname == "DYJetsToLL_M50_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v1/50000/7642F20E-30DC-E711-9548-0025905A60B8.root')
 elif procname == "DYJetsToLL_M-4to50_HT-400to600_2017":
