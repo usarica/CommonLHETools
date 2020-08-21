@@ -13,7 +13,7 @@
 #include <DataFormats/Common/interface/Handle.h>
 #include <SimDataFormats/GeneratorProducts/interface/LHERunInfoProduct.h>
 #include <SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h>
-#include <ZZMatrixElement/MELA/interface/Mela.h>
+#include <JHUGenMELA/MELA/interface/Mela.h>
 #include <MelaAnalytics/EventContainer/interface/MELAEvent.h>
 
 #include <vector>

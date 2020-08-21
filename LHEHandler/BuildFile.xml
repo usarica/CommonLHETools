@@ -1,6 +1,6 @@
 <flags ADD_SUBDIR="1" />
 
-<flags CPPFLAGS="-I$(CMSSW_BASE)/src/CommonLHETools/LHEHandler/interface/ -I$(CMSSW_BASE)/src/ZZMatrixElement/MELA/interface/" />
+<flags CPPFLAGS="-I$(CMSSW_BASE)/src/CommonLHETools/LHEHandler/interface/ -I$(CMSSW_BASE)/src/JHUGenMELA/MELA/interface/" />
 
 
 <use name="FWCore/MessageLogger"/>
@@ -10,7 +10,7 @@
 <use name="CLHEP"/>
 <use name="root"/>
 <use name="rootmath"/>
-<use name="ZZMatrixElement/MELA"/>
+<use name="JHUGenMELA/MELA"/>
 <use name="MelaAnalytics/EventContainer"/>
 <export>
   <lib   name="1"/>

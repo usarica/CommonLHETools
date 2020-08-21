@@ -2,7 +2,7 @@
 #include <FWCore/Utilities/interface/EDMException.h>
 #include <MelaAnalytics/EventContainer/interface/HiggsComparators.h>
 #include <MelaAnalytics/EventContainer/interface/TopComparators.h>
-#include <ZZMatrixElement/MELA/interface/MELAStreamHelpers.hh>
+#include <JHUGenMELA/MELA/interface/MELAStreamHelpers.hh>
 #include <iomanip>
 #include <iostream>
 #include <cstdlib>
