@@ -12,7 +12,7 @@ git cms-init
 
 ```
 git clone https://github.com/JHUGen/JHUGenMELA.git
-(cd JHUGenMELA; git checkout -b from-v231 v2.3.1; ./setup.sh -j;)
+(cd JHUGenMELA; git checkout -b from-v232 v2.3.2; ./setup.sh -j;)
 ```
 
 ### MELA Analytics
