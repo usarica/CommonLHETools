@@ -12,7 +12,7 @@ git cms-init
 
 ```
 git clone https://github.com/JHUGen/JHUGenMELA.git
-(cd JHUGenMELA; git checkout -b from-v232 v2.3.2; ./setup.sh -j;)
+(cd JHUGenMELA; git checkout -b from-v235 v2.3.5; ./setup.sh -j;)
 ```
 
 ### MELA Analytics
@@ -25,5 +25,5 @@ git clone https://github.com/MELALabs/MelaAnalytics.git
 ### Common LHE tools
 ```
 git clone https://github.com/usarica/CommonLHETools.git
-(cd CommonLHETools; git checkout -b from-v134 v1.3.4)
+(cd CommonLHETools; git checkout -b from-v135 v1.3.5)
 ```
