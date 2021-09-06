@@ -8,6 +8,8 @@ theVVMode=0
 theVVDecayMode=-1
 theKinMode=0
 
+theYear = None
+theRunMode = "CMS_Run2_preUL"
 procname = "VBFH2000_2017"
 fNames = None
 if procname == "WWZ_2017":
@@ -61,7 +63,6 @@ elif procname == "ST_t-channel_antitop_5f_TuneCP5_13TeV-powheg-pythia8_2018":
 elif procname == "ZGTo2LG_PtG-130_TuneCP5_13TeV-amcatnloFXFX-pythia8_2018": # specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case1
   fNames = cms.untracked.vstring('/store/mc/RunIIAutumn18MiniAOD/ZGTo2LG_PtG-130_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/10000/0CCFD0D3-8AC3-F546-A94C-08CEE9E24825.root')
 
-theYear = None
 if "2018" in procname:
    theYear=2018
 elif "2017" in procname:
@@ -91,7 +92,8 @@ process.OutTree = cms.EDAnalyzer(
    year = cms.int32(theYear),
    VVMode = cms.int32(theVVMode),
    VVDecayMode = cms.int32(theVVDecayMode),
-   kinMode = cms.int32(theKinMode)
+   kinMode = cms.int32(theKinMode),
+   LHEHandlerRunMode = cms.untracked.string(theRunMode)
 )
 
 #process.MessageLogger = cms.Service("MessageLogger",

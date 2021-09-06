@@ -32,13 +32,14 @@ int LHEHandler::maxlines_print_header=1000;
 //FIXME: only applies to POWHEG samples, not to madgraph.  Madgraph is always reweighted to NNPDF31_nlo_hessian_pdfas.
 //(LO samples like JHUGen and MCFM only have one pdf, NNPDF31_lo_as_0130.  Phantom only has NNPDF31_nnlo_hessian_pdfas.)
 
-LHEHandler::LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, MELAEvent::CandidateVVMode VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_) :
+LHEHandler::LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, MELAEvent::CandidateVVMode VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_, LHEHandler::RunMode runMode_) :
 VVMode(VVMode_),
 VVDecayMode(VVDecayMode_),
 doKinematics(doKinematics_),
 year(year_),
 pdfChoice(pdfChoice_),
 orderChoice(orderChoice_),
+runMode(runMode_),
 genEvent(nullptr),
 genCand(nullptr)
 {
@@ -55,13 +56,14 @@ genCand(nullptr)
   setHandle(lhe_evt_); // Also calls clear()
   extract();
 }
-LHEHandler::LHEHandler(MELAEvent::CandidateVVMode VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_) :
+LHEHandler::LHEHandler(MELAEvent::CandidateVVMode VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_, LHEHandler::RunMode runMode_) :
 VVMode(VVMode_),
 VVDecayMode(VVDecayMode_),
 doKinematics(doKinematics_),
 year(year_),
 pdfChoice(pdfChoice_),
 orderChoice(orderChoice_),
+runMode(runMode_),
 genEvent(nullptr),
 genCand(nullptr)
 {
@@ -111,12 +113,12 @@ float LHEHandler::getLHEWeight(unsigned int whichWeight, float defaultValue) con
   if (whichWeight<LHEWeight.size()) return LHEWeight.at(whichWeight);
   else return defaultValue;
 }
-float LHEHandler::getLHEWeight_PDFVariationUpDn(int whichUpDn, float defaultValue) const{
+float LHEHandler::getLHEWeight_PDFVariationUpDn(char const& whichUpDn, float defaultValue) const{
   if (whichUpDn<0 && LHEWeight_PDFVariationUpDn.size()>1) return LHEWeight_PDFVariationUpDn.at(1);
   else if (whichUpDn>0 && LHEWeight_PDFVariationUpDn.size()>0) return LHEWeight_PDFVariationUpDn.at(0);
   else return defaultValue;
 }
-float LHEHandler::getLHEWeigh_AsMZUpDn(int whichUpDn, float defaultValue) const{
+float LHEHandler::getLHEWeigh_AsMZUpDn(char const& whichUpDn, float defaultValue) const{
   if (whichUpDn<0 && LHEWeight_AsMZUpDn.size()>1) return LHEWeight_AsMZUpDn.at(1);
   else if (whichUpDn>0 && LHEWeight_AsMZUpDn.size()>0) return LHEWeight_AsMZUpDn.at(0);
   else return defaultValue;
@@ -352,7 +354,7 @@ void LHEHandler::readEvent(){
 
     float wgtval = weight.wgt;
     //cout << "PDF id = " << PDFid.at(0) << " " << wgtid << " -> " << wgtval << endl;
-    if (year == 2016){
+    if (check_Run2_2016_preULconfig()){
       // Do not assign defaultMemberZeroWeight or defaultWeightScale. This will be handled correctly later on via LHEWeight[0].
       if (weightstype == unknown && 1001 <= wgtid && wgtid <= 1009){ // This is the NNPDF 3.0 NLO central value and muR/muF variations
         LHEWeight.push_back(wgtval);
@@ -390,7 +392,7 @@ void LHEHandler::readEvent(){
         if (pdfVarMode == useNone) pdfVarMode = useMC;
       }
     }
-    else if (year == 2017 || year == 2018){
+    else if (check_Run2_201718_preULconfig() || check_Run2_20161718_ULconfig()){
       if (specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1){ // This is actually POWHEG, but sort of in some weird order
         weightstype = powheg;
         if (1001 <= wgtid && wgtid <= 1009){
@@ -852,7 +854,7 @@ void LHEHandler::readEvent(){
     }
     else{
       printHeader(true);
-      throw cms::Exception("LHEWeights") << "Unknown year " << year;
+      throw cms::Exception("LHEWeights") << "Unknown year " << year << " and run mode " << runMode << " combination.";
     }
   }
   // Handle LO samples with 101 or 103 alternative weights
@@ -1009,9 +1011,9 @@ void LHEHandler::printHeader(bool error) const{
   }
 }
 
-bool LHEHandler::compareAbsIsLess(float val1, float val2){ return std::abs(val1) < std::abs(val2); }
+bool LHEHandler::compareAbsIsLess(float const& val1, float const& val2){ return std::abs(val1) < std::abs(val2); }
 
-float LHEHandler::findNearestOneSigma(float ref, int lowhigh, std::vector<float> const& wgt_array){
+float LHEHandler::findNearestOneSigma(float const& ref, char const& lowhigh, std::vector<float> const& wgt_array){
   int nrep = wgt_array.size();
   int pos_low=-1, pos_high=nrep;
   for (int irep=0; irep<nrep; irep++){ // Assume ordered from low to high in absolute value
@@ -1108,3 +1110,7 @@ void LHEHandler::suppressLargeWeights(std::vector<float>& wgt_array){
   }
 
 }
+
+bool LHEHandler::check_Run2_2016_preULconfig() const{ return (year == 2016 && runMode==CMS_Run2_preUL); }
+bool LHEHandler::check_Run2_201718_preULconfig() const{ return ((year == 2017 || year == 2018) && runMode==CMS_Run2_preUL); }
+bool LHEHandler::check_Run2_20161718_ULconfig() const{ return ((year == 2016 || year == 2017 || year == 2018) && runMode==CMS_Run2_UL); }

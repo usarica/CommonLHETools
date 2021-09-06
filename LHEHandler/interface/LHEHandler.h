@@ -41,9 +41,13 @@ public:
     tryNLO,
     tryNNLO
   };
+  enum RunMode{
+    CMS_Run2_preUL,
+    CMS_Run2_UL
+  };
 
-  LHEHandler(MELAEvent::CandidateVVMode VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_);
-  LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, MELAEvent::CandidateVVMode VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_);
+  LHEHandler(MELAEvent::CandidateVVMode VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_, LHEHandler::RunMode runMode_);
+  LHEHandler(edm::Handle<LHEEventProduct>* lhe_evt_, MELAEvent::CandidateVVMode VVMode_, int VVDecayMode_, LHEHandler::KinematicsMode doKinematics_, int year_, LHEHandler::PDFChoice pdfChoice_, LHEHandler::QCDOrderChoice orderChoice_, LHEHandler::RunMode runMode_);
   virtual ~LHEHandler();
 
   void setHandle(edm::Handle<LHEEventProduct>* lhe_evt_);
@@ -53,22 +57,22 @@ public:
 
   MELAEvent* getEvent();
   MELACandidate* getBestCandidate();
-  float const& getLHEOriginalWeight() const; // Weight written in the <event> block, supposed to = genhepmcweight if no Pythia reweighting is done
-  float const& getMemberZeroWeight() const; // Weight from POWHEG before JHUGen reweighting, taken from alternate weight 1001.  If there are no alternate weights this is the same as the LHEOriginalWeight
-  float const& getWeightRescale() const; // Nominal weight should be getLHEOriginalWeight() * getWeightRescale()
+  float const& getLHEOriginalWeight() const; // Weight written in the <event> block
+  float const& getMemberZeroWeight() const; // Weight from POWHEG before JHUGen reweighting, taken from alternate weight 1001. If there are no alternative weights, this is the same as the LHEOriginalWeight.
+  float const& getWeightRescale() const; // The weight rescale accounts for your choice of the PDFs relative to the nominal PDF used in MC generation. Nominal weight should be getLHEOriginalWeight() * getWeightRescale().
   float getLHEWeight(unsigned int whichWeight, float defaultValue=1) const; // = {Weights written in LHE weight variations} / getLHEOriginalWeight()
-  float getLHEWeight_PDFVariationUpDn(int whichUpDn, float defaultValue=1) const; // = {Weights written in LHE weight variations} / getLHEOriginalWeight()
-  float getLHEWeigh_AsMZUpDn(int whichUpDn, float defaultValue=1) const; // = {Weights written in LHE weight variations} / getLHEOriginalWeight()
+  float getLHEWeight_PDFVariationUpDn(char const& whichUpDn, float defaultValue=1) const; // = {Weights written in LHE weight variations} / getLHEOriginalWeight()
+  float getLHEWeigh_AsMZUpDn(char const& whichUpDn, float defaultValue=1) const; // = {Weights written in LHE weight variations} / getLHEOriginalWeight()
   float const& getPDFScale() const;
   bool hasHeader() const;
   std::vector<std::string> const& getHeader() const;
   std::vector<MELAParticle*> const& getParticleList() const;
 
   // Misc. functions needed for ordering the PDF weights
-  static bool compareAbsIsLess(float val1, float val2);
+  static bool compareAbsIsLess(float const& val1, float const& val2);
   static void suppressLargeWeights(std::vector<float>& wgt_array);
-  static float findNearestOneSigma(float ref, int lowhigh, std::vector<float> const& wgt_array);
-  static float safeDivide(float numerator, float denominator){ return (!(std::isfinite(numerator) && std::isfinite(denominator)) || denominator==0.f ? 0.f : numerator/denominator); }
+  static float findNearestOneSigma(float const& ref, char const& lowhigh, std::vector<float> const& wgt_array);
+  static float safeDivide(float const& numerator, float const& denominator){ return (!(std::isfinite(numerator) && std::isfinite(denominator)) || denominator==0.f ? 0.f : numerator/denominator); }
 
   // Misc. functions for the operation of printouts
   static void set_maxlines_print_header(int nlines){ LHEHandler::maxlines_print_header=nlines; }
@@ -97,6 +101,7 @@ protected:
   // These options influence which pdf sets/members are selected
   PDFChoice pdfChoice;
   QCDOrderChoice orderChoice;
+  RunMode runMode;
 
   edm::Handle<LHEEventProduct>* lhe_evt;
   std::vector<MELAParticle*> particleList;
@@ -115,6 +120,10 @@ protected:
   std::vector<std::string> LHEHeader;
 
   void readEvent();
+
+  bool check_Run2_2016_preULconfig() const;
+  bool check_Run2_201718_preULconfig() const;
+  bool check_Run2_20161718_ULconfig() const;
 
   // Include functions for exceptional cases from a separate file here
   // so that these functions are members of the LHEHandler class.

@@ -7,8 +7,8 @@ using namespace std;
 
 
 bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_nf_4_Madgraph_1000offset_Case1(){
-  if (year == 2016) return false;
-  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+  if (check_Run2_2016_preULconfig()) return false;
+  else if (!(check_Run2_201718_preULconfig() || check_Run2_20161718_ULconfig())) throw cms::Exception("SpecialPDF") << "Unknown year " << year << " and run mode " << runMode << " configuration.";
 
   for (auto const& line:LHEHeader){
     if (line.find("<weight id=\"1010\"> PDF=  320900 NNPDF31_nnlo_as_0118_nf_4 </weight>")!=std::string::npos) return true;
@@ -17,8 +17,8 @@ bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_nf_4_Madgraph_1000offset_C
 }
 // This is a fun one...
 bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case1(){
-  if (year == 2016) return false;
-  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+  if (check_Run2_2016_preULconfig()) return false;
+  else if (!(check_Run2_201718_preULconfig() || check_Run2_20161718_ULconfig())) throw cms::Exception("SpecialPDF") << "Unknown year " << year << " and run mode " << runMode << " configuration.";
 
   // This block of strings is only part of what needs to be tested
   const std::vector<std::string> searchBlock{
@@ -88,8 +88,8 @@ bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case1(
 }
 // This is just a waste of storage...
 bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2(){
-  if (year == 2016) return false;
-  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+  if (check_Run2_2016_preULconfig()) return false;
+  else if (!(check_Run2_201718_preULconfig() || check_Run2_20161718_ULconfig())) throw cms::Exception("SpecialPDF") << "Unknown year " << year << " and run mode " << runMode << " configuration.";
 
   const std::vector<std::vector<std::string>> searchBlock{
     { "weight id", "1001", "muR=0.10000E+01 muF=0.10000E+01" },
@@ -107,8 +107,8 @@ bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2(
 }
 // This is a straightforward one...
 bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case1(){
-  if (year == 2016) return false;
-  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+  if (check_Run2_2016_preULconfig()) return false;
+  else if (!(check_Run2_201718_preULconfig() || check_Run2_20161718_ULconfig())) throw cms::Exception("SpecialPDF") << "Unknown year " << year << " and run mode " << runMode << " configuration.";
 
   const std::vector<std::vector<std::string>> searchBlock{
     { "weight", "325300", "1001" }, // NNPDF31_nnlo_as_0118_mc_hessian_pdfas central PDF
@@ -146,8 +146,8 @@ bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_
 }
 
 bool LHEHandler::test_specialPDF_NNPDF30_NLO_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1(){
-  if (year == 2016) return false;
-  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+  if (check_Run2_2016_preULconfig()) return false;
+  else if (!(check_Run2_201718_preULconfig() || check_Run2_20161718_ULconfig())) throw cms::Exception("SpecialPDF") << "Unknown year " << year << " and run mode " << runMode << " configuration.";
 
   const std::vector<std::vector<std::string>> searchBlock{
     {"weight id", "1001", "muR=0.10000E+01 muF=0.10000E+01"},
@@ -165,8 +165,8 @@ bool LHEHandler::test_specialPDF_NNPDF30_NLO_nf_4_pdfas_Madgraph_1000offset_POWH
 }
 // This is a case where the ordering is sort of wrong...
 bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1(){
-  if (year == 2016) return false;
-  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+  if (check_Run2_2016_preULconfig()) return false;
+  else if (!(check_Run2_201718_preULconfig() || check_Run2_20161718_ULconfig())) throw cms::Exception("SpecialPDF") << "Unknown year " << year << " and run mode " << runMode << " configuration.";
 
   const std::vector<std::vector<std::string>> searchBlock{
     { "weight id", "1001", "lhapdf=320900" },
@@ -184,8 +184,8 @@ bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1(
   return (!searchBlock.empty() && itBlock==searchBlock.cend());
 }
 bool LHEHandler::test_specialPDF_NNPDF31_LO_as_0130_Madgraph_0offset_Case1(){
-  if (year == 2016) return false;
-  else if (!(year == 2017 || year == 2018)) throw cms::Exception("SpecialPDF") << "Unknown year " << year;
+  if (check_Run2_2016_preULconfig()) return false;
+  else if (!(check_Run2_201718_preULconfig() || check_Run2_20161718_ULconfig())) throw cms::Exception("SpecialPDF") << "Unknown year " << year << " and run mode " << runMode << " configuration.";
 
   const std::vector<std::vector<std::string>> searchBlock{
     { "id", "1", "315200" }, // NNPDF31_lo_as_0130

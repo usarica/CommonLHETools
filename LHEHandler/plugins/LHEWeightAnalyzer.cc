@@ -1,6 +1,8 @@
 #include <memory>
 #include <cmath>
 #include <algorithm>
+#include <string>
+#include <cctype>
 
 #include <FWCore/Framework/interface/EDAnalyzer.h>
 #include "FWCore/Framework/interface/Event.h"
@@ -54,11 +56,14 @@ protected:
 
   virtual void FillLHEWeights(std::unique_ptr<LHEHandler> const& lheHandler, float& LHEweight_Scaled, float& LHEweight_Original, float& LHEweight_MemberZero, float& LHEweight_QCDscale_muR1_muF1, float& LHEweight_QCDscale_muR1_muF2, float& LHEweight_QCDscale_muR1_muF0p5, float& LHEweight_QCDscale_muR2_muF1, float& LHEweight_QCDscale_muR2_muF2, float& LHEweight_QCDscale_muR2_muF0p5, float& LHEweight_QCDscale_muR0p5_muF1, float& LHEweight_QCDscale_muR0p5_muF2, float& LHEweight_QCDscale_muR0p5_muF0p5, float& LHEweight_PDFVariation_Up, float& LHEweight_PDFVariation_Dn, float& LHEweight_AsMZ_Up, float& LHEweight_AsMZ_Dn);
 
+  LHEHandler::RunMode getLHEHandlerRunMode() const;
+
   // ----------member data ---------------------------
   int year;
   MELAEvent::CandidateVVMode VVMode;
   int VVDecayMode;
   LHEHandler::KinematicsMode kinMode;
+  std::string str_lhehandler_runmode;
   TString theTreeName;
   TTree* tree;
   std::unique_ptr<LHEHandler> lheHandler_DefaultPDF;
@@ -81,6 +86,7 @@ LHEWeightAnalyzer::LHEWeightAnalyzer(const edm::ParameterSet& pset) :
   VVMode((MELAEvent::CandidateVVMode) pset.getParameter<int>("VVMode")),
   VVDecayMode(pset.getParameter<int>("VVDecayMode")),
   kinMode((LHEHandler::KinematicsMode) pset.getParameter<int>("kinMode")),
+  str_lhehandler_runmode(pset.getUntrackedParameter<std::string>("LHEHandlerRunMode")),
   theTreeName("weightsTree"),
   tree(nullptr)
 {
@@ -91,40 +97,49 @@ LHEWeightAnalyzer::LHEWeightAnalyzer(const edm::ParameterSet& pset) :
   if (year==2016) LHEHandler::set_maxlines_print_header(1000);
   else LHEHandler::set_maxlines_print_header(-1);
 
+  LHEHandler::RunMode lhehandler_runmode = getLHEHandlerRunMode();
+  std::cout << "LHE handler year and run mode: " << year << ", " << lhehandler_runmode << std::endl;
   lheHandler_DefaultPDF = std::make_unique<LHEHandler>(
     VVMode, VVDecayMode,
     kinMode,
-    year, LHEHandler::keepDefaultPDF, LHEHandler::keepDefaultQCDOrder
+    year, LHEHandler::keepDefaultPDF, LHEHandler::keepDefaultQCDOrder,
+    lhehandler_runmode
   );
   lheHandler_NNPDF30_NNLO = std::make_unique<LHEHandler>(
     VVMode, VVDecayMode,
     LHEHandler::noKinematics,
-    year, LHEHandler::tryNNPDF30, LHEHandler::tryNNLO
+    year, LHEHandler::tryNNPDF30, LHEHandler::tryNNLO,
+    lhehandler_runmode
   );
   lheHandler_NNPDF30_NLO = std::make_unique<LHEHandler>(
     VVMode, VVDecayMode,
     LHEHandler::noKinematics,
-    year, LHEHandler::tryNNPDF30, LHEHandler::tryNLO
+    year, LHEHandler::tryNNPDF30, LHEHandler::tryNLO,
+    lhehandler_runmode
   );
   lheHandler_NNPDF30_LO = std::make_unique<LHEHandler>(
     VVMode, VVDecayMode,
     LHEHandler::noKinematics,
-    year, LHEHandler::tryNNPDF30, LHEHandler::tryLO
+    year, LHEHandler::tryNNPDF30, LHEHandler::tryLO,
+    lhehandler_runmode
   );
   lheHandler_NNPDF31_NNLO = std::make_unique<LHEHandler>(
     VVMode, VVDecayMode,
     LHEHandler::noKinematics,
-    year, LHEHandler::tryNNPDF31, LHEHandler::tryNNLO
+    year, LHEHandler::tryNNPDF31, LHEHandler::tryNNLO,
+    lhehandler_runmode
   );
   lheHandler_NNPDF31_NLO = std::make_unique<LHEHandler>(
     VVMode, VVDecayMode,
     LHEHandler::noKinematics,
-    year, LHEHandler::tryNNPDF31, LHEHandler::tryNLO
+    year, LHEHandler::tryNNPDF31, LHEHandler::tryNLO,
+    lhehandler_runmode
   );
   lheHandler_NNPDF31_LO = std::make_unique<LHEHandler>(
     VVMode, VVDecayMode,
     LHEHandler::noKinematics,
-    year, LHEHandler::tryNNPDF31, LHEHandler::tryLO
+    year, LHEHandler::tryNNPDF31, LHEHandler::tryLO,
+    lhehandler_runmode
   );
 }
 
@@ -396,6 +411,15 @@ void LHEWeightAnalyzer::endRun(edm::Run const& iRun, edm::EventSetup const&){
     }
   }
   */
+}
+
+LHEHandler::RunMode LHEWeightAnalyzer::getLHEHandlerRunMode() const{
+  std::string str_lhehandler_runmode_lower = str_lhehandler_runmode;
+  std::transform(str_lhehandler_runmode_lower.begin(), str_lhehandler_runmode_lower.end(), str_lhehandler_runmode_lower.begin(), [] (unsigned char c){ return std::tolower(c); });
+  if (str_lhehandler_runmode_lower=="cms_run2_preul") return LHEHandler::CMS_Run2_preUL;
+  else if (str_lhehandler_runmode_lower=="cms_run2_ul") return LHEHandler::CMS_Run2_UL;
+  else throw cms::Exception("LHEHandlerRunMode") << "Error identifying the run mode from string " << str_lhehandler_runmode_lower << " (original: " << str_lhehandler_runmode << ").";
+  return LHEHandler::CMS_Run2_preUL; // Return some dummy choice, should never happen.
 }
 
 
