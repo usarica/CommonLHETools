@@ -12,5 +12,7 @@ bool test_specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case1();
 bool test_specialPDF_NNPDF31_NNLO_as_0118_Madgraph_1000offset_Case2();
 // madgraph_1000offset special case with the central PDF being 'NNPDF31_nnlo_as_0118_mc_hessian_pdfas'
 bool test_specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case1();
+// madgraph_1000offset special case with 45 muR, muF variations with 5 completely different central value choices, but the central PDF being 'NNPDF31_nnlo_as_0118_mc_hessian_pdfas'
+bool test_specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case2();
 // madgraph_1000offset special case with some numbering differences and MC-type PDF variations
 bool test_specialPDF_NNPDF31_NNLO_as_0118_nf_4_POWHEG_MadSpin_Case1();
