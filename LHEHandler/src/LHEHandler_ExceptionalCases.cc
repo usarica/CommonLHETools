@@ -144,6 +144,88 @@ bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_
   }
   return (!searchBlock.empty() && itBlock==searchBlock.cend());
 }
+// This is a fun one, too...
+bool LHEHandler::test_specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case2(){
+  if (check_Run2_2016_preULconfig()) return false;
+  else if (!(check_Run2_201718_preULconfig() || check_Run2_20161718_ULconfig())) throw cms::Exception("SpecialPDF") << "Unknown year " << year << " and run mode " << runMode << " configuration.";
+
+  // This block of strings is only part of what needs to be tested
+  const std::vector<std::string> searchBlock{
+    "weight DYN_SCALE=\"1\" MUF=\"1.0\" MUR=\"1.0\" PDF=\"325300\" id=\"1002\"",
+    "weight DYN_SCALE=\"2\" MUF=\"1.0\" MUR=\"1.0\" PDF=\"325300\" id=\"1003\"",
+    "weight DYN_SCALE=\"3\" MUF=\"1.0\" MUR=\"1.0\" PDF=\"325300\" id=\"1004\"",
+    "weight DYN_SCALE=\"4\" MUF=\"1.0\" MUR=\"1.0\" PDF=\"325300\" id=\"1005\"",
+    "weight MUF=\"1.0\" MUR=\"2.0\" PDF=\"325300\" id=\"1006\"",
+    "weight DYN_SCALE=\"1\" MUF=\"1.0\" MUR=\"2.0\" PDF=\"325300\" id=\"1007\"",
+    "weight DYN_SCALE=\"2\" MUF=\"1.0\" MUR=\"2.0\" PDF=\"325300\" id=\"1008\"",
+    "weight DYN_SCALE=\"3\" MUF=\"1.0\" MUR=\"2.0\" PDF=\"325300\" id=\"1009\"",
+    "weight DYN_SCALE=\"4\" MUF=\"1.0\" MUR=\"2.0\" PDF=\"325300\" id=\"1010\"",
+    "weight MUF=\"1.0\" MUR=\"0.5\" PDF=\"325300\" id=\"1011\"",
+    "weight DYN_SCALE=\"1\" MUF=\"1.0\" MUR=\"0.5\" PDF=\"325300\" id=\"1012\"",
+    "weight DYN_SCALE=\"2\" MUF=\"1.0\" MUR=\"0.5\" PDF=\"325300\" id=\"1013\"",
+    "weight DYN_SCALE=\"3\" MUF=\"1.0\" MUR=\"0.5\" PDF=\"325300\" id=\"1014\"",
+    "weight DYN_SCALE=\"4\" MUF=\"1.0\" MUR=\"0.5\" PDF=\"325300\" id=\"1015\"",
+    "weight MUF=\"2.0\" MUR=\"1.0\" PDF=\"325300\" id=\"1016\"",
+    "weight DYN_SCALE=\"1\" MUF=\"2.0\" MUR=\"1.0\" PDF=\"325300\" id=\"1017\"",
+    "weight DYN_SCALE=\"2\" MUF=\"2.0\" MUR=\"1.0\" PDF=\"325300\" id=\"1018\"",
+    "weight DYN_SCALE=\"3\" MUF=\"2.0\" MUR=\"1.0\" PDF=\"325300\" id=\"1019\"",
+    "weight DYN_SCALE=\"4\" MUF=\"2.0\" MUR=\"1.0\" PDF=\"325300\" id=\"1020\"",
+    "weight MUF=\"2.0\" MUR=\"2.0\" PDF=\"325300\" id=\"1021\"",
+    "weight DYN_SCALE=\"1\" MUF=\"2.0\" MUR=\"2.0\" PDF=\"325300\" id=\"1022\"",
+    "weight DYN_SCALE=\"2\" MUF=\"2.0\" MUR=\"2.0\" PDF=\"325300\" id=\"1023\"",
+    "weight DYN_SCALE=\"3\" MUF=\"2.0\" MUR=\"2.0\" PDF=\"325300\" id=\"1024\"",
+    "weight DYN_SCALE=\"4\" MUF=\"2.0\" MUR=\"2.0\" PDF=\"325300\" id=\"1025\"",
+    "weight MUF=\"2.0\" MUR=\"0.5\" PDF=\"325300\" id=\"1026\"",
+    "weight DYN_SCALE=\"1\" MUF=\"2.0\" MUR=\"0.5\" PDF=\"325300\" id=\"1027\"",
+    "weight DYN_SCALE=\"2\" MUF=\"2.0\" MUR=\"0.5\" PDF=\"325300\" id=\"1028\"",
+    "weight DYN_SCALE=\"3\" MUF=\"2.0\" MUR=\"0.5\" PDF=\"325300\" id=\"1029\"",
+    "weight DYN_SCALE=\"4\" MUF=\"2.0\" MUR=\"0.5\" PDF=\"325300\" id=\"1030\"",
+    "weight MUF=\"0.5\" MUR=\"1.0\" PDF=\"325300\" id=\"1031\"",
+    "weight DYN_SCALE=\"1\" MUF=\"0.5\" MUR=\"1.0\" PDF=\"325300\" id=\"1032\"",
+    "weight DYN_SCALE=\"2\" MUF=\"0.5\" MUR=\"1.0\" PDF=\"325300\" id=\"1033\"",
+    "weight DYN_SCALE=\"3\" MUF=\"0.5\" MUR=\"1.0\" PDF=\"325300\" id=\"1034\"",
+    "weight DYN_SCALE=\"4\" MUF=\"0.5\" MUR=\"1.0\" PDF=\"325300\" id=\"1035\"",
+    "weight MUF=\"0.5\" MUR=\"2.0\" PDF=\"325300\" id=\"1036\"",
+    "weight DYN_SCALE=\"1\" MUF=\"0.5\" MUR=\"2.0\" PDF=\"325300\" id=\"1037\"",
+    "weight DYN_SCALE=\"2\" MUF=\"0.5\" MUR=\"2.0\" PDF=\"325300\" id=\"1038\"",
+    "weight DYN_SCALE=\"3\" MUF=\"0.5\" MUR=\"2.0\" PDF=\"325300\" id=\"1039\"",
+    "weight DYN_SCALE=\"4\" MUF=\"0.5\" MUR=\"2.0\" PDF=\"325300\" id=\"1040\"",
+    "weight MUF=\"0.5\" MUR=\"0.5\" PDF=\"325300\" id=\"1041\"",
+    "weight DYN_SCALE=\"1\" MUF=\"0.5\" MUR=\"0.5\" PDF=\"325300\" id=\"1042\"",
+    "weight DYN_SCALE=\"2\" MUF=\"0.5\" MUR=\"0.5\" PDF=\"325300\" id=\"1043\"",
+    "weight DYN_SCALE=\"3\" MUF=\"0.5\" MUR=\"0.5\" PDF=\"325300\" id=\"1044\"",
+    "weight DYN_SCALE=\"4\" MUF=\"0.5\" MUR=\"0.5\" PDF=\"325300\" id=\"1045\"",
+    "id=\"1046\"", // Any PDF, doesn't matter
+    "id=\"1047\"", // Any PDF, doesn't matter
+    "weight MUF=\"1.0\" MUR=\"1.0\" PDF=\"325300\" id=\"1048\""
+  };
+
+  bool matchAll=true;
+  bool beginTest=false;
+  std::vector<std::string>::const_iterator itBlock=searchBlock.cbegin();
+  for (auto const& line:LHEHeader){
+    if (itBlock==searchBlock.cend()) break;
+    if (line.find("weightgroup")!=std::string::npos) continue;
+    if (!beginTest && line.find(*itBlock)!=std::string::npos){
+      beginTest=true;
+      std::cout << "Found <<" << *itBlock << ">>" << std::endl;
+      itBlock++;
+    }
+    else if (beginTest){
+      matchAll &= (line.find(*itBlock)!=std::string::npos);
+      if (matchAll){
+        std::cout << "Found <<" << *itBlock << ">>" << std::endl;
+      }
+      else{
+        std::cout << "Cannot find <<" << *itBlock << ">> in <<" << line << ">>" << std::endl;
+      }
+      if (!matchAll) break;
+      itBlock++;
+    }
+  }
+
+  return (beginTest && matchAll);
+}
 
 bool LHEHandler::test_specialPDF_NNPDF30_NLO_nf_4_pdfas_Madgraph_1000offset_POWHEGStyle_Case1(){
   if (check_Run2_2016_preULconfig()) return false;
