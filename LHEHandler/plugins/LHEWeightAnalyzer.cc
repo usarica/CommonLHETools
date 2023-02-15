@@ -64,6 +64,7 @@ protected:
   int VVDecayMode;
   LHEHandler::KinematicsMode kinMode;
   std::string str_lhehandler_runmode;
+  std::string str_lheruninfoproduct_tag;
   TString theTreeName;
   TTree* tree;
   std::unique_ptr<LHEHandler> lheHandler_DefaultPDF;
@@ -87,11 +88,12 @@ LHEWeightAnalyzer::LHEWeightAnalyzer(const edm::ParameterSet& pset) :
   VVDecayMode(pset.getParameter<int>("VVDecayMode")),
   kinMode((LHEHandler::KinematicsMode) pset.getParameter<int>("kinMode")),
   str_lhehandler_runmode(pset.getUntrackedParameter<std::string>("LHEHandlerRunMode")),
+  str_lheruninfoproduct_tag(pset.getUntrackedParameter<std::string>("LHERunInfoProductTag")),
   theTreeName("weightsTree"),
   tree(nullptr)
 {
   consumesMany<LHEEventProduct>();
-  lheRunInfoToken = consumes<LHERunInfoProduct, edm::InRun>(edm::InputTag("externalLHEProducer"));
+  lheRunInfoToken = consumes<LHERunInfoProduct, edm::InRun>(edm::InputTag(str_lheruninfoproduct_tag));
   genInfoToken = consumes<GenEventInfoProduct>(edm::InputTag("generator"));
 
   if (year==2016) LHEHandler::set_maxlines_print_header(1000);
@@ -384,7 +386,7 @@ void LHEWeightAnalyzer::beginRun(edm::Run const& iRun, edm::EventSetup const&){
   static bool firstRun=true;
   if (firstRun){
     edm::Handle<LHERunInfoProduct> lhe_runinfo;
-    iRun.getByLabel(edm::InputTag("externalLHEProducer"), lhe_runinfo);
+    iRun.getByLabel(edm::InputTag(str_lheruninfoproduct_tag), lhe_runinfo);
     lheHandler_DefaultPDF->setHeaderFromRunInfo(&lhe_runinfo);
     lheHandler_NNPDF30_NNLO->setHeaderFromRunInfo(&lhe_runinfo);
     lheHandler_NNPDF30_NLO->setHeaderFromRunInfo(&lhe_runinfo);

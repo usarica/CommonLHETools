@@ -3,12 +3,13 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("testLHEWeights")
 
 
+theLHERunInfoProductTag="externalLHEProducer"
 # See MELAEvent.h for the VVModes and MELAEvent.cc for the VVDecayModes
 theVVMode=0
 theVVDecayMode=-1
 theKinMode=0
 
-procname = "ttZjets-madgraph_UL_2018"
+procname = "ttbb_4f_2l2nu_UL_2016"
 fNames = None
 if procname == "WWZ_2017":
   fNames = cms.untracked.vstring('/store/mc/RunIIFall17MiniAOD/WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/94X_mc2017_realistic_v11-v1/100000/4231F556-3A26-E811-AB1D-002590D60038.root')
@@ -71,6 +72,10 @@ elif procname == "TTZZ-madgraph_UL_2018": # specialPDF_NNPDF31_NNLO_as_0118_mc_h
 elif procname == "ttZjets-madgraph_UL_2018": # specialPDF_NNPDF31_NNLO_as_0118_mc_hessian_pdfas_Madgraph_1000offset_Case2
   fNames = cms.untracked.vstring('/store/mc/RunIISummer20UL18MiniAODv2/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/250000/0968CCB6-6145-2243-9AD3-C83FA97A0C3E.root')
 
+elif procname == "ttbb_4f_2l2nu_UL_2016":
+  fNames = cms.untracked.vstring('/store/mc/RunIISummer20UL16MiniAODAPVv2/TTbb_4f_TTTo2L2Nu_TuneCP5-Powheg-Openloops-Pythia8/MINIAODSIM/106X_mcRun2_asymptotic_preVFP_v11-v1/70000/07C117CE-2377-8A41-A971-1972667D98B9.root')
+  theLHERunInfoProductTag="source"
+
 
 theYear = None
 if "2018" in procname:
@@ -108,7 +113,8 @@ process.OutTree = cms.EDAnalyzer(
    VVMode = cms.int32(theVVMode),
    VVDecayMode = cms.int32(theVVDecayMode),
    kinMode = cms.int32(theKinMode),
-   LHEHandlerRunMode = cms.untracked.string(theRunMode)
+   LHEHandlerRunMode = cms.untracked.string(theRunMode),
+   LHERunInfoProductTag = cms.untracked.string(theLHERunInfoProductTag)
 )
 
 #process.MessageLogger = cms.Service("MessageLogger",
